@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import{RegistrationService} from '../services/registration.service'
 
 @Component({
@@ -11,7 +11,10 @@ import{RegistrationService} from '../services/registration.service'
 export class RegisterStudentComponent implements OnInit {
 
   
-  constructor(private router:Router,private registrationservices:RegistrationService) { 
+  constructor(private router:Router,
+    private registrationservices:RegistrationService,
+    route:ActivatedRoute
+    ) { 
 
     
 
@@ -22,7 +25,7 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   gettencode(){
-    sessionStorage.setItem('universityId','0001') ;
+    
    
     const params = new HttpParams()
     .set('userName','190234')

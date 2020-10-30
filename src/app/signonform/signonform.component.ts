@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {NgForm,} from '@angular/forms';
+import {NgForm} from '@angular/forms';
 import{UserService} from '../services/user.service'
 import { HttpParams } from '@angular/common/http';
 
-import { map } from 'rxjs/operators';
+
 import * as xml2js from 'xml2js';
-import { ILogin } from 'src/app/interfaces/login';  
+
 import { AuthService } from '../services/auth.service' 
+import {CookieService} from 'ngx-cookie-service'
 
 
 
@@ -19,26 +20,30 @@ import { AuthService } from '../services/auth.service'
 export class SignonformComponent  {
 
   
-   public sts:String ="ACT";
+   public sts:string ="ACT";
    message: string;  
    returnUrl: string;  
+   userGroupId:string;
+   maxLogins:string;
+    params:HttpParams ;
   constructor(private router:Router,
     private userservice:UserService,
-    private authService: AuthService ) { }
+    private authService: AuthService ,
+    private cookieservice:CookieService) { }
   ngOnInit() {  
  
  this.returnUrl = '/dashboard';  
  this.authService.logout();  
+ 
  }  
-  model: ILogin = { userid: "admnin", password: "admin@123" }  ;
   
    main(form):void {
-    const params = new HttpParams()
+     this.params = new HttpParams()
     .set('userName',form.inputUser)
     .set('password', form.inputPassword)
     .set('application','CMS');
 
-    var session:WindowSessionStorage ;
+    
     
 
     // var data= null;
@@ -50,7 +55,7 @@ export class SignonformComponent  {
     // urlSearchParams.append('password', form.inputPassword);
     // urlSearchParams.append('application', 'CMS');
     // let body = urlSearchParams.toString();
-    this.userservice.startlogin(params).subscribe(res=>{
+    this.userservice.startlogin(this.params).subscribe(res=>{
      // this.router.navigate(['\dashboard']);
      
      let  data= null;
@@ -59,26 +64,39 @@ export class SignonformComponent  {
        
                });
        
-      //console.log("Arush"+data.loginInfo.loginInfo[0].status);
+      console.log("inside startlogin result"+data.loginInfo.loginInfo[0].userGroupId);
       
       this.sts =data.loginInfo.loginInfo[0].status;
+      this.userGroupId=data.loginInfo.loginInfo[0].userGroupId ;
+      this.maxLogins = data.loginInfo.loginInfo[0].maxLogins;
 
-  //     if (form.inputUser == this.model.userid && form.inputpassword == this.model.password) {  
-  //       console.log("Login successful");  
-  //       //this.authService.authLogin(this.model);  
-  //       localStorage.setItem('isLoggedIn', "true");  
-  //       localStorage.setItem('token', form.inputUser);  
-  //       this.router.navigate([this.returnUrl]);  
-  //    }  
-  // else {  
-  //    this.message = "Please check your userid and password";  
-  //    }  
+
          
       if(this.sts=="ACT"){
-        console.log("Login successful"); 
+        console.log("Login successful",this.maxLogins);
+
+
+       this.params= this.params.append('userGroupId',this.userGroupId);
+       this.params=this.params.append('maxLogins',this.maxLogins);
+       //console.log(this.params);
+
+       this.userservice.getLoginDetails(this.params).subscribe(res=>{
+
+        let cook:string =this.cookieservice.get('JSESSIONID'); 
+        console.log("cookies",cook);
+
+       this.userservice.getmenus(this.params).subscribe(res=>{
         localStorage.setItem('isLoggedIn', "true");  
         localStorage.setItem('token', form.inputUser); 
-        this.router.navigate(['\dashboard']);
+
+        
+       this.router.navigate(['\dashboard']);
+
+       });
+       
+          });
+
+            
         }else{
           this.message = "Please check your userid and password";  
           console.log("In else condition if loop "+data);

@@ -22,7 +22,8 @@ public isLoggedIn(): boolean {
     status = true;      
  }    
  else {      
-    status = false;      
+    status = false;   
+    console.log("Arush logout status"+status);   
     }      
  return status;      
  } 

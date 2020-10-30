@@ -6,24 +6,27 @@ import { HomeComponent } from './home/home.component';
 import { SignonformComponent } from './signonform/signonform.component';
 import { TestComponent } from './test/test.component';
 import {AuthGuard} from './guards/auth.guard'
+import { RegisterStudentComponent } from './register-student/register-student.component';
 
 
 const routes:Routes=[
   //basic routes
-  {path:'',redirectTo:'login',pathMatch:'full'},
+ 
   {path:'login',component:SignonformComponent},
+  
     { 
     path: 'dashboard',canActivate:[AuthGuard],
     component: DashboardComponent,
     children : [
-      { path: 'home', component: HomeComponent },
+      { path: 'registration_continue', component: RegisterStudentComponent },
         { path: 'main', component: TestComponent  },
         { path: 'first', component: FirstComponent },
         
         
         
     ]
-}
+},
+{path:'',redirectTo:'login',pathMatch:'full'}
   
 
 ];

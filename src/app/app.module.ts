@@ -22,12 +22,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { FirstComponent } from './first/first.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ThirdComponent } from './third/third.component';
 import { AgGridModule } from 'ag-grid-angular';
 import 'ag-grid-enterprise';
 import { MygridComponent } from './mygrid/mygrid.component';
 import { RegisterStudentComponent } from './register-student/register-student.component';
+import {CookieService} from 'ngx-cookie-service';
+import {HttpinterceptorService} from './services/httpinterceptor.service';
+
+
 
 @NgModule({
   declarations: [
@@ -41,7 +45,8 @@ import { RegisterStudentComponent } from './register-student/register-student.co
     FirstComponent,
     ThirdComponent,
     MygridComponent,
-    RegisterStudentComponent,
+    RegisterStudentComponent
+    
     
    
   ],
@@ -63,7 +68,12 @@ import { RegisterStudentComponent } from './register-student/register-student.co
   
   ],
   providers: [
-    
+   
+    [
+      {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
+      CookieService
+     
+    ]
   ],
   bootstrap: [AppComponent]
 })

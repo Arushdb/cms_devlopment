@@ -26,16 +26,17 @@ export class RegistrationService {
      
    myurl =
      this.url+"/registrationforstudent/gettencodes.htm" ;
-    //let body="";
+    let body="";
     console.log(params+"Arush");
 
  
    
 
   //return  this.httpclient.get(myurl,{responseType: 'text',params});
-  return  this.httpclient.post(myurl,{
+  return  this.httpclient.post(myurl,body,{
     params,
     responseType: 'text'
+   
      });
  
  

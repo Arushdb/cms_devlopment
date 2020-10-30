@@ -17,7 +17,7 @@ ngOnInit() {
   //console.log(this.id);  
 }  
 logout() {  
-  console.log('logout');  
+  //console.log('logout in dashboard');  
   this.authService.logout();  
   this.router.navigate(['/login']);  
 }  

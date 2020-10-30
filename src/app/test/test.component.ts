@@ -20,11 +20,11 @@ export class TestComponent implements OnInit {
 
   public myarr=[
     {
-     displayname:"Arush",
+     displayname:"Student",
      children:[
        {
-       displayname:"Agam",
-       route:'home'
+       displayname:"Registration",
+       route:'registration_continue'
        },
        {
         displayname:"Aarat",
