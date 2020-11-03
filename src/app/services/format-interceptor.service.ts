@@ -22,8 +22,7 @@ export class FormatInterceptorService implements HttpInterceptor {
         return result;     
         
       });
-        
-        
+                
          }})
          
          )

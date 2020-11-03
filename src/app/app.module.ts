@@ -30,6 +30,7 @@ import { MygridComponent } from './mygrid/mygrid.component';
 import { RegisterStudentComponent } from './register-student/register-student.component';
 import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
+import { MessageComponent } from './message/message.component';
 
 
 
@@ -45,7 +46,8 @@ import {HttpinterceptorService} from './services/httpinterceptor.service';
     FirstComponent,
     ThirdComponent,
     MygridComponent,
-    RegisterStudentComponent
+    RegisterStudentComponent,
+    MessageComponent
     
     
    

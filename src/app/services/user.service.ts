@@ -70,8 +70,8 @@ export class UserService {
 
       //headers=headers.append('Access-Control-Allow-Origin', 'http://localhost:8080');
      // headers=headers.append('Access-Control-Allow-Credentials', 'true');
-      headers=headers.append('withCredentials', 'true');
-      headers=headers.append('credentials', 'include');
+      // headers=headers.append('withCredentials', 'true');
+      // headers=headers.append('credentials', 'include');
       
       myurl = this.url+"/login/getLoginDetails.htm" ;
       let body="";
