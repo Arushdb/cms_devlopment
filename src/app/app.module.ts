@@ -30,6 +30,7 @@ import { MygridComponent } from './mygrid/mygrid.component';
 import { RegisterStudentComponent } from './register-student/register-student.component';
 import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
+import {FormatInterceptorService} from './services/format-interceptor.service';
 import { MessageComponent } from './message/message.component';
 
 
@@ -73,6 +74,7 @@ import { MessageComponent } from './message/message.component';
    
     [
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
+      {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
       CookieService
      
     ]

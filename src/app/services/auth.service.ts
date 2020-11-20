@@ -9,7 +9,7 @@ export class AuthService {
   constructor() { }
 
   logout() :void { 
-    console.log('Arush logout in auth Service');     
+      
     localStorage.setItem('isLoggedIn','false');    
     localStorage.removeItem('token');    
     }    

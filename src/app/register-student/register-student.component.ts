@@ -5,7 +5,9 @@ import{RegistrationService} from '../services/registration.service';
 import * as xml2js from 'xml2js';
 import { ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import {MessageService}   from '../services/message.service'
+import {MessageService}   from '../services/message.service';
+import {Location} from '@angular/common'
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'register-student',
@@ -34,9 +36,10 @@ columnDefs = [
    params = new HttpParams()
   .set('application','CMS');
   constructor(private router:Router,
-    private registrationservices:RegistrationService,
+    private userservice:UserService,
     route:ActivatedRoute,
-    private message:MessageService
+    
+    private location:Location
     ) { 
   }
 
@@ -57,9 +60,9 @@ columnDefs = [
     this.params =this.params.set('method','/registrationforstudent/gettencodes.htm');
      console.log(this.params);
     
-         this.registrationservices.getdata(this.params).subscribe(res=>{
+         this.userservice.getdata(this.params).subscribe(res=>{
 
-          this.message.add("Ten code selected");
+          this.userservice.log("Ten code selected");
           
           let data = null;
           xml2js.parseString( res, function (err, result){
@@ -81,7 +84,7 @@ columnDefs = [
 
          })
      
-    //  this.registrationservices.gettencodes(params).subscribe(res=>{
+    //  this.userservice.gettencodes(params).subscribe(res=>{
     //    console.log(res);
     //  });
   }
@@ -90,8 +93,8 @@ columnDefs = [
   getswitchdetail(){
     this.params=this.params.set('method','/registrationforstudent/getswitchdetail.htm');
     console.log(this.params);
-    this.registrationservices.getdata(this.params).subscribe(res=>{
-      this.message.add(" in switch detail selected");
+    this.userservice.getdata(this.params).subscribe(res=>{
+      this.userservice.log(" in switch detail selected");
      let data = null;
       xml2js.parseString( res, function (err, result){
        data = result;
@@ -119,7 +122,7 @@ columnDefs = [
     this.params=this.params.append('switchType','NON');
     this.params=this.params.append('module','');
     
-    this.registrationservices.getdata(this.params).subscribe(res=>{
+    this.userservice.getdata(this.params).subscribe(res=>{
       let data = null;
       xml2js.parseString( res, function (err, result){
        data = result;
@@ -138,4 +141,8 @@ columnDefs = [
 
 
 } 
+
+goBack(): void {
+  this.location.back();
+}
 }

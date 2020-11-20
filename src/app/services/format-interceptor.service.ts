@@ -12,20 +12,38 @@ import { map, filter } from 'rxjs/operators';
 export class FormatInterceptorService implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(httpRequest).pipe(
-      
-      filter(event => event instanceof HttpResponse && httpRequest.url.includes('format')),
+    console.log("in interceptor");
 
-      map(
-        (event: HttpResponse<any>) => event.clone({ body: ()=>{
-                xml2js.parseString( event.body, function (err, result){
-        return result;     
-        
-      });
-                
-         }})
-         
-         )
-    );
+     let format:string =httpRequest.headers.get('format');
+    return next.handle(httpRequest).pipe(
+
+      
+    
+      //filter(event => (event instanceof HttpResponse && format=='format')),
+      filter(event => (event instanceof HttpResponse )),
+       // event => event instanceof HttpResponse && httpRequest.url.includes('format')),
+              
+      map( 
+               
+        (event: HttpResponse<any>):HttpResponse<any>  => {
+      let data = null;
+      if(format=='format'){
+
+      xml2js.parseString( event.body , function (err, result){ 
+          data =result;
+                     
+        });
+        //console.log("in interceptor",data);
+        return event.clone({body:JSON.stringify(data)});
+      }else{
+        //console.log("in else of map");
+        return event;
+      }
+      
+      
+      }
+       
+           ))
+    
   }
 }
