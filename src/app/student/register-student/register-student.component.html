@@ -19,20 +19,21 @@
 <button (click)="getSelectedRows()">Get Selected Rows</button>
 <div class="d-flex p-2 bd-highlight border">
   
-<ag-grid-angular *ngIf = "rowData.length>0" class="w-100"
-
-    
-   
-    [rowData]="rowData"
+<ag-grid-angular *ngIf = "myrowData.length>0" 
+    suppressHorizontalScroll = "true"
+    style="width: 100%; height: 500px;"
+    [rowData]="myrowData"
     [columnDefs]="columnDefs"
     #agGrid
     rowSelection="multiple"
-    
     class="ag-theme-alpine"
-    [defaultColDef]="defaultColDef"
-
+ [defaultColDef]="defaultColDef"
+ [scr]
+ 
 >
 </ag-grid-angular>
 
 </div>
-
+<!--
+<router-outlet></router-outlet>
+-->

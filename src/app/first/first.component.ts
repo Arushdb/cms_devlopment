@@ -14,6 +14,7 @@ export class FirstComponent implements OnInit {
     
 
     const id: Observable<string> = route.params.pipe(map(p => p.id));
+    console.log("parameter map",route.snapshot.queryParamMap);
     const url: Observable<string> = route.url.pipe(map(segments => segments.join('')));
     // route.data includes both `data` and `resolve`
     const user = route.data.pipe(map(d => d.user));

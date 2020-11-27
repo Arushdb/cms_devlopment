@@ -25,7 +25,7 @@ export class HttpinterceptorService implements HttpInterceptor{
     
     return next.handle(req).pipe(
 
-      retry(2),
+      //retry(2),
       catchError((error:HttpErrorResponse)=>{
        
         

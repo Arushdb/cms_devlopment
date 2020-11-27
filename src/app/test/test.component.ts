@@ -2,6 +2,7 @@
 import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
+import { StudentModule } from '../student/student.module';
 
 @Component({
   selector: 'app-test',
@@ -21,6 +22,7 @@ export class TestComponent implements OnInit {
   public myarr=[
     {
      displayname:"Student",
+     route :'StudentMod',
      children:[
        {
        displayname:"Registration",
@@ -41,14 +43,14 @@ export class TestComponent implements OnInit {
     
     },{
       displayname:"Arush1",
-      children:[
-        {
-        displayname:"Agam1"
-        },
-        {
-         displayname:"Aarat1"
-         }
-       ] 
+      // children:[
+      //   {
+      //   displayname:"Agam1"
+      //   },
+      //   {
+      //    displayname:"Aarat1"
+      //    }
+      //  ] 
      
      }
   

@@ -20,20 +20,31 @@ export class UserService {
    
    application="CMS";
   
-   getdata(params:HttpParams){
+   getdata(params:HttpParams,myparam){
     var myurl ="";
     let headers: HttpHeaders= new HttpHeaders();
  
     
    // console.log("XMLJS flag",params.get("xmltojs"));
-    if(params.get("xmltojs")=="Y"){
-      console.log("in xmljs");
-      headers=headers.append('format', 'format');// format the response data from xml to json 
+    // if(params.get("xmltojs")=="Y"){
+    //   console.log("in xmljs");
+    //   headers=headers.append('format', 'format');// format the response data from xml to json 
+    // }else{
+    //   headers=headers.append('format', 'None');// format the response data from xml to json
+    // }
+    if(myparam.xmltojs=="Y"){
+      headers=headers.append('format', 'format');// format the response data from xml to json
     }else{
       headers=headers.append('format', 'None');// format the response data from xml to json
-    }
-     
-    myurl = this.url+params.get('method') ;
+    } 
+
+    console.log(params.get('method')); 
+    console.log(this.url);
+    console.log("params",params);
+  
+    //myurl = this.url+params.get('method') ;
+    myurl = this.url+myparam.method ;
+    console.log(console.log(myurl));
     return  this.httpclient.get(myurl,{headers,responseType: 'text',params});
  
     }

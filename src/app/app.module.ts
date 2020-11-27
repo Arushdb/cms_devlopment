@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import {FormsModule}  from '@angular/forms'
+import {FormsModule}  from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,18 +27,20 @@ import { ThirdComponent } from './third/third.component';
 import { AgGridModule } from 'ag-grid-angular';
 import 'ag-grid-enterprise';
 import { MygridComponent } from './mygrid/mygrid.component';
-import { RegisterStudentComponent } from './register-student/register-student.component';
+
 import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { MessageComponent } from './message/message.component';
 
 
+//import {StudentModule} from  './student/student.module' ;
 
 @NgModule({
   declarations: [
     AppComponent,
      SignonformComponent,
+     
     CmsnavComponent,
     TestComponent,
     MenuItemComponent,
@@ -47,7 +49,7 @@ import { MessageComponent } from './message/message.component';
     FirstComponent,
     ThirdComponent,
     MygridComponent,
-    RegisterStudentComponent,
+  
     MessageComponent
     
     
@@ -67,7 +69,9 @@ import { MessageComponent } from './message/message.component';
     MatListModule,
     MatMenuModule,
     FormsModule,
+  //  StudentModule,
     AgGridModule.withComponents([])
+   
   
   ],
   providers: [

@@ -29,7 +29,8 @@ export class SignonformComponent  {
    returnUrl: string;  
    userGroupId:string;
    maxLogins:string;
-    params:HttpParams ;
+    httpparams:HttpParams ;
+  
     headers:HttpHeaders;
   constructor(private router:Router,
     private userservice:UserService,
@@ -44,13 +45,17 @@ export class SignonformComponent  {
  }  
   
    main(form):void {
-     this.params = new HttpParams()
+     this.httpparams = new HttpParams()
     .set('userName',form.inputUser)
     .set('password', form.inputPassword)
-    .set('application','CMS')
-    .set('method','/login/loginProcedureStart.htm' )
-    .set('xmltojs','Y');
+    .set('application','CMS');
 
+
+    let  myparam ={
+                  method:'/login/loginProcedureStart.htm',
+                  xmltojs:'Y'
+                  };
+    
   
     // var data= null;
     // var sts:String ="";
@@ -62,9 +67,9 @@ export class SignonformComponent  {
     // urlSearchParams.append('application', 'CMS');
     // let body = urlSearchParams.toString();
     let  data= null;
-    this.userservice.getdata(this.params).subscribe(res=>{
+    this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{
     //  alert(res);
-    //this.userservice.startlogin(this.params).subscribe(res=>{
+    //this.userservice.startlogin(this.httpparams).subscribe(res=>{
      // this.router.navigate(['\dashboard']);
     //  console.log("in response start login",JSON.parse(res));
      
@@ -89,23 +94,23 @@ export class SignonformComponent  {
         console.log("Login successful",this.maxLogins);
 
 
-       this.params= this.params.append('userGroupId',this.userGroupId);
-       this.params=this.params.append('maxLogins',this.maxLogins);
+       this.httpparams= this.httpparams.append('userGroupId',this.userGroupId);
+       this.httpparams=this.httpparams.append('maxLogins',this.maxLogins);
 
-       this.params=this.params.append('method','/login/getLoginDetails.htm');
-     
-       this.userservice.getdata(this.params).subscribe(res=>{ 
-       //this.userservice.getLoginDetails(this.params).subscribe(res=>{
+       //this.httpparams=this.httpparams.append('method','/login/getLoginDetails.htm');
+       myparam.method ='/login/getLoginDetails.htm';
+       this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{ 
+       //this.userservice.getLoginDetails(this.httpparams).subscribe(res=>{
         res= JSON.parse(res);
         let cook:string =this.cookieservice.get('JSESSIONID'); 
         console.log("cookies",cook);
 
-        this.params=this.params.append('method','/login/generateMenu.htm');
-     
-        this.userservice.getdata(this.params).subscribe(res=>{ 
+        //this.httpparams=this.httpparams.append('method','/login/generateMenu.htm');
+        myparam.method ='/login/generateMenu.htm';
+        this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{ 
 
 
-      // this.userservice.getmenus(this.params).subscribe(res=>{
+      // this.userservice.getmenus(this.httpparams).subscribe(res=>{
         //res= JSON.parse(res);
         localStorage.setItem('isLoggedIn', "true");  
         localStorage.setItem('token', form.inputUser); 

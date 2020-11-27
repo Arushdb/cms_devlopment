@@ -13,7 +13,7 @@ interface NavItem {
 }
 
 @Component({
-  selector: 'material-app',
+  selector: 'start-app',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
   encapsulation: ViewEncapsulation.None

@@ -13,11 +13,7 @@ export class RegistrationService {
  // Url = 'assets/config.json';
   
    
- 
-  
-   
-
-    getdata(params:HttpParams){
+     getdata(params:HttpParams){
        return  this.httpclient.get(this.url+params.get('method'),{responseType: 'text',params});
     }
    
