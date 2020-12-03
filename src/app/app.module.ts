@@ -15,6 +15,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatDialogModule} from '@angular/material/dialog'
 import { TestComponent } from './test/test.component';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { hostViewClassName } from '@angular/compiler';
@@ -32,6 +33,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { MessageComponent } from './message/message.component';
+import {DialogComponent  } from './common/dialog.component';
 
 
 //import {StudentModule} from  './student/student.module' ;
@@ -50,7 +52,9 @@ import { MessageComponent } from './message/message.component';
     ThirdComponent,
     MygridComponent,
   
-    MessageComponent
+    MessageComponent,
+  
+    DialogComponent
     
     
    
@@ -69,6 +73,7 @@ import { MessageComponent } from './message/message.component';
     MatListModule,
     MatMenuModule,
     FormsModule,
+    MatDialogModule,
   //  StudentModule,
     AgGridModule.withComponents([])
    

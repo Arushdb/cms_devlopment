@@ -5,10 +5,8 @@ import { RegisterStudentComponent } from './register-student/register-student.co
 
 
 const routes: Routes = [
-  {path: '',redirectTo:'StudentMod'},
-  
-  {path:'registration_continue',component: RegisterStudentComponent}
     
+   
 
 ];
 

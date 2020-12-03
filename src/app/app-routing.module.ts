@@ -22,14 +22,18 @@ const routes:Routes=[
         { path: 'main', component: TestComponent  },
         { path: 'first', component: FirstComponent },
         { path: 'StudentMod',
-        loadChildren: () => import('./student/student.module').then(m => m.StudentModule)
-          }
+        loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
         
-        
-        
+        {path:'registration_continue',component: RegisterStudentComponent}
+         
     ]
 },
-{path:'',redirectTo:'login',pathMatch:'full'}
+   
+
+        
+
+
+        {path:'',redirectTo:'login',pathMatch:'full'}
   
 
 ];
