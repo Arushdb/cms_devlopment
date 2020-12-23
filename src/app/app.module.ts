@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import {FormsModule}  from '@angular/forms';
+import {FormsModule, ReactiveFormsModule}  from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +18,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatDialogModule} from '@angular/material/dialog'
 import { TestComponent } from './test/test.component';
 import { MenuItemComponent } from './menu-item/menu-item.component';
-import { hostViewClassName } from '@angular/compiler';
+
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { FirstComponent } from './first/first.component';
@@ -33,7 +33,11 @@ import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { MessageComponent } from './message/message.component';
-import {DialogComponent  } from './common/dialog.component';
+import {alertComponent  } from './common/alert.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
+
 
 
 //import {StudentModule} from  './student/student.module' ;
@@ -54,7 +58,13 @@ import {DialogComponent  } from './common/dialog.component';
   
     MessageComponent,
   
-    DialogComponent
+    alertComponent,
+  
+    RxjsexampleComponent
+  
+   // CustomComboboxComponent
+  
+    
     
     
    
@@ -75,9 +85,17 @@ import {DialogComponent  } from './common/dialog.component';
     FormsModule,
     MatDialogModule,
   //  StudentModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+   
+   MatAutocompleteModule,
+   // MatFormFieldModule,
+   
+    //ReactiveFormsModule
    
   
+  ],
+  entryComponents: [
+    alertComponent
   ],
   providers: [
    

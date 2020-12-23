@@ -3,7 +3,31 @@
 <button   type="button" class="btn btn-primary"  (click)="gettencode()">Register Student</button>
 </div>
 -->
-<button (click) = "goBack()" >Go Back</button>
+<div class="container">
+    
+    <app-custom-combobox   
+    (OptSelected)="OnOptionselected($event)"
+     #combo 
+     *ngIf="combodata.length>0;else gridblock" 
+     [Options] ='combodata' 
+     [labeltext]='combolabel' 
+     [combowidth] ="combowidth"
+     >
+    
+    </app-custom-combobox>
+
+
+  <div class="container border"  *ngIf="combodata.length>0 && displaybutton ">
+      
+    <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onContinue()"  >Continue</button>
+    <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm ">Cancel</button>
+
+</div>
+    <ng-template #gridblock>
+
+    <button (click) = "goBack()" >Go Back</button>
+
+
 <div class="d-flex flex-row align-items-start p-2 bd-highlight border" >
     <div class="p-2 bd-highlight text-primary"><label >{{entity}}</label></div>
     <div class="p-2 bd-highlight text-primary"><label >{{pgm}}</label></div>
@@ -18,7 +42,7 @@
 </div>
 
 <button (click)="submit()">Submit</button>
-<button (click)="getSelectedRows()">Cancel</button>
+<button >Cancel</button>
 <div class="d-flex p-2 bd-highlight border">
   
 <ag-grid-angular *ngIf = "myrowData.length>0" 
@@ -34,7 +58,10 @@
  
 >
 </ag-grid-angular>
-
+<app-spinner *ngIf = 'mask' [spinnerstatus]="mask">{{mask}}</app-spinner>
 </div>
+</ng-template>
+</div>
+
 
 

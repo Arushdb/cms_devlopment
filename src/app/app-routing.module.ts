@@ -8,6 +8,9 @@ import { TestComponent } from './test/test.component';
 import {AuthGuard} from './guards/auth.guard'
 import { RegisterStudentComponent } from './student/register-student/register-student.component';
 import { MygridComponent } from './mygrid/mygrid.component';
+import { CustomComboboxComponent } from './student/custom-combobox/custom-combobox.component';
+import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
+
 
 
 const routes:Routes=[
@@ -23,9 +26,14 @@ const routes:Routes=[
         { path: 'first', component: FirstComponent },
         { path: 'StudentMod',
         loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
-        
+        //{path:'registration_continue',component: RegisterStudentComponent
         {path:'registration_continue',component: RegisterStudentComponent}
-         
+       // {path:'custom_combo',component: CustomComboboxComponent}
+       
+         //children:[{path:'custom_combo',component: CustomComboboxComponent}]
+        
+        
+        
     ]
 },
    
