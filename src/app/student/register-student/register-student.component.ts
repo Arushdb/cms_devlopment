@@ -195,7 +195,21 @@ columnDefs = [
        /*   
        vstack.selectedChild=sempanel;
        */
-    break;	
+      for (var num:number =1;num<17;num++ ){
+  
+        this.combodata.push({id:num.toString(),label:num.toString()});
+      
+      }
+  
+    
+     this.combolabel = "Select Module" ;
+     this.combowidth = "50%";
+     console.log("In Module",this.combodata); 
+    
+      return;
+      
+
+    
     }else{
       
       
@@ -249,7 +263,7 @@ columnDefs = [
     //this.params["module"]="";
     
    
-    this.getcourses();
+    this.getcoursesservice(this.params);
     break;
     }else{
       
@@ -279,7 +293,7 @@ columnDefs = [
         return;
       }	
      
-      this.getcourses();
+      this.getcoursesservice(this.params);
          
       }
       
@@ -356,7 +370,7 @@ getspcservice(param){
 
 }
 
-  getcourses(){
+getcoursesservice(param){
   
  
    let myparam = {xmltojs:'Y',
@@ -396,6 +410,9 @@ getspcservice(param){
 	for (var obj of  res.registerDetails.Detail){
 		
 		if(obj.available=='N'){
+      
+      this.myrowData.splice(0,this.myrowData.length);
+      this.userservice.log(obj.message);
 			//errorlabel.text=obj.message;
 			//vstack.selectedChild=errorpanel;	
   //		Alert.show("Error :"+obj.message);
@@ -439,7 +456,8 @@ getspcservice(param){
        this.entity = obj.entityName ;
        console.log("in course success",obj.entityName);
        this.creditavailable = obj.creditavailable;
-			// Alert.show("creditavailable:"+creditavailable +"  max credit:"+maxcredit.text);
+      // Alert.show("creditavailable:"+creditavailable +"  max credit:"+maxcredit.text);
+      console.log(this.creditavailable,obj.creditavailable);
 			 
 		start++;
 		}
@@ -519,7 +537,7 @@ goBack(): void {
     var semestermaxcredit:number=0;
     var semestermincredit:number=0;
 
-
+       console.log(subjectselected.length);
     if (subjectselected.length==0){
       const dialogRef=  this.dialog.open(alertComponent,
         {data:{title:"Warning",content:"You selected :"+ 0+" credits ." +
@@ -534,7 +552,7 @@ goBack(): void {
         
       
      // var gridItem:Object=subjectselected.getItemAt(d);
-         
+         console.log("grid item",gridItem);
         semestermaxcredit=parseFloat(gridItem.maxcredit);
         semestermincredit=parseFloat(gridItem.mincredit);
         
@@ -544,7 +562,7 @@ goBack(): void {
           if(
           (this.creditavailable<=this.mincreditrequired)
           ||
-          gridItem.select==true
+          (subjectselected.length>0)
          
           )
            
@@ -818,25 +836,43 @@ goBack(): void {
  
 onContinue(){
 
-  console.log("on Continue");
+  //console.log("on Continue");
  
-  if(this.itemselected.id=="00"){
-    this.params=this.params.append("switchType","NON")  ;
-  }else{
-
-  }
+  
    if(this.combolabel==="Select Speclization"){
     console.log("on  select specilization");
+    if(this.itemselected.id=="00"){
+      this.params=this.params.append("switchType","NON")  ;
+    }else{
+  
+    }
     this.params=this.params.append("specializationId", this.itemselected.id);   
-   }else{
-    console.log("on  select Branch");
+    this.getcoursesservice(this.params);
+   }else if(this.combolabel==="Select Branch"){
+    //console.log("on  select Branch");
     this.params=this.params.append("branchId", this.itemselected.id);
+    this.params =this.params.append("module","");
+    this.getcoursesservice(this.params);
      
+   }else if(this.combolabel==="Select Module"){
+    this.params=this.params.append("switchType","NON" );
+    this.params=this.params.append("module",this.itemselected.id );
+    this.myparam=this.myparam.append("module",this.itemselected.id );
+    this.params=this.params.append("switchType","NON" );
+   
+    if (this.myparam["switchType"]!=null){
+      //this.getcourses(myparam);
+      this.getcoursesservice(this.myparam); 
+    }else{
+      //this.getcourses(param);
+      this.getcoursesservice(this.params);
+    }
+
+
    }
   
-  this.params =this.params.append("module","");
-     //Alert.show("Selected Spc ID"+selectedspcId);
-  this.getcourses(); 
+  
+
 }
 
 

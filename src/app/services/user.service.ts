@@ -69,7 +69,7 @@ export class UserService {
       if(myparam.xmltojs=="Y"){
         headers=headers.append('format', 'format');// format the response data from xml to json
       }else{
-        headers=headers.append('format', 'None');// format the response data from xml to json
+        headers=headers.append('format', 'None');// do not format the response data from xml to json
       } 
   
       // console.log(params.get('method')); 
@@ -90,7 +90,7 @@ export class UserService {
       }
 
 
-   /** Log a HeroService message with the MessageService */
+   /** Log a UserService message with the MessageService */
   public log(message: string) {
   this.messagesrv.add(`User Service: ${message}`);
   }
