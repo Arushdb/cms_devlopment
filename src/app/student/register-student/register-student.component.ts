@@ -16,6 +16,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { alertComponent } from 'src/app/common/alert.component';
 import { ThemePalette } from '@angular/material/core';
 import { CustomComboboxComponent } from '../custom-combobox/custom-combobox.component';
+import { GridReadyEvent } from 'ag-grid-community';
 
 
 
@@ -30,6 +31,8 @@ export class RegisterStudentComponent implements AfterViewInit {
   @ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
   combowidth: string;
   public displaybutton: boolean =false;
+  //suppressRowDeselection = false;
+  check=false;
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
   // color: ThemePalette = 'primary';
@@ -48,7 +51,28 @@ export class RegisterStudentComponent implements AfterViewInit {
       
   }
   ngAfterViewInit(): void {
+    
+  }
 
+  // OnSelectAll(){
+  //   this.agGrid.api.selectAll();
+  // }
+  Onchange(){
+    console.log(this.check);
+    this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
+  }
+
+  OngridReady(parameters:GridReadyEvent){
+    //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
+
+
+      if(this.mincreditrequired===this.maxcreditrequired){
+        parameters.api.selectAll();
+      
+        this.check=true;
+        //this.suppressRowDeselection=true;
+
+  }
   }
 
   ngOnInit(): void {
@@ -116,8 +140,16 @@ export class RegisterStudentComponent implements AfterViewInit {
     filter: true
        
 };
+hashValueGetter = function (params) {
+  return params.node.rowIndex;
+};
 
 columnDefs = [
+  {
+    headerName: 'Seq No',
+    maxWidth: 100,
+    valueGetter: this.hashValueGetter,
+  },
   { field: 'courseCode',checkboxSelection: true  },
   { field: 'coursename' },
   { field: 'credits' }
@@ -411,7 +443,7 @@ getcoursesservice(param){
 		
 		if(obj.available=='N'){
       
-      this.myrowData.splice(0,this.myrowData.length);
+      this.myrowData.splice(0,this.myrowData.length);// clear the myrowdata array
       this.userservice.log(obj.message);
 			//errorlabel.text=obj.message;
 			//vstack.selectedChild=errorpanel;	
@@ -467,27 +499,14 @@ getcoursesservice(param){
 		// credits:obj.credits,maxcredit:obj.maxcredit,mincredit:obj.mincredit
 		//this.agGrid.api.refreshCells();
 		
-		//});
+    //});
+    
+    // this.agGrid.api.forEachNode((node,index)=>{
+    //   console.log(node,index);
+
+    // });
 			}
 	}
-			
-	
-			
-			// compulsoryCourseGrid.dataProvider=regdataAC;
-			// regdataAC.refresh();
-			
-
-	
-	
-
-
-
-
-
-
-
-
-
 
 }
 goBack(): void {
@@ -499,6 +518,8 @@ goBack(): void {
   //var subjectselected:ArrayCollection=compulsoryCourseGrid.dataProvider as ArrayCollection;
   
   //var subjectselected =this.getSelectedRows();
+
+  //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
  
   const selectedNodes = this.agGrid.api.getSelectedNodes();
 

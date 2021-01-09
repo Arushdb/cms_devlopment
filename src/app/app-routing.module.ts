@@ -11,6 +11,8 @@ import { MygridComponent } from './mygrid/mygrid.component';
 import { CustomComboboxComponent } from './student/custom-combobox/custom-combobox.component';
 import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 
+import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
+
 
 
 const routes:Routes=[
@@ -27,7 +29,8 @@ const routes:Routes=[
         { path: 'StudentMod',
         loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
         //{path:'registration_continue',component: RegisterStudentComponent
-        {path:'registration_continue',component: RegisterStudentComponent}
+        {path:'registration_continue',component: RegisterStudentComponent},
+        {path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}}
        // {path:'custom_combo',component: CustomComboboxComponent}
        
          //children:[{path:'custom_combo',component: CustomComboboxComponent}]

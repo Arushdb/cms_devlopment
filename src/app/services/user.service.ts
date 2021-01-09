@@ -23,7 +23,7 @@ export class UserService {
    getdata(params:HttpParams,myparam){
     var myurl ="";
     let headers: HttpHeaders= new HttpHeaders();
- 
+     
     
    // console.log("XMLJS flag",params.get("xmltojs"));
     // if(params.get("xmltojs")=="Y"){

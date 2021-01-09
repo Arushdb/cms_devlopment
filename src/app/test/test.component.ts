@@ -42,15 +42,16 @@ export class TestComponent implements OnInit {
       ] 
     
     },{
-      displayname:"Arush1",
-      // children:[
-      //   {
-      //   displayname:"Agam1"
-      //   },
-      //   {
-      //    displayname:"Aarat1"
-      //    }
-      //  ] 
+      displayname:"Teacher",
+      children:[
+        {
+        displayname:"Internal Award Sheet",
+        route:'Internal_award_sheet'
+        },
+        {
+         displayname:"Aarat1"
+         }
+       ] 
      
      }
   

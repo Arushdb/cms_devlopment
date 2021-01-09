@@ -23,7 +23,7 @@
 <ng-template #gridblock >
     <div  *ngIf="myrowData.length>0">
 
-                <button (click) = "goBack()" >Go Back</button>
+                <button class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "goBack()" >Go Back</button>
         
 
                 <div class="d-flex flex-row align-items-start p-2 bd-highlight border" >
@@ -38,10 +38,27 @@
                     <div class="p-2 bd-highlight text-primary"><label >{{crselected}}</label></div>
                 
                 </div>
-
-                <button (click)="submit()">Submit</button>
-                <button >Cancel</button>
-                    <div class="d-flex p-2 bd-highlight border" >
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-primary btn-sm " (click)="submit()">Submit</button>
+                    
+                    <button type="button" class="btn btn-primary btn-sm">Cancel</button>
+                  </div>
+                  <!--
+                <button class="btn btn-primary btn-primary-spacing  btn-sm " (click)="submit()">Submit</button>
+                <button class="btn btn-primary btn-primary-spacing  btn-sm " (click)="OnSelectAll()">Select All</button>
+                <button class="btn btn-primary btn-primary-spacing  btn-sm " >Cancel</button>
+                --> 
+               
+               
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="Check1"  [(ngModel)]="check"  
+                    (change)="Onchange()" >
+                    <label class="form-check-label" for="Check1">Select All</label>
+                  </div>
+                 
+                 
+                <div class="d-flex p-2 bd-highlight border" >
+                   
     
                         <ag-grid-angular
                             suppressHorizontalScroll = "true"
@@ -49,9 +66,11 @@
                             [rowData]="myrowData"
                             [columnDefs]="columnDefs"
                             #agGrid
+                            (gridReady) ="OngridReady($event)"
                             rowSelection="multiple"
                             class="ag-theme-alpine"
-                        [defaultColDef]="defaultColDef"
+                           
+                            [defaultColDef]="defaultColDef"
                         [scr]
                         
                         >
