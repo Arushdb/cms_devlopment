@@ -38,9 +38,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 
-import { LabelComponent } from './label/label.component';
-import { ResultProcessingComponent } from './result-processing/result-processing.component';
-import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
+//import { LabelComponent } from './label/label.component';
+//import { ResultProcessingComponent } from './result-processing/result-processing.component';
+//import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 
 
 
@@ -67,11 +67,11 @@ import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.
     RxjsexampleComponent,
   
   
-    LabelComponent,
+    //LabelComponent,
   
-    ResultProcessingComponent,
+    //ResultProcessingComponent,
   
-    AwardBlankSheetComponent
+    //AwardBlankSheetComponent
   
    // CustomComboboxComponent
   
