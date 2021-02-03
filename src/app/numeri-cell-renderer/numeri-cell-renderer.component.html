@@ -1,0 +1,8 @@
+<!--
+<input type="text"  (keydown)="onKeyDown($event)"  [(ngModel)]="value"/>
+<span><button #theButton (click) ="onButtonClicked()" id="theButton" style="height: 39px">#</button>
+    <span id="theValue"  #theValue style="padding-left: 4px;"></span>
+</span>
+-->
+
+<input  [class.red]="hasError"  [class.size20]="hasError" type="text"    [(ngModel)]="value"/>

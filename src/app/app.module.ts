@@ -41,6 +41,8 @@ import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 import { LabelComponent } from './label/label.component';
 import { ResultProcessingComponent } from './result-processing/result-processing.component';
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
+import { NumericCellEditorComponent } from './numeric-cell-editor/numeric-cell-editor.component';
+import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
 
 
 
@@ -71,7 +73,11 @@ import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.
   
     ResultProcessingComponent,
   
-    AwardBlankSheetComponent
+    AwardBlankSheetComponent,
+  
+    NumericCellEditorComponent,
+  
+    NumeriCellRendererComponent
   
    // CustomComboboxComponent
   

@@ -1,8 +1,16 @@
 
-import { ViewEncapsulation } from '@angular/core';
+import { Input, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
 import { StudentModule } from '../student/student.module';
+
+
+type MyType = {
+  displayname:string;
+  route:string;
+  children:MyType;
+}
+
 
 @Component({
   selector: 'app-test',
@@ -10,16 +18,21 @@ import { StudentModule } from '../student/student.module';
   styleUrls: ['./test.component.css'],
   
 })
-export class TestComponent implements OnInit {
 
+export class TestComponent implements OnInit {
+  
   @ViewChild(MenuItemComponent) myitem:MenuItemComponent;
+  @Input() myarr:MyType[];
+
+
+
   constructor() { }
   
   ngAfterViewInit() {
     console.log("Viewing  child Menu Item from test"+this.myitem); // Dolphin
   }
 
-  public myarr=[
+  public myarr1=[
     {
      displayname:"Student",
      route :'StudentMod',

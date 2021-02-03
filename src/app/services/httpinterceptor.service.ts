@@ -6,6 +6,7 @@ import { Observable ,throwError} from 'rxjs';
 import { map,catchError, retry } from 'rxjs/operators';
 import {AppError}  from "../AppErrors/app-error" ;
 import {NotFoundError}  from "../AppErrors/not-found-error" ;
+import { isNull } from '@angular/compiler/src/output/output_ast';
 @Injectable(
 
  // {providedIn: 'root'}
@@ -16,12 +17,14 @@ export class HttpinterceptorService implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler):
   Observable<HttpEvent<any>> {
   
-    // console.log("interceptor: " + req.url);
+     console.log("interceptor: " + req.url);
     const API_Key ='123456';
-    withCredentials: true
+    withCredentials: true;
+   
+     let  token=localStorage.getItem('token');
+       
     req = req.clone({
-      setHeaders:{API_Key},withCredentials: true
-    });
+      setHeaders:{token},withCredentials: true    });
     
     return next.handle(req).pipe(
 

@@ -31,6 +31,7 @@ const routes:Routes=[
         //{path:'registration_continue',component: RegisterStudentComponent
         {path:'registration_continue',component: RegisterStudentComponent},
         {path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}}
+              
        // {path:'custom_combo',component: CustomComboboxComponent}
        
          //children:[{path:'custom_combo',component: CustomComboboxComponent}]

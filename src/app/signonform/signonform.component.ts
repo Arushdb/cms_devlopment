@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import {NgForm} from '@angular/forms';
 import{UserService} from '../services/user.service'
 import { HttpHeaders, HttpParams } from '@angular/common/http';
@@ -53,6 +53,7 @@ export class SignonformComponent  {
     headers:HttpHeaders;
 
     roleSelectionAllowed: boolean;
+	token: any;
   constructor(private router:Router,
     private userservice:UserService,
     private authService: AuthService ,
@@ -61,120 +62,11 @@ export class SignonformComponent  {
   ngOnInit() {  
  
  this.returnUrl = '/dashboard';  
- this.authService.logout();  
+ //this.authService.logout();  
  
  }  
   
-  //  main(form):void {
-  //    this.httpparams = new HttpParams()
-  //   .set('userName',form.inputUser)
-  //   .set('password', form.inputPassword)
-  //   .set('application','CMS');
-
-
-  //   let  myparam ={
-  //                 method:'/login/loginProcedureStart.htm',
-  //                 xmltojs:'Y'
-  //                 };
-    
   
-  //   // var data= null;
-  //   // var sts:String ="";
-   
-
-  //   // let urlSearchParams = new URLSearchParams();
-  //   // urlSearchParams.append('userName', form.inputUser);
-  //   // urlSearchParams.append('password', form.inputPassword);
-  //   // urlSearchParams.append('application', 'CMS');
-  //   // let body = urlSearchParams.toString();
-  //   let  data= null;
-  //   this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{
-  //   //  alert(res);
-  //   //this.userservice.startlogin(this.httpparams).subscribe(res=>{
-  //    // this.router.navigate(['\dashboard']);
-  //   //  console.log("in response start login",JSON.parse(res));
-     
-  //     data = JSON.parse(res);
-  //   //     xml2js.parseString( res, function (err, result){
-  //   //     data = result;     
-  //   //    let data=null;
-  //   // xml2js.parseString( res , function (err, result){ 
-  //   //   data =result;
-                 
-  //   // });       
-       
-  //     console.log("inside startlogin result"+data.loginInfo.loginInfo[0].userGroupId);
-      
-  //     this.sts =data.loginInfo.loginInfo[0].status;
-  //     this.userGroupId=data.loginInfo.loginInfo[0].userGroupId ;
-  //     this.maxLogins = data.loginInfo.loginInfo[0].maxLogins;
-
-   
-         
-  //     if(this.sts=="ACT"){
-  //       console.log("Login successful",this.maxLogins);
-
-
-  //      this.httpparams= this.httpparams.append('userGroupId',this.userGroupId);
-  //      this.httpparams=this.httpparams.append('maxLogins',this.maxLogins);
-
-  //      //this.httpparams=this.httpparams.append('method','/login/getLoginDetails.htm');
-  //      myparam.method ='/login/getLoginDetails.htm';
-  //      this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{ 
-  //      //this.userservice.getLoginDetails(this.httpparams).subscribe(res=>{
-  //       res= JSON.parse(res);
-  //       let cook:string =this.cookieservice.get('JSESSIONID'); 
-  //       console.log("cookies",cook);
-
-  //       //this.httpparams=this.httpparams.append('method','/login/generateMenu.htm');
-  //       myparam.method ='/login/generateMenu.htm';
-  //       this.userservice.getdata(this.httpparams,myparam).subscribe(res=>{ 
-
-
-  //     // this.userservice.getmenus(this.httpparams).subscribe(res=>{
-  //       //res= JSON.parse(res);
-  //       localStorage.setItem('isLoggedIn', "true");  
-  //       localStorage.setItem('token', form.inputUser); 
-
-        
-  //      this.router.navigate(['\dashboard']);
-
-  //      });
-       
-  //         });
-
-            
-  //       }else{
-  //         this.message = "Please check your userid and password";  
-  //         console.log("In else condition if loop "+data);
-  //         this.router.navigate(['\login']);
-  //         alert(this.sts);
-  //       }
-
-  //     },
-  //     (error:AppError)=>{
-  //      if(error instanceof NotFoundError){
-  //       this.userservice.log("Server not found");
-  //       alert("Server not found");
-
-  //      }
-  //        else{
-  //         this.userservice.log("Hello Arush :An unexpected Error");
-  //         alert("Hello Arush :An unexpected Error");
-  //        }
-        
-
-  //     }
-      
-      
-      
-  //     );
-        
-      
-  
-    
-  // }
-
 
   roles = new Collections.Set<User>();
   //roles = new Collections.arrays[];
@@ -207,27 +99,19 @@ urlPrefix:string;
 //On click of login button
  Login(form)
 {
-	// if(Validator.validateAll([userNameValidator,passwordValidator,emailvalidator]).length==0)
-	// {
-   
-		console.log(appProperties['accountDissable']);
-
+	
 		this.params = new HttpParams()
 		.set('userName',form.inputUser)
 		.set('password', form.inputPassword)
-		.set('application','CMS');
-
-	
+		.set('application','CMS')
+		;
 
 		
 				this.loginRoleService(this.params);
              
 
 
-	//}
-	//else{
-	//	userPasswordLabel.visible=true;
-	//}
+
 }
 
 loginRoleService(params){
@@ -238,10 +122,10 @@ loginRoleService(params){
 
 let  data= null;
 this.userservice.getdata(this.params,myparam).subscribe(res=>{
-
+console.log(res);
 data = JSON.parse(res);
 
-this.LoginRoleServiceResult(data)
+this.LoginRoleServiceResult(data);
 });
 }
  requestPasswordServiceResult(ResultEvent){
@@ -298,11 +182,11 @@ LoginRoleServiceResult(res){
     // var str:String=this.roles['status'];
     // console.log(str);
 		// var msg:Array<string>=str.split("-");	
-		
-		localStorage.setItem('isLoggedIn', "true");  
-    localStorage.setItem('token', res.userName); 
+		console.log(res.token);
+
 		//if(msg[0]=="ACT"){
 		if(str=="ACT"){
+			
       console.log("inside login");
 			if(this.roles.size() > 1){
 			//if(this.roles.size() > 1){
@@ -423,6 +307,9 @@ if (isUndefined((data.loginInfo.loginInfo))){
   let valuesset=new Collections.Set<User>() ;
   //let values=new Collections.Set<User>() ;
   //let values:  Array <User>;
+  console.log(res.token);
+   this.token =res.loginInfo.loginInfo[0].token ;
+  		
   
 	for (var obj of res.loginInfo.loginInfo)
 	{
@@ -449,6 +336,8 @@ if (isUndefined((data.loginInfo.loginInfo))){
 		// userNameLabel.visible=true;						
 		this.userGroupId=String(values[0].userGroupId);
 		this.userGroupName=String(values[0].userGroupName);
+
+			
 		
 		this.getMenues(this.userGroupId,this.userGroupName);	
 		//added by Jyoti on 22-Dec-2017
@@ -481,18 +370,92 @@ if (isUndefined((data.loginInfo.loginInfo))){
 }
 
 //getting menues
- getMenues(roleId:String,roleName:String):void
+ getMenues(roleId:string,roleName:string):void
 {
-	var param:Object=new Object();
-	param["userGroupId"]=roleId;
-	param["userGroupName"]=roleName;
-	param["application"]="CMS";
+	//var param:Object=new Object();
+	let param:HttpParams=new HttpParams();
+	
+	// param=param["userGroupId"]=roleId;
+	// param=param["userGroupName"]=roleName;
+	// param["application"]="CMS";
+
+	param=param.append("userGroupId",roleId);
+	param=param.append("userGroupName",roleName);
+	param=param.append("application","CMS");
+
 	//menuHttpService.send(param);
+	this.menuHttpService(param)
 
 	console.log("in get menues");
+	//this.router.navigate(['\dashboard']);
         
-  this.router.navigate(['\dashboard']);
+  //this.router.navigate(['\dashboard'],{state:{cc:""}});
 }
+
+menuHttpService(params){
+
+	let  myparam ={
+		method:'/login/generateMenu.htm',
+		xmltojs:'N'
+		};
+console.log("inside menu service");
+let  data= null;
+console.log(params);
+this.userservice.getdata(params,myparam).subscribe(res=>{
+  console.log(res);
+data = JSON.parse(res);
+//console.log(data);
+
+this.menuHttpServiceResultHandler(data);
+});
+
+}
+
+ menuHttpServiceResultHandler(res):void{
+	//Mask.close();
+	console.log(res);
+	let navigationExtras: NavigationExtras = {
+		queryParams: {
+			"menus": JSON.stringify(res)
+		}
+	  };
+
+
+	 
+	  localStorage.setItem('isLoggedIn', "true");  
+	  localStorage.setItem('token', this.token); 
+	  localStorage.setItem('id', this.userName); 
+
+
+	 this.router.navigate(['\dashboard'],navigationExtras);
+	 console.log(res);
+	var menuString:string=res.result;
+	//if(menuString.localeCompare("errorMenu")==1){
+	if(menuString=="1"){
+		// Alert.show(commonFunction.getMessages('menuError')+" ( "+menuString.substring(10, menuString.length)+" ) "+ commonFunction.getMessages('checkLogFile'), 
+		// 	commonFunction.getMessages('error'),4,null,null,errorIcon);
+
+		this.userservice.log("Error in menu");
+	}
+	else{
+		//usersXML= new XML(menuString);
+		//menuData =  new XMLListCollection(usersXML.*);
+		// vStack.selectedIndex=1;		
+		// menuBar.enabled=true;							
+		//var str:Array=this.expiryStatus.split("-");
+		let str=[];
+		if(str[0]=="ACT1"){
+			//Alert.show(resourceManager.getString("Messages","accountGoingtoBeExpire",[str[1]]),(commonFunction.getMessages('info')),4,null,null,infoIcon);						
+		}
+		else if(str[0]=="ACTTODAY"){
+			//Alert.show(resourceManager.getString("Messages","accountExpireToday"),(commonFunction.getMessages('info')),(Alert.YES|Alert.NO),null,changePassword,infoIcon);						
+		}
+		else if(str[0]=="EXP"){
+			//Alert.show(resourceManager.getString("Messages","accountExpired"),(commonFunction.getMessages('info')),(Alert.OK),null,changePassword,infoIcon);						
+		}
+	}
+}
+
 
 //login fault handler
  loginInfoFaultHandler(res):void
