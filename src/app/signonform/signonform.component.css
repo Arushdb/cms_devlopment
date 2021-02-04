@@ -1,0 +1,49 @@
+.headerLogo {
+	max-height: 90px !important;
+	margin: 1%;
+}
+.color-darkBlue{
+	color: #363c7b !important;
+}
+.color-lightBlue{
+	color: #25a6d1 !important;
+}
+.fs-I{
+  font-style: italic;
+}  
+.fs-IB{
+  font-style: italic;
+  font-weight: 400;
+}
+.page-footer {
+	position: absolute;
+	bottom: 0;
+	padding: 0.5rem;
+	display: flex !important;
+	flex: row wrap !important;
+	align-items: center;
+	justify-content: space-between;
+	width:100%;
+	box-sizing:border-box;
+  }
+  .bk-grey{
+	  background-color: #dfdfdf; 
+  }
+.login-container{
+	margin-top: 5%;
+	margin-bottom: 5%;
+  }
+  .login-form{
+	padding: 5%;
+	box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  }
+  .login-form h3{
+	text-align: center;
+	color: #333;
+  }
+  .m-t-10 {
+	  margin-top: 10px important;
+  }
+  .m-b-10{
+	  margin-bottom: 10px important;
+  }

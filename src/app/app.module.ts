@@ -38,11 +38,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 
-import { LabelComponent } from './label/label.component';
-import { ResultProcessingComponent } from './result-processing/result-processing.component';
+//import { LabelComponent } from './label/label.component';
+//import { ResultProcessingComponent } from './result-processing/result-processing.component';
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 import { NumericCellEditorComponent } from './numeric-cell-editor/numeric-cell-editor.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
+//import { LabelComponent } from './label/label.component';
+//import { ResultProcessingComponent } from './result-processing/result-processing.component';
+//import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 
 
 
@@ -69,9 +72,9 @@ import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-
     RxjsexampleComponent,
   
   
-    LabelComponent,
+    //LabelComponent,
   
-    ResultProcessingComponent,
+    //ResultProcessingComponent,
   
     AwardBlankSheetComponent,
   

@@ -14,7 +14,7 @@ import { AppError } from '../AppErrors/app-error';
 import { NotFoundError } from '../AppErrors/not-found-error';
 import { MessageService } from '../services/message.service';
 import * as Collections from 'typescript-collections';
-import {appProperties} from '../appProperties'
+//import {appProperties} from '../appProperties'
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 
 
@@ -208,7 +208,7 @@ LoginRoleServiceResult(res){
 		//else if(msg[0]=="DIS"){
 		else if(str=="DIS"){
 			//Alert.show(commonFunction.getMessages('accountDissable'),commonFunction.getMessages('info'),null,null,null,infoIcon);
-			console.log(appProperties['accountDissable']);
+			//console.log(appProperties['accountDissable']);
 			this.userservice.log('account is Dissabled');
 			//reset();
 		}
