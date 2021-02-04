@@ -11,7 +11,6 @@ import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { parse ,isAfter} from 'date-fns';
 import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 //import {awardsheetmodel} from './award-blank-sheet-model'
 
 
@@ -24,7 +23,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 
        
-export class AwardBlankSheetComponent implements OnInit {
+export class AwardBlankSheetComponentcopy implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('mkGrid') mkGrid: AgGridAngular;
 
@@ -82,7 +81,6 @@ export class AwardBlankSheetComponent implements OnInit {
   gradelimit: string;
   employeeCode: any;
   sheetstatus: any;
-  editgrid: boolean=true;
   
 
   constructor(
@@ -284,7 +282,6 @@ if (this.displayType=="I"){
 
     this.gridOptionsmk.api.setColumnDefs(this.columnDefsmk);
     this.gridOptionsmk.api.setRowData(this.abc);
-    this.gridOptionsmk.suppressCellSelection=true;
   
     
        
@@ -422,266 +419,264 @@ onRowSelected(event){
     this.awardsheet_params=this.awardsheet_params.set("endDate",event.data.semesterEndDate);
     this.awardsheet_params=this.awardsheet_params.set("employeeCode",this.employeeCode);
     this.awardsheet_params=this.awardsheet_params.set("selEmployeeName",event.data.employeeName);
-    this.awardsheet_params=this.awardsheet_params.set("approvalOrder","1");
     
-		 //	if (event.data.gradelimit=='1')
-          //this.httprequestgetgradelimit() ;
+		 	if (event.data.gradelimit=='1')
+          this.httprequestgetgradelimit() ;
           this.httpStatus();
-          this.getEvaluationComponents();	
         											
 	}
 	
-//   httprequestgetgradelimit() {
+  httprequestgetgradelimit() {
 
 
-//       let obj = {xmltojs:'Y',
-//       method:'None' };   
-//       obj.method='/awardsheet/getgradelimit.htm';
+      let obj = {xmltojs:'Y',
+      method:'None' };   
+      obj.method='/awardsheet/getgradelimit.htm';
   
-//       this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//       res = JSON.parse(res);
-//       this.getgradelimitResultHandler(res);
+      this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+      res = JSON.parse(res);
+      this.getgradelimitResultHandler(res);
   
-// })
-//     //getgradelimit.htm
-//   }
+})
+    //getgradelimit.htm
+  }
   
  
-  //  getgradelimitResultHandler(res){
+   getgradelimitResultHandler(res){
     
-  //   let param:HttpParams =new HttpParams();
+    let param:HttpParams =new HttpParams();
 
 		
-  //     this.gradelimitarraycoll = [];
+      this.gradelimitarraycoll = [];
      
-  //     if(isUndefined(res.CodeList.root)){
-  //       this.gradelimitdetail = false ;
+      if(isUndefined(res.CodeList.root)){
+        this.gradelimitdetail = false ;
 
-  //     }else{
+      }else{
     
     
-	// 	for (var obj of res.CodeList.root){
-	// 	this.gradelimitarraycoll.push({coursecode:obj.courseCode,grades:obj.grades ,marksfrom:obj.marksfrom,marksto:obj.marksto});	
-  //   }
-  // }
+		for (var obj of res.CodeList.root){
+		this.gradelimitarraycoll.push({coursecode:obj.courseCode,grades:obj.grades ,marksfrom:obj.marksfrom,marksto:obj.marksto});	
+    }
+  }
    
-  //   if (this.gradelimitarraycoll.length== 0){
-	// 		//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
-	// 		this.gradelimitdetail = false ;
+    if (this.gradelimitarraycoll.length== 0){
+			//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
+			this.gradelimitdetail = false ;
 		
-	// 	}
+		}
 		
-	// 	this.gradelimitdetail = true ;
-	// 	this.httprequestgetcourseAprStatus();
-  // }
+		this.gradelimitdetail = true ;
+		this.httprequestgetcourseAprStatus();
+  }
   
-// 	httprequestgetcourseAprStatus(){
-//     //getcourseAprStatus.htm
-//     //result="getcourseAprStatusResultHandler(event)"
+	httprequestgetcourseAprStatus(){
+    //getcourseAprStatus.htm
+    //result="getcourseAprStatusResultHandler(event)"
 
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/getcourseAprStatus.htm';
-//  // console.log(params);
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+  obj.method='/awardsheet/getcourseAprStatus.htm';
+ // console.log(params);
   
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.getcourseAprStatusResultHandler(res);
+  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    this.getcourseAprStatusResultHandler(res);
   
-// })
+})
 
 
-//   }
+  }
 	
   
 
-  //  getcourseAprStatusResultHandler(res):void{
-  //   if(isUndefined(res.root)){
-  //     this.userservice.log("No Approver assigned");
+   getcourseAprStatusResultHandler(res):void{
+    if(isUndefined(res.root)){
+      this.userservice.log("No Approver assigned");
       
-  //   }
-	// 	//courseapprstatusarraycoll.removeAll();
-  //   let courseapprstatusarraycoll = [];
+    }
+		//courseapprstatusarraycoll.removeAll();
+    let courseapprstatusarraycoll = [];
     
-  //   if(isUndefined(res.root)){
-  //   }else{
+    if(isUndefined(res.root)){
+    }else{
 
     
-	// 	for(let obj of res.root){
-  //       courseapprstatusarraycoll.push({coursecode:obj.courseCode,entityId:obj.entityId ,requestSender:obj.requestSender,requestGetter:obj.requestGetter
-  //       ,requestdate:obj.requestdate,completiondate:obj.completiondate,approvalOrder:obj.approvalOrder,status:obj.status,
-  //       requestSendername:obj.requestSendername,requestgettername:obj.requestgettername,requestSenderdesignation:obj.requestSenderdesignation
-  //       ,requestGetterdesignation:obj.requestGetterdesignation,
-  //       submitdates:obj.submitdates}
-	//       	);	
-  //       }
-  //     }
-	// 	this.courseapprstatus = true ;
-	// 	if (courseapprstatusarraycoll.length== 0){
-	// 		//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
-	// 		this.courseapprstatus = false;
+		for(let obj of res.root){
+        courseapprstatusarraycoll.push({coursecode:obj.courseCode,entityId:obj.entityId ,requestSender:obj.requestSender,requestGetter:obj.requestGetter
+        ,requestdate:obj.requestdate,completiondate:obj.completiondate,approvalOrder:obj.approvalOrder,status:obj.status,
+        requestSendername:obj.requestSendername,requestgettername:obj.requestgettername,requestSenderdesignation:obj.requestSenderdesignation
+        ,requestGetterdesignation:obj.requestGetterdesignation,
+        submitdates:obj.submitdates}
+	      	);	
+        }
+      }
+		this.courseapprstatus = true ;
+		if (courseapprstatusarraycoll.length== 0){
+			//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
+			this.courseapprstatus = false;
 			
-	// 	}
+		}
 		
-  //   this.httpIsNextApprovalOrderExist();
+    this.httpIsNextApprovalOrderExist();
 
-  // }
+  }
   
-// 	httpIsNextApprovalOrderExist(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/isNextApprovalExist.htm';
+	httpIsNextApprovalOrderExist(){
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+  obj.method='/awardsheet/isNextApprovalExist.htm';
   
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpIsNextAppOrderExistResultHandler(res);
+  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    this.httpIsNextAppOrderExistResultHandler(res);
   
-// })
+})
 
-//   }
+  }
 
 
 
-//  httpIsNextAppOrderExistResultHandler(res):void{
-// 		//var xmlData:XML = event.result as XML;
+ httpIsNextAppOrderExistResultHandler(res):void{
+		//var xmlData:XML = event.result as XML;
 	
-// 		if(res.info.result[0].message=="approvalOrderNotExist"){
-//       //Alert.show(commonFunction.getMessages('setAtleastTwoAppOrder'), commonFunction.getMessages("info"),4,null,null,infoIcon);
-//       this.userservice.log("Set at least two App order");
-//       return;
-// 		}
-// 		else{
+		if(res.info.result[0].message=="approvalOrderNotExist"){
+      //Alert.show(commonFunction.getMessages('setAtleastTwoAppOrder'), commonFunction.getMessages("info"),4,null,null,infoIcon);
+      this.userservice.log("Set at least two App order");
+      return;
+		}
+		else{
 
-// 		this.getApprovalOrder();
+		this.getApprovalOrder();
         
-//      // this.setButtonPressed('SW');
-//       //this.setVariables();
+      this.setButtonPressed('SW');
+      this.setVariables();
 			
-// 		}
-//   }
+		}
+  }
   
 
-// 	getApprovalOrder(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/getApprovalOrder.htm';
+	getApprovalOrder(){
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+  obj.method='/awardsheet/getApprovalOrder.htm';
   
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpGetApprovalOrder(res);
+  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    this.httpGetApprovalOrder(res);
 
-// })
+})
 
-//   }
+  }
 
  
 
-  // httpGetApprovalOrder(res){
-  //   if(res.CodeList.root.length<=0){
+  httpGetApprovalOrder(res){
+    if(res.CodeList.root.length<=0){
 
      
-  //     this.userservice.log("No Approvar exists");
-  //     return;
+      this.userservice.log("No Approvar exists");
+      return;
 
-  //   }
+    }
 
-  // 	this.currentApprovalOrder = res.CodeList.root[0].approvalOrder;
+  	this.currentApprovalOrder = res.CodeList.root[0].approvalOrder;
   
-  //  this.awardsheet_params=this.awardsheet_params.set("approvalOrder",this.currentApprovalOrder);
+   this.awardsheet_params=this.awardsheet_params.set("approvalOrder",this.currentApprovalOrder);
     
    	
-	// 	this.getAprStatus();
+		this.getAprStatus();
   	
-  // }
-//   getAprStatus(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//     obj.method='/awardsheet/getAprStatus.htm';
+  }
+  getAprStatus(){
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+    obj.method='/awardsheet/getAprStatus.htm';
   
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpAprStatusService(res);
+  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    this.httpAprStatusService(res);
   
-// })
-//     }
+})
+    }
 
-  //   httpAprStatusService(res){
+    httpAprStatusService(res){
 
-  //   let resp_status=false; 
+    let resp_status=false; 
      
     
-  //   if(res.info.trim()===""){
-  //     resp_status =false;
-  //   }else{
-  //     resp_status=true;
-  //   }
-  // console.log(resp_status,res.result.message);
+    if(res.info.trim()===""){
+      resp_status =false;
+    }else{
+      resp_status=true;
+    }
+  console.log(resp_status,res.result.message);
      
-  //     try
-  //     {
-  //       if(res.result.sessionConfirm == true &&resp_status)
-  //       {
-  //        //  Alert.show(resourceManager.getString('Messages','sessionInactive'));
-  //         var url:String="";
-  //         //url=commonFunction.getConstants('navigateHome');
-  //         //var urlRequest:URLRequest=new URLRequest(url);
-  //         //urlRequest.method=URLRequestMethod.POST;
-  //         //navigateToURL(urlRequest,"_self");
-  //       }
-  //     }
-  //      catch(e){}
-  //      //downloadButton.visible=false;
-  //        //uploadButton.visible=false;
-  //      if(resp_status&&(res.result.message=="SUB" || res.result.message=="APR" )){
+      try
+      {
+        if(res.result.sessionConfirm == true &&resp_status)
+        {
+         //  Alert.show(resourceManager.getString('Messages','sessionInactive'));
+          var url:String="";
+          //url=commonFunction.getConstants('navigateHome');
+          //var urlRequest:URLRequest=new URLRequest(url);
+          //urlRequest.method=URLRequestMethod.POST;
+          //navigateToURL(urlRequest,"_self");
+        }
+      }
+       catch(e){}
+       //downloadButton.visible=false;
+         //uploadButton.visible=false;
+       if(resp_status&&(res.result.message=="SUB" || res.result.message=="APR" )){
        
-  //       // downloadButton.visible=false;
-  //        //uploadButton.visible=false;
-  //        this.gradelimitButton=false ;
-  //      }
-  //      else{
-  //      //	downloadButton.visible=true;  access removed  as requested by examination 
-  //        this.gradelimitButton=true ;
-  //      //	uploadButton.visible=true;  access removed  as requested by examination
-  //      }
-  //      if(this.displayType=="E"){
-  //       //var params:Object = new Object();
-  //       // params["courseCode"]=courseCode;
-  //       // params["sessionStartDate"]=sessionStartDate;
-  //       //    params["sessionEndDate"]=sessionEndDate;
-  //       this.httpIsExtAwardAllowed();	
-  //     }
-  //     else{
-  //       // setButtonPressed('SW');
-  //       // setVariables();
-  //     }
+        // downloadButton.visible=false;
+         //uploadButton.visible=false;
+         this.gradelimitButton=false ;
+       }
+       else{
+       //	downloadButton.visible=true;  access removed  as requested by examination 
+         this.gradelimitButton=true ;
+       //	uploadButton.visible=true;  access removed  as requested by examination
+       }
+       if(this.displayType=="E"){
+        //var params:Object = new Object();
+        // params["courseCode"]=courseCode;
+        // params["sessionStartDate"]=sessionStartDate;
+        //    params["sessionEndDate"]=sessionEndDate;
+        this.httpIsExtAwardAllowed();	
+      }
+      else{
+        // setButtonPressed('SW');
+        // setVariables();
+      }
   
 
    
-  //   }
-     httpIsExtAwardAllowed(){
+    }
+    httpIsExtAwardAllowed(){
   
 
-     };	
+    };	
 
 
-  //   setButtonPressed(status){
+    setButtonPressed(status){
 
       
-  //     this.buttonPressed=status;
-  // }
-  //  setVariables(){
+      this.buttonPressed=status;
+  }
+   setVariables(){
   
-  //     if(this.buttonPressed==='SW'){ // show button
+      if(this.buttonPressed==='SW'){ // show button
  
   
-  //         this.getEvaluationComponents();			
-  //     }
-  // }
+          this.getEvaluationComponents();			
+      }
+  }
   
       getEvaluationComponents(){
   
@@ -775,7 +770,7 @@ onRowSelected(event){
       }
       resultHandlerStudentMarks(res){
     
-      //this.submitForApprovalButton=true;
+      this.submitForApprovalButton=true;
   
  		var resultObj:Object=new Object();
  		    let dataProviderList:any[] =[]; 
@@ -945,8 +940,8 @@ onRowSelected(event){
 //   					resultObj["totalExternal"]=obj2.totalExternal;
 //   					resultObj["totalInternal"]=obj2.totalInternal;
 //   					resultObj["totalMarks"]=obj2.totalMarks;
-            //console.log((String(obj2.internalGrade).toString()==="X"));
-            //console.log((this.displayType.toString()==="I"));
+            console.log((String(obj2.internalGrade).toString()==="X"));
+            console.log((this.displayType.toString()==="I"));
    					if(this.displayType.toString()==="I"){ 
    						resultObj["grade"]=obj2.internalGrade;	
 						grade=obj2.internalGrade;
@@ -997,7 +992,7 @@ onRowSelected(event){
    				}
    			}
    			
-        
+       
    			this.abc.push(resultObj);
         if(this.columnDefsmk.length>0)
          this.gridOptionsmk.api.setRowData(this.abc);
@@ -1006,11 +1001,10 @@ onRowSelected(event){
           this.submitForApprovalButton=false;
           this.gradelimitButton=false;
           this.saveButton=false;
-          
 
         }
        
-        this.editgrid =false;
+
         
    	      
    		  
@@ -1059,9 +1053,7 @@ onRowSelected(event){
            definition.cellRendererParams = {
            values: column.maximumMarks};
            definition.valueSetter=this.hasValuesetter;
-           definition.editable=this.editgrid;
-           
-           definition.suppressNavigable=!this.editgrid;
+           definition.editable=true;
         
             this.columnDefsmk.push(definition);
           });

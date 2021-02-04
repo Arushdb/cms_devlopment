@@ -18,9 +18,10 @@
     </div>
     <div class="container border"  >
       
-        <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="getStudentMarks()"  >Save</button>
-        <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm ">Cancel</button>
-
+        <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="getStudentMarks()" *ngIf="saveButton" >Save</button>
+        <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onClickentergradelimit()" *ngIf="gradelimitButton" >GradeLimit</button>
+        <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " *ngIf="submitForApprovalButton">Submit</button>
+       
 </div>
     <div class="d-flex p-2 bd-highlight border" [ngStyle]="style"  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
 
