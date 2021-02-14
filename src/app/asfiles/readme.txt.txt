@@ -1,1 +1,0 @@
-as3-to-typescript  src/app/asfiles src/app/tsfiles

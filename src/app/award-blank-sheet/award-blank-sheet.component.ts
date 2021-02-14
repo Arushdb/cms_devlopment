@@ -1,18 +1,29 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, GridOptions, GridReadyEvent, ValueSetterParams } from 'ag-grid-community';
+import { ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
-import { parse ,isAfter} from 'date-fns';
+
 import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
+
+import { GriddialogComponent } from 'src/app/common/griddialog/griddialog.component';
+import { alertComponent } from '../common/alert.component';
+
+
+import 'node_modules/ag-grid-community/dist/styles/ag-grid.css';
+import 'node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
+
+import    'src/app/common/subscription-container';
+import { subscribeOn } from 'rxjs/operators';
+import { SubscriptionContainer } from 'src/app/common/subscription-container';
+import { getWeekYearWithOptions } from 'date-fns/fp';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-//import {awardsheetmodel} from './award-blank-sheet-model'
 
 
 
@@ -24,7 +35,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 
        
-export class AwardBlankSheetComponent implements OnInit {
+export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('mkGrid') mkGrid: AgGridAngular;
 
@@ -40,13 +51,18 @@ export class AwardBlankSheetComponent implements OnInit {
     };
 
     submitForApprovalButton:boolean=false;
-    saveButton:boolean=false;
-    gradelimitButton:boolean=false; 
+    public saveButton:boolean=false;
+    gradelimitButton:boolean=false;
+    instructorCount:string="" ;
+  
+    gradeauthorityholder:boolean=false;
+    submitstatusofotherteacher="";
+
  
  trigger:String="button";
-  abc:any[]=[];
-  abcbk:any[]=[];       
+  studentmarks=[];
   editing = false;
+
   //columnDefsmk:ColDef[]=[];  
   buttonPressed:string=null;
   componentAC:any[];
@@ -66,11 +82,8 @@ export class AwardBlankSheetComponent implements OnInit {
   isCheck=true;
   edit='Dont Edit';
   public defaultColDef;
- 
   
-  
-
-  LoggedInUser: any;
+  LoggedInUser: string;
   public courseListGrid=[];
   gradelimitdetail: boolean;
   courseapprstatus: boolean;
@@ -81,9 +94,25 @@ export class AwardBlankSheetComponent implements OnInit {
   gradelimitarraycoll: any[];
   gradelimit: string;
   employeeCode: any;
-  sheetstatus: any;
+  sheetstatus: string;
   editgrid: boolean=true;
+  allowEdit: string;
+  marksEndSemester: any;
+  totalMarks: any;
+  subjectTotalMarks: any;
+  styleCourse: { width: string; height: string; flex: string; };
+  private pinnedTopRowData:any[]=[];
   
+  styleMarks={
+    width: '100%',
+    height: '100%',
+    flex: '1 1 auto'
+
+  }
+  subs = new SubscriptionContainer();
+  spinnerstatus: boolean=false;
+  gradesCalculated: boolean;
+  someoneElseHasAuthority: boolean=false;
 
   constructor(
     private router:Router,
@@ -97,13 +126,15 @@ export class AwardBlankSheetComponent implements OnInit {
 
     ) { 
       this.gridOptions = <GridOptions>{
-        enableSorting: true,
-        enableFilter: true               
+       // enableSorting: true,
+       // enableFilter: true               
       } ;
+      
       this.gridOptionsmk = <GridOptions>{
         enableSorting: true,
         enableFilter: true               
       } ;
+      
 
 
       this.defaultColDef = {
@@ -113,9 +144,28 @@ export class AwardBlankSheetComponent implements OnInit {
            
     };
 
-      const columns = ['Seq_No','courseCode', 'courseName', 'entityName'];
-      this.setColumns(columns);
+    this.styleCourse={
+      width: '100%',
+      height: '30%',
+      flex: '1 1 auto'
 
+    }
+
+    
+
+      const columns = ['Seq_No','courseCode', 'courseName', 'entityName','programName','branchName','specializationName','semesterStartDate'];
+      this.setColumns(columns);
+      
+
+  }
+  ngOnDestroy(): void {
+    this.subs.dispose();
+    this.elementRef.nativeElement.remove();
+   
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {
@@ -134,7 +184,7 @@ export class AwardBlankSheetComponent implements OnInit {
   
   moduleCreationCompleteHandler():void{
 
-  this._Activatedroute.data.subscribe(data => { 
+    this.subs.add=this._Activatedroute.data.subscribe(data => { 
     
     this.displayType = data.displayType;
     this.urlPrefix="/awardsheet/"; 
@@ -156,11 +206,13 @@ export class AwardBlankSheetComponent implements OnInit {
     let obj = {xmltojs:'Y',
     method:'None' };   
   obj.method='/awardsheet/getCourseList.htm';
-  
-  this.userservice.getdata(param,obj).subscribe(res=>{
+  this.spinnerstatus=true;
+  this.subs.add=this.userservice.getdata(param,obj).subscribe(res=>{
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
     this.employeeCourseHttpServiceResultHandler(res);
+
+    this.spinnerstatus=false;
    
 })
   }
@@ -169,12 +221,14 @@ export class AwardBlankSheetComponent implements OnInit {
   httpEmployeeCode(param){
     let obj = {xmltojs:'Y',
     method:'None' };   
+    this.spinnerstatus=true;
   obj.method='/awardsheet/getEmployeeCode.htm';
   
-  this.userservice.getdata(param,obj).subscribe(res=>{
+  this.subs.add=this.userservice.getdata(param,obj).subscribe(res=>{
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
     this.resultHandlerEmployeeCode(res);
+    this.spinnerstatus=false;
   
 })
    
@@ -185,37 +239,27 @@ export class AwardBlankSheetComponent implements OnInit {
 
   }
 
-   employeeCourseHttpServiceResultHandler(res):void{
+   employeeCourseHttpServiceResultHandler(res){
 
-  
+  console.log(res);
+    if (isUndefined(res.CodeList.root)){
+      this.userservice.log("No Subject Assigned");
+      this.goBack();
 
-    var employeeCourse =res;
-  
-if (this.displayType=="I"){
-			
-		} else if (this.displayType=="E"){
-			//courselabel.text = "Select Course to enter External Marks " ;
-		}else{
-			//courselabel.text = "Select Course to enter Remedial " ;
-		}
-    
-    if(employeeCourse.hasOwnProperty("Details")){
-		//if(!(isUndefined(employeeCourse.Details.sessionConfirm))){
-
-   
-		if(employeeCourse.Details.sessionConfirm == true){
-    		//Alert.show(commonFunction.getMessages('sessionInactive'),commonFunction.getMessages('error'), 4, null,null,errorIcon);
-    	// 	this.parentDocument.vStack.selectedIndex=0;
-      // this.parentDocument.loaderCanvas.removeAllChildren();
-      this.userservice.log("Session In Active");
       return;
-      }
-    } 
+
+    }
+   
+   
+
+    let employeeCourse =res;
+  
+
+    
 		
     //var param:Object =new Object();
     this.awardsheet_params = this.awardsheet_params.set("time",new Date().toString())
-	 	//param["time"]=new Date();
-    //gradeHttpService.send(param);
+	 
     let param= new HttpParams();
     param.set("time",new Date().toString());
 		this.gradeHttpService();
@@ -247,22 +291,6 @@ if (this.displayType=="I"){
      
       this.courseListGrid=employeeCourseArrCol;
       this.employeeCode=employeeCourseArrCol[0].employeeCode;
-     
-     //this.gridOptions.rowData =this.courseListGrid;
-      //** for testing
-
-      //this.gridOptions.api.setColumnDefs(this.columnDefs);
-      this.gridOptions.api.setRowData(this.courseListGrid);
-
-      
-       
-
-    //  );
-      
-     
-
-      
-
       
      
 		}
@@ -274,21 +302,41 @@ if (this.displayType=="I"){
 
   
    
-      this.defaultColumnDefs();
+      //this.defaultColumnDefs();
           this.style = {
             width: '100%',
             height: '100%',
             flex: '1 1 auto'
         };
-      
 
+   //     this.gridOptionsmk.api.sizeColumnsToFit();
+    
+  // this.gridOptionsmk.api.setDomLayout('autoHeight');
+   this.gridOptionsmk.api.setAlwaysShowVerticalScroll(true);
+    this.gridOptionsmk.api.setDomLayout('normal');
+
+     
     this.gridOptionsmk.api.setColumnDefs(this.columnDefsmk);
-    this.gridOptionsmk.api.setRowData(this.abc);
-    this.gridOptionsmk.suppressCellSelection=true;
+    this.gridOptionsmk.api.setRowData(this.studentmarks);
   
+    
+   
+    
     
        
   }
+
+
+  OnCoursegridReady($event){
+    this.styleCourse = {
+      width: '100%',
+      height: '30%',
+      flex: '1 1 auto'
+  };
+  this.gridOptions.api.setRowData(this.courseListGrid);
+
+
+}
 
 
 
@@ -297,7 +345,7 @@ if (this.displayType=="I"){
     method:'None' };   
   obj.method='/awardsheet/getGrades.htm';
   
-  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+  this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
     this.gradeHttpServiceResultHandler(res);
@@ -309,18 +357,7 @@ if (this.displayType=="I"){
   gradeHttpServiceResultHandler(res){
 		//gradeXML =  event.result as XML;
 		let gradeXML = res;
-		
-	
-
-		  	
-		//Mask.close();
-		if(gradeXML.sessionConfirm == true){
-    	// 	Alert.show(commonFunction.getMessages('sessionInactive'),commonFunction.getMessages('error'), 4, null,null,errorIcon);
-    	// 	this.parentDocument.vStack.selectedIndex=0;
-      // this.parentDocument.loaderCanvas.removeAllChildren();
-      
-      this.userservice.log("session Inactive");
-		}
+			
 	}
 	
 
@@ -340,7 +377,7 @@ httprequestgetupdatedgradelimitForSave(){
   method:'None' };   
 obj.method='/awardsheet/getgradelimit.htm';
 
-this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
   //this.userservice.log(" in switch detail selected");
   res = JSON.parse(res);
   this.getupdatedgradelimitForSaveResultHandler(res);
@@ -349,15 +386,18 @@ this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
 
 getupdatedgradelimitForSaveResultHandler(res){
 
+  console.log(res);
   
   this.gradelimitarraycoll=[];
-  if(isUndefined(res.root)){
-
-  }else{
+  if(isUndefined(res.CodeList.root)){
     this.gradelimitarraycoll=[];
-    for (var obj of  res.root){
-      this.gradelimitarraycoll.push({coursecode:obj.courseCode,grades:obj.grades ,marksfrom:obj.marksfrom,marksto:obj.marksto});	
-    }
+  }
+  else
+  {
+        this.gradelimitarraycoll=[];
+        for (var obj of  res.CodeList.root){
+          this.gradelimitarraycoll.push({coursecode:obj.courseCode,grades:obj.grades ,marksfrom:obj.marksfrom,marksto:obj.marksto});	
+        }
   }
   
 	if (this.gradelimitarraycoll.length== 0){
@@ -365,10 +405,10 @@ getupdatedgradelimitForSaveResultHandler(res){
 		this.gradelimitdetail = false ;
 		
 	}else{
-		
+		this.gradelimitdetail = true ;
 	}
 	
-	this.saveMarks(this.saveCaller);
+	//this.saveMarks(this.saveCaller);
 }
 
 
@@ -394,7 +434,7 @@ onRowSelected(event){
    
 
   }else{
-   //this.gridOptionsmk.api.destroy();
+ 
   
     this.columnDefsmk =[];
     this.displaymkgrid =false;
@@ -421,267 +461,33 @@ onRowSelected(event){
     this.awardsheet_params=this.awardsheet_params.set("startDate",event.data.semesterStartDate);
     this.awardsheet_params=this.awardsheet_params.set("endDate",event.data.semesterEndDate);
     this.awardsheet_params=this.awardsheet_params.set("employeeCode",this.employeeCode);
-    this.awardsheet_params=this.awardsheet_params.set("selEmployeeName",event.data.employeeName);
+    this.awardsheet_params=this.awardsheet_params.set("EmployeeName",event.data.employeeName);
     this.awardsheet_params=this.awardsheet_params.set("approvalOrder","1");
-    
-		 //	if (event.data.gradelimit=='1')
-          //this.httprequestgetgradelimit() ;
-          this.httpStatus();
-          this.getEvaluationComponents();	
+
+
+                //Steps
+                //  1 :check  status of other sheets if multiple award sheets.:getCourseGradeLimitStatus()
+
+                //  2 :check if grade limit is present or not   method:httprequestgetupdatedgradelimitForSave()
+                //  3 :check if user has a grade limit authority method:getCourseAuthorityDetails()
+                //  4 :Check award sheet submitted status before loading   this.httpStatus();  
+               
+                
+   
+          //this.getCourseGradeLimitStatus(); //check  status of other sheets .
+          this.httprequestgetupdatedgradelimitForSave(); // check if grade limit is present or not
+          this.getInstructorCountForCourse()
+          //this.getCourseAuthorityDetails(); // check is user has  grade limit authority
+
+         
+         
+       
+
+          	
         											
 	}
-	
-//   httprequestgetgradelimit() {
-
-
-//       let obj = {xmltojs:'Y',
-//       method:'None' };   
-//       obj.method='/awardsheet/getgradelimit.htm';
   
-//       this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//       res = JSON.parse(res);
-//       this.getgradelimitResultHandler(res);
   
-// })
-//     //getgradelimit.htm
-//   }
-  
- 
-  //  getgradelimitResultHandler(res){
-    
-  //   let param:HttpParams =new HttpParams();
-
-		
-  //     this.gradelimitarraycoll = [];
-     
-  //     if(isUndefined(res.CodeList.root)){
-  //       this.gradelimitdetail = false ;
-
-  //     }else{
-    
-    
-	// 	for (var obj of res.CodeList.root){
-	// 	this.gradelimitarraycoll.push({coursecode:obj.courseCode,grades:obj.grades ,marksfrom:obj.marksfrom,marksto:obj.marksto});	
-  //   }
-  // }
-   
-  //   if (this.gradelimitarraycoll.length== 0){
-	// 		//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
-	// 		this.gradelimitdetail = false ;
-		
-	// 	}
-		
-	// 	this.gradelimitdetail = true ;
-	// 	this.httprequestgetcourseAprStatus();
-  // }
-  
-// 	httprequestgetcourseAprStatus(){
-//     //getcourseAprStatus.htm
-//     //result="getcourseAprStatusResultHandler(event)"
-
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/getcourseAprStatus.htm';
-//  // console.log(params);
-  
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.getcourseAprStatusResultHandler(res);
-  
-// })
-
-
-//   }
-	
-  
-
-  //  getcourseAprStatusResultHandler(res):void{
-  //   if(isUndefined(res.root)){
-  //     this.userservice.log("No Approver assigned");
-      
-  //   }
-	// 	//courseapprstatusarraycoll.removeAll();
-  //   let courseapprstatusarraycoll = [];
-    
-  //   if(isUndefined(res.root)){
-  //   }else{
-
-    
-	// 	for(let obj of res.root){
-  //       courseapprstatusarraycoll.push({coursecode:obj.courseCode,entityId:obj.entityId ,requestSender:obj.requestSender,requestGetter:obj.requestGetter
-  //       ,requestdate:obj.requestdate,completiondate:obj.completiondate,approvalOrder:obj.approvalOrder,status:obj.status,
-  //       requestSendername:obj.requestSendername,requestgettername:obj.requestgettername,requestSenderdesignation:obj.requestSenderdesignation
-  //       ,requestGetterdesignation:obj.requestGetterdesignation,
-  //       submitdates:obj.submitdates}
-	//       	);	
-  //       }
-  //     }
-	// 	this.courseapprstatus = true ;
-	// 	if (courseapprstatusarraycoll.length== 0){
-	// 		//Alert.show(commonFunction.getMessages('gradeLimitNotExist'),commonFunction.getMessages("info"),4,null,null,infoIcon) ;
-	// 		this.courseapprstatus = false;
-			
-	// 	}
-		
-  //   this.httpIsNextApprovalOrderExist();
-
-  // }
-  
-// 	httpIsNextApprovalOrderExist(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/isNextApprovalExist.htm';
-  
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpIsNextAppOrderExistResultHandler(res);
-  
-// })
-
-//   }
-
-
-
-//  httpIsNextAppOrderExistResultHandler(res):void{
-// 		//var xmlData:XML = event.result as XML;
-	
-// 		if(res.info.result[0].message=="approvalOrderNotExist"){
-//       //Alert.show(commonFunction.getMessages('setAtleastTwoAppOrder'), commonFunction.getMessages("info"),4,null,null,infoIcon);
-//       this.userservice.log("Set at least two App order");
-//       return;
-// 		}
-// 		else{
-
-// 		this.getApprovalOrder();
-        
-//      // this.setButtonPressed('SW');
-//       //this.setVariables();
-			
-// 		}
-//   }
-  
-
-// 	getApprovalOrder(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//   obj.method='/awardsheet/getApprovalOrder.htm';
-  
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpGetApprovalOrder(res);
-
-// })
-
-//   }
-
- 
-
-  // httpGetApprovalOrder(res){
-  //   if(res.CodeList.root.length<=0){
-
-     
-  //     this.userservice.log("No Approvar exists");
-  //     return;
-
-  //   }
-
-  // 	this.currentApprovalOrder = res.CodeList.root[0].approvalOrder;
-  
-  //  this.awardsheet_params=this.awardsheet_params.set("approvalOrder",this.currentApprovalOrder);
-    
-   	
-	// 	this.getAprStatus();
-  	
-  // }
-//   getAprStatus(){
-//     let obj = {xmltojs:'Y',
-//     method:'None' };   
-//     obj.method='/awardsheet/getAprStatus.htm';
-  
-//   this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-//     //this.userservice.log(" in switch detail selected");
-//     res = JSON.parse(res);
-//     this.httpAprStatusService(res);
-  
-// })
-//     }
-
-  //   httpAprStatusService(res){
-
-  //   let resp_status=false; 
-     
-    
-  //   if(res.info.trim()===""){
-  //     resp_status =false;
-  //   }else{
-  //     resp_status=true;
-  //   }
-  // console.log(resp_status,res.result.message);
-     
-  //     try
-  //     {
-  //       if(res.result.sessionConfirm == true &&resp_status)
-  //       {
-  //        //  Alert.show(resourceManager.getString('Messages','sessionInactive'));
-  //         var url:String="";
-  //         //url=commonFunction.getConstants('navigateHome');
-  //         //var urlRequest:URLRequest=new URLRequest(url);
-  //         //urlRequest.method=URLRequestMethod.POST;
-  //         //navigateToURL(urlRequest,"_self");
-  //       }
-  //     }
-  //      catch(e){}
-  //      //downloadButton.visible=false;
-  //        //uploadButton.visible=false;
-  //      if(resp_status&&(res.result.message=="SUB" || res.result.message=="APR" )){
-       
-  //       // downloadButton.visible=false;
-  //        //uploadButton.visible=false;
-  //        this.gradelimitButton=false ;
-  //      }
-  //      else{
-  //      //	downloadButton.visible=true;  access removed  as requested by examination 
-  //        this.gradelimitButton=true ;
-  //      //	uploadButton.visible=true;  access removed  as requested by examination
-  //      }
-  //      if(this.displayType=="E"){
-  //       //var params:Object = new Object();
-  //       // params["courseCode"]=courseCode;
-  //       // params["sessionStartDate"]=sessionStartDate;
-  //       //    params["sessionEndDate"]=sessionEndDate;
-  //       this.httpIsExtAwardAllowed();	
-  //     }
-  //     else{
-  //       // setButtonPressed('SW');
-  //       // setVariables();
-  //     }
-  
-
-   
-  //   }
-     httpIsExtAwardAllowed(){
-  
-
-     };	
-
-
-  //   setButtonPressed(status){
-
-      
-  //     this.buttonPressed=status;
-  // }
-  //  setVariables(){
-  
-  //     if(this.buttonPressed==='SW'){ // show button
- 
-  
-  //         this.getEvaluationComponents();			
-  //     }
-  // }
   
       getEvaluationComponents(){
   
@@ -690,7 +496,7 @@ onRowSelected(event){
           method:'None' };   
         obj.method='/awardsheet/getEvaluationComponents.htm';
         
-        this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
           //this.userservice.log(" in switch detail selected");
           res = JSON.parse(res);
           this.resultHandlerComponent(res);
@@ -706,12 +512,20 @@ onRowSelected(event){
   
           this.componentAC = [];
          let  flag:Boolean=true;
+         if(!(isUndefined(res.ComponentList.component)))
+          {
+
+      
        
-          for (let object of res.ComponentList.component){
-              this.componentAC.push({evaluationId:object.evaluationId,evaluationIdName:object.evaluationIdName,group:object.group,
-              rule:object.rule,idType:object.idType,displayType:object.displayType,maximumMarks:object.maximumMarks,componentType:object.componentType});
+              for (let object of res.ComponentList.component){
+                  this.componentAC.push({evaluationId:object.evaluationId,evaluationIdName:object.evaluationIdName,group:object.group,
+                  rule:object.rule,idType:object.idType,displayType:object.displayType,maximumMarks:object.maximumMarks,componentType:object.componentType});
+              }
+          }else{
+            this.userservice.log("Subject components are not set up ");
+            this.setoffButton()
+            return;
           }
-  
          
           if(this.componentAC.length==0){
           }
@@ -728,7 +542,7 @@ onRowSelected(event){
         method:'None' };   
       obj.method='/awardsheet/getStudentList.htm';
       
-      this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+      this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
         //this.userservice.log(" in switch detail selected");
         res = JSON.parse(res);
         this.resultHandlerStudent(res);
@@ -740,20 +554,30 @@ onRowSelected(event){
 
      
       if(isUndefined(res.StudentList.student)){
-        this.userservice.log("No Student Exists");
+        this.userservice.log("No Student found");
+        this.setoffButton();
         return;
       }
 
         this.studentXml=[];
      
         this.studentXml=res.StudentList.student;
+
     		
 	  	this.getStudentMarks();
       
 
       }
 
+      setoffButton(){
+        this.submitForApprovalButton=false;
+        this.gradelimitButton=false;
+        this.editgrid=false;
+        this.saveButton=false;
+      }
+
       getStudentMarks(){
+        //this.displaymkgrid =false;
         this.httpStudentMarksList();
 
       }
@@ -763,364 +587,343 @@ onRowSelected(event){
         method:'None' };   
         obj.method='/awardsheet/getStudentMarks.htm';
       
-        let sub=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
         //this.userservice.log(" in switch detail selected");
         res = JSON.parse(res);
         this.resultHandlerStudentMarks(res);
-        sub.unsubscribe();
+        
       
     })
         
         
       }
-      resultHandlerStudentMarks(res){
+      resultHandlerStudentMarks(res)
+      {
     
-      //this.submitForApprovalButton=true;
-  
- 		var resultObj:Object=new Object();
- 		    let dataProviderList:any[] =[]; 
-    
-        let studentMarksListAC:any[]=[];
-       let markspublish:any[]=[];
-  
-     this.abc=[];
-     this.abcbk=[];
-	
-		
-        
-   		for  (var obj1 of  this.studentXml){
-   			var resultObj:Object=new Object();
-   			
-   			
-   			var _s1:string=obj1.rollNumber;
-   		//	resultObj["rollNumber"]=obj1.rollNumber;
-   		    resultObj["rollNumber"]=_s1;
-                		
-   			resultObj["studentName"]=obj1.studentName;
-   			
-   			
-   			//Alert.show("marks"+marksXml);
-   			resultObj["totalInternal"]= "0";
-			resultObj["totalExternal"]="0";
-			resultObj["totalMarks"]="0";
-			resultObj["grade"]="";
-			resultObj["Correction"]="";
-			resultObj["rowchanged"]="N";
+        this.studentmarks=[];
 
-			for (var obj3 of  this.componentAC){
-			var s4: string = obj3.evaluationId;
-			resultObj[obj3.evaluationId]="Z";
-			}
+                      this.submitForApprovalButton=false;
+                      this.gradelimitButton=true;
+                      this.editgrid=true;
+                      this.saveButton=true;
 
-
-   			var cVal:string="";
-   			var cVal1:string="";
-   			var cVal2:string="";// for down load  arush 
-   			var grade:string="";
-
-   			var studentexist:Boolean = false;
-   			var publishdate:Object=new Object();
-         
-         if(String(res.MarksList).trim()===""){
-
-         }else{
-             
-   			for (var obj2 of  res.MarksList.marks){
-
-         
-
-   				
-   				  var _dateinsert:string =""; 
-   					var _datemodified:string = "";
-   					var _publishdate:string="";
-   					var _dateins:Date = new Date();
-   					var _datemod:Date=new Date() ;
-   				//	var res:Number;
-   					var resn:Number;
-   				
-           publishdate = new Object();
-        
-   				if(String(obj1.rollNumber).toString()===String(obj2.rollNumber).toString()){
-          
-             studentexist=true;
-          
-   					var cValue:string="";
-   					
-   					if(String(obj2.attendence).toUpperCase()=== "ABS" ){
-   						cValue="A" ;
-   					}else{
-   				   				   					
-   					if(obj2.marks!="" ){
-   						cValue=obj2.marks;
-   					}else if(obj2.grades!=""){
-   						cValue=obj2.grades;
-   					}else{
-   						cValue=obj2.passfail;
-   					}
-					if(cValue=="" || cValue==null){
-						cVal1="0";
-//						cVal="0";
-            cValue = "Z";
-            this.submitForApprovalButton=false;
-					}
-					else{
-						cVal1=cValue;
-					}
-					}
-   				
-					//Alert.show("cValue is name is "+obj1.studentName+" :  "+cValue.toString()+" : "+obj2.evaluationId);
-					
-   					resultObj[obj2.evaluationId]=cValue;
-
-   	   					   					
-   					if (cValue!="Z"){
-   					_dateinsert = obj2.inserttime;
-   					_datemodified = obj2.modificationtime;
-   				   						
-   									
-				   					if (_dateinsert == ""){
-				   					_publishdate = _dateinsert ;
-				   						
-				   					}else if (_datemodified !=""){
-									   					// _datemod=DateField.stringToDate(_datemodified,"YYYY-MM-DD");
-                               // _dateins=DateField.stringToDate(_dateinsert,"YYYY-MM-DD");	
-                               _datemod =parse(_datemodified,'yyyy-mm-dd',new Date());
-                               _dateins =parse(_dateinsert,'yyyy-mm-dd',new Date());
-
-                               //res=compare(_datemod,_dateins);
-                               
-				   										if (!isAfter(_dateins,_datemod)){
-				   										_publishdate = _dateinsert;
-				   										}else {
-				   										_publishdate = _datemodified;
-				   										}
-				  		
-				   										}
-				   					else{
-				   						_publishdate = _dateinsert ;
-				   					}
-				   					
-   					}
-   					publishdate[obj2.evaluationId]=_publishdate;
-   					//setpublishdate(markspublish,obj2.evaluationId,publishdate);
-
-
-
-   					cVal=cVal1+"/"+obj2.evaluationId+"-"+cVal;
-   					cVal2=cVal1+"/"+obj2.evaluationId+"#"+cVal2; // use # as sep. - is causing issue when student grades  are in negative eg. A-,B- arush
-//   					Alert.show("cVal :" + cVal + "cVal1 :" + cVal1 + "cVal2 :" + cVal2 + "cValue :" + cValue);
-				if (obj2.requestedmarks==null || obj2.requestedmarks==""){
-				
-				}else{
-					resultObj["Correction"] += obj2.requestedmarks+"|"+obj2.evaluationId+"|"+ obj2.requesterremarks+"|"+ obj2.issuestatus+"|";
-					
-                  
-					
-				}
-				
-
-   					
-   					if (obj2.totalExternal==null || obj2.totalExternal==""){
-   						
-   						resultObj["totalExternal"]="0";
-   					}else{
-   						resultObj["totalExternal"]=obj2.totalExternal;
-   					}
-   					
-     					if (obj2.totalInternal==null || obj2.totalInternal==""){
-   						
-   						resultObj["totalInternal"]="0";
-   					}else{
-   						resultObj["totalInternal"]=obj2.totalInternal;
-   					}
-   					
-     					if (obj2.totalMarks==null || obj2.totalMarks==""){
-   						
-   						resultObj["totalMarks"]="0";
-   					}else{
-   						resultObj["totalMarks"]=obj2.totalMarks;
-   					} 					 					
-   					
-   					
-//   					resultObj["totalExternal"]=obj2.totalExternal;
-//   					resultObj["totalInternal"]=obj2.totalInternal;
-//   					resultObj["totalMarks"]=obj2.totalMarks;
-            //console.log((String(obj2.internalGrade).toString()==="X"));
-            //console.log((this.displayType.toString()==="I"));
-   					if(this.displayType.toString()==="I"){ 
-   						resultObj["grade"]=obj2.internalGrade;	
-						grade=obj2.internalGrade;
-						if(String(obj2.internalGrade).toString()==="X"){
-   						this.submitForApprovalButton=false ;
-   						//gradesCalculated="0";
-   						}else{
-   							//gradesCalculated="1";
-   						}
-						
-   					}
-   					else if(this.displayType.toString()==="E"){
-   						resultObj["grade"]=obj2.externalGrade;
-						//grade=obj2.internalGrade;  Arush
-						grade = obj2.externalGrade ;
-						if (String(obj2.externalGrade).toString()==="X"){
-   						this.submitForApprovalButton=false ;
-   						}
-   					}
-   					else{
-//   						resultObj["grade"]=obj2.internalGrade;
-//						grade=obj2.internalGrade;
-// Changed by Dheeraj for getting grades from student_marks table 
-						//resultObj["grade"]=obj2.grades; // Arush on 13/05/2015
-						resultObj["grade"]=obj2.internalGrade;
-						//grade=obj2.grades; // Arush on 13/05/2015
-						grade=obj2.internalGrade; // Arush on 13/05/2015
-						//if (obj2.grades=="X"){  //// Arush on 13/05/2015
-						if (String(obj2.internalGrade).toString()==="X"){   // Arush on 13/05/2015
-   						this.submitForApprovalButton=false ;
-   					}
-						
-   					}
-   					
-
-
- //  				}
-   			}
-
-         }
-        }
-   			for  (const key in  resultObj){
-          
-   				if(resultObj[key] =="Z"){
-   					_publishdate = "";
-   					publishdate[key]=_publishdate;
-   					//setpublishdate(markspublish,str,publishdate);
-   				}
-   			}
-   			
-        
-   			this.abc.push(resultObj);
-        if(this.columnDefsmk.length>0)
-         this.gridOptionsmk.api.setRowData(this.abc);
-
-        if(this.sheetstatus==="APR" ||this.sheetstatus==="SUB"){
-          this.submitForApprovalButton=false;
-          this.gradelimitButton=false;
-          this.saveButton=false;
-          
-
-        }
-       
-        this.editgrid =false;
-        
-   	      
-   		  
-			
-		
-   		}
-       // this.abc.forEach(val => this.abcbk.push(Object.assign({}, val)));
-    
      
-		//this.createGrid();
-    this.setColumnsmk();
+
+     //console.log(this.studentXml,res);
+  
+		this.gradesCalculated=true;
+        
+       for  (var obj1 of  this.studentXml)
+       {
+  
+                let resultObj:Object=new Object();
+              
+                resultObj["rollNumber"]=String(obj1.rollNumber).toString();
+                            
+                resultObj["studentName"]=obj1.studentName;
+                resultObj["totalMarks"]="0";
+                resultObj["grade"]="";
+        //console.log(res.MarksList.marks);
+
+                if(isUndefined(res.MarksList.marks))
+                {  // if marks not entered
+                        this.submitForApprovalButton=false;
+                        for (var obj of this.componentAC)
+                          {
+                          
+                          resultObj[obj.evaluationId]="Z";
+                          }
+                          this.submitForApprovalButton=false ;
+                          this.gradesCalculated=false;
+
+                }
+                else
+                {
+
+                       for (var obj2 of  res.MarksList.marks)
+                       {
+
+                          if(String(obj1.rollNumber).toString()===String(obj2.rollNumber).toString())
+                          {
+	                          
+                                    if(String(obj2.marks).toString()!=="" )
+                                        resultObj[obj2.evaluationId]=obj2.marks;
+                                      
+                                    else
+                                    {
+                                        resultObj[obj2.evaluationId]="Z";
+                                        this.submitForApprovalButton=false;
+                                    }
+
+                                    if(String(obj2.attendence).toString()=== "ABS" )
+                                      resultObj[obj2.evaluationId]="A";
+                    
+                                    if(this.displayType.toString()==="I"  )
+                                    { 
+                                      resultObj["grade"]=obj2.internalGrade;
+                                      resultObj["totalMarks"]=obj2.totalInternal;	
+                                      resultObj["totalInternal"]=obj2.totalInternal;	
+                                                    
+                                    }
+
+                                    if(this.displayType.toString()==="E")
+                                    { 
+                                      resultObj["grade"]=obj2.externalGrade;
+                                      resultObj["totalMarks"]=obj2.totalExternal;	
+                                      resultObj["totalExternal"]=obj2.totalExternal;	
+                                        
+                                    }
+
+                                    if(this.displayType.toString()==="R")
+                                    { 
+                                      resultObj["grade"]=obj2.internalGrade;
+                                      resultObj["totalMarks"]=obj2.totalInternal;	
+                                      resultObj["totalInternal"]=obj2.totalInternal;	
+                                      
+                                    }
+                                    
+
+                                   
+                                    if(
+                                      
+                                      (String(resultObj["grade"]).toString().trim()==="") ||
+                                      (String(resultObj["grade"]).toString()==="X")
+                                    )
+                                    {
+                                      this.submitForApprovalButton=false ;
+                                      this.gradesCalculated=false;
+                                    }
+                
+                          }else{      // no marks record present in Student Marks
+                                      
+                          }      
+   					
+                        }
+                  }
+       
+      
+   		
+                      this.studentmarks.push(resultObj);
+
+                     
+
+        }
+
+
+        console.log("Sheet status:",this.sheetstatus,"instructor count:",this.instructorCount
+        ,"this.gradesCalculated:",this.gradesCalculated,"submitstatusofotherteacher",this.submitstatusofotherteacher
+        , "this.gradeauthorityholder",this.gradeauthorityholder
+        ,"this.gradelimitdetail",this.gradelimitdetail,"editgrid",this.editgrid,"someoneElseHasAuthority:",this.someoneElseHasAuthority);
+        /// set up buttons now
+              if(this.columnDefsmk.length>0)
+              this.gridOptionsmk.api.setRowData(this.studentmarks);
+
+              if(this.sheetstatus==="APR" ||this.sheetstatus==="SUB")
+              {
+                this.submitForApprovalButton=false;
+                this.gradelimitButton=false;
+                this.saveButton=false;
+                this.editgrid =false;
+                
+              }
+              else
+              {
+                //step-1
+                //   if single teacher  and grades are calculated  and authority holder  submit button should be on
+                    if(String(this.instructorCount).toString()==="1" && this.gradesCalculated && this.gradeauthorityholder)
+                    {
+                      this.submitForApprovalButton=true;
+                      console.log("Step-1");
+
+                    }
+   
+
+                    //step-2
+                //if multi teacher  and   authority holder  and  grades calculated 
+                // and all other teacher submitted   submit button should  be on
+
+                    if(String(this.instructorCount).toString()!=="1" && this.gradesCalculated
+                    && this.submitstatusofotherteacher==="Y"
+                    && this.gradeauthorityholder)
+                    
+                      {
+                      this.submitForApprovalButton=true;
+                      console.log("Step-2");
+                      }
+                //step-3      
+                //if multi teacher  and  not a authority holder   and gradelimit authority Present
+                // and some one else has a authority  and  it should not be last sheet for submisiion ,submit button should  be on
+                    if(String(this.instructorCount).toString()!=="1" 
+                        && !this.gradeauthorityholder
+                        //&& this.gradelimitdetail
+                        && this.someoneElseHasAuthority
+                        && this.submitstatusofotherteacher==="N")
+                                                    
+                    
+                        {
+                          this.submitForApprovalButton=true;
+                          console.log("Step-3");
+                          
+                        }
+
+                
+                
+
+              }
+   
+		
+              this.setColumnsmk();
 
       }
 
       
+     
 
-
-      onNewColumnsLoadedEvent(event){
-
-       
-      }
+     
   
-      setColumnsmk() {
+      setColumnsmk()
+       {
         
-
-           this.columnDefsmk =[];
-
-         
-
-                  {
+                 {
                     let definition: ColDef;
+                    
                     definition = { headerName: "Roll Number",  field :'rollNumber' , width: 100,editable:false };
                     this.columnDefsmk.push(definition);
-                    definition = { headerName: "Student Name",  field :'studentName' , width: 250,editable:false};
+                    definition = { headerName: "Student Name",  field :'studentName' , width: 200,editable:false};
                     this.columnDefsmk.push(definition);
                   }
 
+           // console.log(this.componentAC);
 
-
-            this.componentAC.forEach((column: any) => {
-            
+                  this.componentAC.forEach((column: any) => 
+                  {
           
-            let definition: ColDef = { headerName: column.evaluationIdName+"/"+column.maximumMarks, field: column.evaluationId, width: 100 };
-       
-           definition.cellRendererFramework=NumeriCellRendererComponent; 
-           definition.cellRendererParams = {
-           values: column.maximumMarks};
-           definition.valueSetter=this.hasValuesetter;
-           definition.editable=this.editgrid;
-           
-           definition.suppressNavigable=!this.editgrid;
-        
-            this.columnDefsmk.push(definition);
-          });
+                      let definition: ColDef = 
+                      { headerName: column.evaluationIdName+"/"+column.group, field: column.evaluationId, width: 105 };
+                
+                    definition.cellRendererFramework=NumeriCellRendererComponent; 
+                    definition.cellRendererParams = {
+                    values: column.maximumMarks};
+                    definition.valueSetter=this.hasValuesetter;
+                    definition.editable=this.editgrid;
+                    
+                              
+                    definition.suppressNavigable=!this.editgrid;
+                  
+                      this.columnDefsmk.push(definition);
+                    }
+                  );
       
-         {
-          let definition: ColDef;
-          definition = { headerName: "TotalMarks", field:'totalMarks' , width: 100,editable:false };
-          this.columnDefsmk.push(definition);
-          definition = { headerName: "Grades", field:'grade',  width: 100,editable:false };
-          this.columnDefsmk.push(definition);
+         
+         
+                  {
+                  let definition: ColDef;
+                  definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false };
+                  this.columnDefsmk.push(definition);
+                  definition = { headerName: "GD", field:'grade',  width: 80,editable:false };
+                  this.columnDefsmk.push(definition);
 
-         }
+                  }
    
          
         }
+
+        setNewColumnsmk() {
+              {
+          let groupdef:ColGroupDef;
+          let columndef: ColDef;
+        
+            groupdef={headerName:"Student", children: [
+             {headerName: "Roll Number",  field :'rollNumber' , width: 100,editable:false,pinned: 'left'},
+             { headerName: "Student Name",  field :'studentName' , width: 250,editable:false,pinned: 'left'}
+           
+           ]};
+           this.columnDefsmk.push(groupdef);
+               
+              }
+      
+        {
+          let groupdef:ColGroupDef;
+          let columndef: ColDef;
+        
+     
+
+         this.componentAC.forEach((column: any) =>
+          {
+         
+       
+            //groupdef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
+            //groupdef.openByDefault=true;
+            columndef.headerName=column.evaluationId;
+            columndef.field=column.evaluationId;
+            columndef.width=100;
+
+            columndef.cellRendererFramework=NumeriCellRendererComponent; 
+            columndef.cellRendererParams = {
+            values: column.maximumMarks};
+            columndef.valueSetter=this.hasValuesetter;
+            columndef.editable=this.editgrid;
+            //columndef.columnGroupShow(open")
+                      
+            columndef.suppressNavigable=!this.editgrid;
+           // groupdef ={headerName:column.evaluationIdName+"/"+column.maximumMarks,children:[columndef]};
+            groupdef.headerName=column.evaluationIdName;
+            groupdef.children.push(columndef);
+           
+  
+            
+         
+         });
+         this.columnDefsmk.push(groupdef);
+        
+      
+       
+     
+        
+         //is.columnDefsmk.push()
+     
+        }
+      
+      
+      //  {
+      //  let definition: ColDef;
+      //  definition = { headerName: "TotalMarks", field:'totalMarks' , width: 100,editable:false ,pinned: 'right'};
+      //  this.columnDefsmk.push(definition);
+      //  definition = { headerName: "Grades", field:'grade',  width: 100,editable:false,pinned: 'right' };
+      //  this.columnDefsmk.push(definition);
+
+      // }
+
+      
+     }
         httpStatus(){
           let obj = {xmltojs:'Y',
           method:'None' };   
           obj.method='/awardsheet/getStatus.htm';
         
-          let sub=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+          this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
           //this.userservice.log(" in switch detail selected");
           res = JSON.parse(res);
           this.resultHandlerStatus(res);
-          sub.unsubscribe();
+         
         
           })
 
         }
 
         resultHandlerStatus(res){
-          this.sheetstatus=res.root.exception[0].exceptionstring;
-        console.log(this.sheetstatus);
-        //   switch (status){
+       
+
+
+          this.sheetstatus=String(res.root.exception[0].exceptionstring).toString();
+          console.log( this.sheetstatus);
+
           
-        //   case "SUB":{
-        //      this.submitForApprovalButton=false;
-        //      this.saveButton=false;
-        //      this.gradelimitButton=false ;
-        //      break;
-
-        //   }
-        //   case "APR" :{
-        //     this.submitForApprovalButton=false;
-        //     this.saveButton=false;
-        //     this.gradelimitButton=false ;
-        //     break;
-
-        //  }
-        //  default:  {
-        //     this.submitForApprovalButton=true;
-        //     this.saveButton=true;
-        //     //this.gradelimitButton=true ;
-           
-        //     break;
-
-        //         }
-
-        //       }
+          this.getEvaluationComponents();
+          
+         
+        //console.log(this.sheetstatus);
+     
 
         }
 
@@ -1178,33 +981,7 @@ onRowSelected(event){
          
 
         }
-        ngOndestroy() {
-         this.elementRef.nativeElement.remove();
-        }
-
-defaultColumnDefs(){
-if(this.isCheck){
-this.gridOptionsmk.defaultColDef={
-  width:100,
-  editable: function(params) {
-              return (
-             true
-              );
-            },
-}
-}else{
-   this.gridOptionsmk.defaultColDef={
-  width:100,
-  editable: function(params) {
-              return (
-             false
-              );
-            },
-}
-}
-
-}
-
+       
 
     
 
@@ -1212,18 +989,60 @@ this.gridOptionsmk.defaultColDef={
     this.columnDefs = [];
     columns.forEach((column: string) => {
 
-       let definition: ColDef = { headerName: column, field: column, width: 120 };
+       let definition: ColDef = { headerName: column, field: column, width: 150 };
        if (column === 'courseCode' ) {
+        definition.headerName="Subject";
          definition.checkboxSelection=true;
-         
+         definition.maxWidth=120;
      
        } else if (column ==='Seq_No') {
         definition.valueGetter=this.hashValueGetter;
         definition.maxWidth=50;
-        definition.headerName="Seq_No";
-
-    
+       definition.headerName="Seq_No";
+  
+       
+       } 
+       else if (column ==='entityName') {
+       
+      
+       definition.headerName="Faculty";
+       definition.maxWidth=200;
+  
        }
+       else if (column ==='courseName') {
+       
+      
+       definition.headerName="Name";
+  
+       }
+       else if (column ==='programName') {
+       
+       
+       definition.headerName="Program";
+  
+       }
+       else if (column ==='branchName') {
+       
+   
+       definition.headerName="Branch";
+  
+       }
+       else if (column ==='specializationName') {
+       
+        
+       definition.headerName="Spec";
+  
+       }
+       else if (column ==='semesterStartDate') {
+       
+    
+       definition.headerName="Sem_Date";
+  
+       }
+
+
+
+
       this.columnDefs.push(definition);
     });
 
@@ -1231,116 +1050,27 @@ this.gridOptionsmk.defaultColDef={
     
   }
 
-   saveMarks(triggerEvent:string){
-		this.trigger=triggerEvent;
-  
-  let payload:string="";
-  
-
-  let markchg="";
-for (var obj of this.abc){
  
-  
-this.componentAC.forEach(item=>{ 
-  
-  if(obj.rowchanged==="C"){
-    if(obj[item.evaluationId]!=="Z"){
-      markchg="C"
-    }else{
-      markchg="N"
-    }
-  }else{
-    markchg="N"
-  }
-
-
-  payload+= 
-  obj["rollNumber"]+"|"+item.evaluationId +"|"+ item.idType + 
-  "|"+obj[item.evaluationId]+"|"+obj["totalInternal"]+"|"+"X"+"|"+"Z"+"|"+markchg+";";
-  
-  });
- 
-}
-
-this.awardsheet_params=this.awardsheet_params.set("data",payload);
- 	this.httpSaveSheet();
-  
-	}
-  
-  
-  httpSaveSheet(){
-    let obj = {xmltojs:'Y',
-    method:'None' };   
-  obj.method='/awardsheet/saveStudentMarks.htm';
-  
-  this.userservice.postdata(this.awardsheet_params,obj).subscribe(res=>{
-    //this.userservice.log(" in switch detail selected");
-    res = JSON.parse(res);
-    this.resultHandlerSave(res);
-  
-})
-    
-  
-
-   
-  }
-
-
   httpSavecell(){
-    let obj = {xmltojs:'Y',
-    method:'None' };   
-  obj.method='/awardsheet/saveStudentMarks.htm';
-  
-  this.userservice.postdata(this.awardsheet_params,obj).subscribe(res=>{
-    //this.userservice.log(" in switch detail selected");
-  //res = JSON.parse(res);
-   // this.resultHandlerSave(res);
-  
-})
+      let obj = {xmltojs:'Y',
+      method:'None' };   
+      obj.method='/awardsheet/saveStudentMarks.htm';
     
-  
-
+      this.subs.add=this.userservice.postdata(this.awardsheet_params,obj).subscribe(res=>{
+    
+    
+      })
    
   }
 
 
-  resultHandlerSave(result){
-   
-		
-		if(result.root.sessionConfirm == true){
-       // Alert.show(commonFunction.getMessages('sessionInactive'),commonFunction.getMessages('error'), 4, null,null,errorIcon);
-        this.userservice.log("Session In active");
-        this.elementRef.nativeElement.remove();
-    	
-    	}
-		
-		if(result.root.exception.exceptionstring == 'E'){
-       //	Alert.show(commonFunction.getMessages('error'),commonFunction.getMessages('error'),4,null,null,errorIcon);
-       this.userservice.log("Error ");
-       this.elementRef.nativeElement.remove();
-		}
-		else{
-		//	Alert.show(trigger);
-			if(this.trigger=="button"){
-			
-         //Alert.show(commonFunction.getMessages('savedSuccessfully') ,commonFunction.getMessages('success'),4,null,null,successIcon);
-         this.userservice.log("Marks Saved Successfully");
-			}
-			this.getStudentMarks();
-
-		
-		//awardSheetCanvas.removeChild(lab:Label);
-	
-	   	}
-	   	//Mask.close();
-
-  }
+ 
   oncellValueChanged(event:CellChangedEvent){
    
    
   let colid = event.column.getColId();
   let rowid =event.node.rowIndex;
-  let row=this.abc[rowid];
+  let row=this.studentmarks[rowid];
   let prvmarks=event.oldValue;
 
 
@@ -1366,7 +1096,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
 
     if(this.displayType==="I"){
 	
-      var params:Object =new Object();
+     // var params:Object =new Object();
       
       this.getCourseAuthorityDetails();
          }else{
@@ -1374,65 +1104,327 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
          }
          
   }
-
+//  if any teacher has grade authority ==(grade limit authority table)  //
   getCourseAuthorityDetails(){
     let obj = {xmltojs:'Y',
     method:'None' };   
   obj.method='/awardsheet/getCourseAuthorityDetails.htm'
   ;
   
-  this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+  this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
-    this.httpGetgetCourseAuthorityDetails(res);
+    this.httpGetgetCourseAuthorityDetails(res);   //
   
 })
 
    
   }
+  
   httpGetgetCourseAuthorityDetails(res){
-    //var gradeAuthorityXML = event.result as XML;
-    var arrayCollect:any=[];
-    var creator:String="";
-    var employee:String="";
-    
-    
-    
-  //	Alert.show(gradeAuthorityXML);
-    for (let obj of res.root){
-      arrayCollect.push({creatorId:obj["creatorId"],emploee_id:obj["employeeId"],
-      employee_name:this.awardsheet_params.get("employeeName")});
-    }
-    if(arrayCollect.length==0){
-    //  getInstructorCountForCourse.send(params);
-  //   }else if(arrayCollect.length>0){		
-  //     for each(var obj:Object in gradeAuthorityXML.root){
-  // //			Alert.show(obj.creatorId+"|"+obj.employeeId);
-  //       creator=obj.creatorId;
-  //       employee=obj.employeeId;
-  //     if(creator==employee){
-  //       allowEdit="Y";
-  //       getCourseMarks.send(params);
-  //     }else{
-  //       allowEdit="N";
-  //       getCourseMarks.send(params);			
-  //       Alert.show( obj.employeeName +" has authority to enter grades for "+courseCode+" for "+
-  //         semesterStartDate+" / "+semesterEndDate);
-  //     }
-  //     break;
-  //     }
-      
-    }
-  //	else{
-  //		Alert.show("You donot have authority to enter Grades");
-  //	}
-    
-    
   
 
+    
+      
+ let arrayCollect:any[]=[];
+            //console.log(res);
+   if(!(isUndefined(res.CodeList.root)))
+        arrayCollect=res.CodeList.root;
+        console.log(arrayCollect);
+  
+     if(arrayCollect.length===0){  
+     
+     // this.getInstructorCountForCourse();  // check count of instructor and check authority accordingly
+     }else{
+      //this.getInstructorCountForCourse();  // check count of instructor and check authority accordingly
+         if (String(arrayCollect[0].creatorId).toString() === String(arrayCollect[0].employeeId).toString()   )
+             
+         
+                {
+                  this.gradeauthorityholder=true;
+                  this.allowEdit="Y";
+                  this.getCourseMarks();
+                }else
+                
+                {
+                  this.gradeauthorityholder=false;
+                  this.allowEdit="N";
+                  this.getCourseMarks();	
+                  this.someoneElseHasAuthority =true;		
+                  this.userservice.log( arrayCollect[0].employeeName +" has authority to enter grades for "+this.awardsheet_params.get("courseCode")+" for "+
+                    this.awardsheet_params.get("semesterstartdt")+" / "+this.awardsheet_params.get("semesterenddt"));
+           
+                }
+       
+
+            } 
+            this.getCourseGradeLimitStatus();
+            
+   }
+
+      getCourseMarks(){
+        let obj = {xmltojs:'Y',
+        method:'None' };   
+        obj.method='/awardsheet/getCourseMarks.htm';
+      
+      
+        this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        //this.userservice.log(" in switch detail selected");
+        res = JSON.parse(res);
+       // console.log("course mark",res);
+        this.httpGetCourseMarks(res);
+      
+            })
+    
   }
+
+      httpGetCourseMarks(res){
+   //console.log("Total Marks...................",res,res.courseDetails.Details[0]);
+        //var courseMarksXML = event.result as XML;
+//	Alert.show(courseMarksXML);
+//	var courseArrCol:ArrayCollection=new ArrayCollection();
+	try{
+	for  (var o of res.courseDetails.Details){
+		this.marksEndSemester=o.marksEndSemester;
+		this.subjectTotalMarks=o.totalMarks
+		break;
+	}	
+	}catch(e){
+		this.userservice.log(e);
+	}
+    //openGradesPopup();
+    
+    
+      }
+
+
+      onclickgradelimitbutton(){
+        const dialogConfig = new MatDialogConfig();
+      dialogConfig.width="100%";
+      dialogConfig.height="50%";
+       dialogConfig.data={ 
+      courseCode:this.awardsheet_params.get("courseCode"),
+      semesterStartDate:this.awardsheet_params.get("semesterstartdt"),
+      semesterEndDate:this.awardsheet_params.get("semesterenddt"),
+      displayType:this.displayType,allowEdit:this.allowEdit,
+      sessionStartDate:this.awardsheet_params.get("sessionstartdt"),
+      sessionEndDate:this.awardsheet_params.get("sessionenddt"),
+      menuType:"AwardSheet",creatorEntity:this.awardsheet_params.get("entityId"),
+      creatorPCK:this.awardsheet_params.get("programCourseKey"),
+      creator:this.LoggedInUser,
+      
+      marksEndSemester:this.marksEndSemester,
+      totalMarks:this.subjectTotalMarks
+        
+    };
+
+    const dialogRef=  this.dialog.open(GriddialogComponent,dialogConfig)
+    
+    this.subs.add=dialogRef.afterClosed().subscribe(result => {
+  if(result)
+ 
+    this.getStudentMarks();
+     });      
+  
+
+      }
+
+  getInstructorCountForCourse(){
+
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+  obj.method='/awardsheet/getInstructorCountForCourse.htm'
+  ;
+  
+  this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    this.httpGetInstructorCountForCourse(res);
+  
+})
+
+
+  }
+  httpGetInstructorCountForCourse(res){
+    console.log(res);
+    this.instructorCount = res.CodeList.root[0].status;
+    console.log(res.CodeList);
+    try{
+      
+           
+    if(String(this.instructorCount).toString()==='1' ){
+      this.allowEdit="Y";
+      this.gradeauthorityholder=true;
+      this.getCourseMarks();
+      this.getCourseGradeLimitStatus();
+    }
+       
+    else{
+      this.allowEdit="N";
+      
+      this.gradeauthorityholder=false;
+      this.getCourseMarks();
+      this.getCourseAuthorityDetails();
+     
+
+      //window.alert("You do not have authority to enter grades");
+    }
+    }catch(e){
+      window.alert(e);
+        }
+        
+       
+  }
+
+
   onClickgradelimit(){
     console.log("hello");
+  }
+
+
+  submitConfirm(){
+  
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width="100%";
+    dialogConfig.height="50%";
+
+    const dialogRef=  this.dialog.open(alertComponent,
+      {data:{title:"Warning",content:"Please confirm ",ok:true,cancel:true,color:"warn"},
+      width:"20%",height:"20%"
+      });
+
+      this.subs.add=dialogRef.afterClosed().subscribe((result:boolean) => {
+   
+    if (result===true){
+      this.submitSheet()
+    }else{
+
+      return;
+    }
+
+
+    });      
+
+      
+  }
+
+
+
+  submitSheet(){
+    this.awardsheet_params=this.awardsheet_params.set("status","SUB");
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+    obj.method='/awardsheet/submitForApproval.htm';
+  
+  
+    this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+   
+   // console.log("course mark",res);
+    this.resultHandlerSubmit(res);
+  
+        })
+
+  }
+
+  resultHandlerSubmit(res){
+    this.gridOptions.api.deselectAll();
+    this.userservice.log("Sheet Submitted Successfully");
+    this.setoffButton();
+    return;
+    
+  }
+
+  /// Check sheet status of other user ie is it submitted or not 
+  getCourseGradeLimitStatus(){
+
+    console.log(this.awardsheet_params);
+
+    this.awardsheet_params=this.awardsheet_params.set("semesterStartDate", this.awardsheet_params.get('semesterstartdt'));
+    this.awardsheet_params=this.awardsheet_params.set("semesterEndDate", this.awardsheet_params.get('semesterenddt'));
+    
+                                            
+
+    this
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+    obj.method='/coursegradelimitpercourse/getCourseGradeLimit.htm';
+   
+    this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    res = JSON.parse(res);
+    
+    this.getCourseGradeLimitSuccess(res)
+  
+        })
+
+  }
+  getCourseGradeLimitSuccess(res)
+  {
+
+    console.log(res);
+
+    console.log(this.LoggedInUser);
+    let gradelimitstatus:any[]=[];
+    this.submitstatusofotherteacher="Y";
+    let loggedinid:string="";
+    let pck:string=this.awardsheet_params.get("programCourseKey")
+    let entity:string=this.awardsheet_params.get("entityId")
+
+    if(!(isUndefined(res.courseDetails.Details))) 
+      {
+      
+                gradelimitstatus=res.courseDetails.Details;
+                console.log(gradelimitstatus.length);
+                let count=0;
+
+                for(let i=0;i<gradelimitstatus.length;i++)
+                {
+                  
+                  console.log(pck,entity,gradelimitstatus[i].status,gradelimitstatus[i].ownerEntityId,gradelimitstatus[i].programCourseKey);
+                              if( 
+                                (String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
+                                String(gradelimitstatus[i].ownerEntityId).toString() !==String(entity).toString()) ||
+                                 
+                                (String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
+                                String(gradelimitstatus[i].programCourseKey).toString() !==String(pck).toString())
+                               
+                            ) {
+                              count++;
+                              console.log(
+                                String(gradelimitstatus[i].status).toString(),"Arush",
+                                String(gradelimitstatus[i].programCourseKey).toString(),
+                                String(pck).toString(),
+                                String(gradelimitstatus[i].ownerEntityId).toString(),
+                                String(entity).toString()
+
+                              )
+                              
+                              }
+
+
+                    //}
+                    
+                    
+                }
+               if(count>0){
+               this.submitstatusofotherteacher="N";
+               console.log("value of count",count);
+               }else{
+                console.log("value in else  count",count);
+               }
+      }
+      else
+      {
+       
+         this.submitstatusofotherteacher="N";
+      }
+    
+console.log(this.submitstatusofotherteacher);
+this.httpStatus();  // Check submitted status and Load award sheet
+    // check the status of sheet of logged in Teacher.
+
   }
 
 }    // end of class 

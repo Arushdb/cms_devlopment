@@ -1,0 +1,17 @@
+.headerLogo {
+	max-height: 90px !important;
+	margin: 1%;
+}
+.color-darkBlue{
+	color: #363c7b !important;
+}
+.color-lightBlue{
+	color: #25a6d1 !important;
+}
+.fs-I{
+  font-style: italic;
+}  
+.fs-IB{
+  font-style: italic;
+  font-weight: 400;
+}

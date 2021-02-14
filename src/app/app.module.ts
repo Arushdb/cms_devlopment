@@ -43,6 +43,14 @@ import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 import { NumericCellEditorComponent } from './numeric-cell-editor/numeric-cell-editor.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
+//import { GriddialogComponent } from './griddialog/griddialog.component';
+import { GriddialogComponent } from 'src/app/common/griddialog/griddialog.component';
+import 'ag-grid-community';
+import    {ProgressSpinnerComponent }  from  'src/app/common/progress-spinner/progress-spinner.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
+import { HeaderComponent } from './header/header.component';
+
 //import { LabelComponent } from './label/label.component';
 //import { ResultProcessingComponent } from './result-processing/result-processing.component';
 //import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
@@ -70,6 +78,7 @@ import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-
     alertComponent,
   
     RxjsexampleComponent,
+    ProgressSpinnerComponent,
   
   
     //LabelComponent,
@@ -80,7 +89,11 @@ import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-
   
     NumericCellEditorComponent,
   
-    NumeriCellRendererComponent
+    NumeriCellRendererComponent,
+  
+    GriddialogComponent,
+  
+    HeaderComponent
   
    // CustomComboboxComponent
   
@@ -107,7 +120,10 @@ import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-
   //  StudentModule,
     AgGridModule.withComponents([]),
    
+   
    MatAutocompleteModule,
+   MatProgressSpinnerModule,
+   MatCardModule,
    // MatFormFieldModule,
    
     //ReactiveFormsModule
@@ -115,7 +131,8 @@ import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-
   
   ],
   entryComponents: [
-    alertComponent
+    alertComponent,
+    GriddialogComponent
   ],
   providers: [
    

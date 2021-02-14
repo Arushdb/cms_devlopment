@@ -9,8 +9,6 @@ import {MatCardModule}  from  '@angular/material/card' ;
 
 import { StudentRoutingModule } from './student-routing.module';
 import {RegisterStudentComponent } from    './register-student/register-student.component' ;
-import { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
-
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,7 +20,7 @@ import { CustomComboboxComponent } from './custom-combobox/custom-combobox.compo
 @NgModule({
   declarations: [
     RegisterStudentComponent,
-    ProgressSpinnerComponent,
+   
     CustomComboboxComponent
     
 
@@ -32,9 +30,9 @@ import { CustomComboboxComponent } from './custom-combobox/custom-combobox.compo
     CommonModule,
     StudentRoutingModule,
     AgGridModule.withComponents([]),
-    MatProgressSpinnerModule,
+  
     FormsModule,
-    MatCardModule,
+   
     
      MatAutocompleteModule,
     MatFormFieldModule,

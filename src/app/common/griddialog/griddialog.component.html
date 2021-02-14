@@ -1,0 +1,60 @@
+
+<div style='height: 100%; display: flex; flex-direction: column;'>
+  <h1 mat-dialog-title>Grade Limits</h1>
+
+ 
+  <div >
+    
+    <button   type="button" class="btn  btn-success  btn-sm " *ngIf="showgrid===true && showsave===true" (click)="saveGradeLimit()" >Save Grade Limits</button>
+    <button   type="button" class="btn btn-primary  mr-2  btn-sm" *ngIf="showgrid" (click)= "close()" >Close</button> 
+  </div>
+
+<div mat-dialog-content  [ngStyle]="style">
+
+  
+<div  *ngIf="showgrid===true">
+  <ag-grid-angular
+  #editGrid
+  style="width: 100%; height: 100%;"
+  [gridOptions] = "gridOptions"
+  class="ag-theme-alpine"
+  domLayout='autoHeight'
+  [columnDefs]="columnDefsEditGrid"
+  [defaultColDef]="defaultColDef"
+  [rowSelection]="rowSelection"
+  [rowData]="rowDataEditGrid"
+  (cellValueChanged)="oncellValueChanged($event)"
+ 
+  (gridReady)="onGridReadyGradeLimit($event)"
+  ></ag-grid-angular>
+
+</div>
+      <div  *ngIf="showAddbutton===true" class ="btn-primary-spacing">
+       <button   type="button" class="btn btn-primary   mr-2 btn-sm" (click)="addbuttonclick()" >Add/Edit</button>
+      </div>
+ <button   type="button" class="btn btn-primary  mr-2  btn-sm" (click)= "close()" >Close</button>
+<div>
+
+    <ag-grid-angular
+    #agGrid
+    style="width: 100%; height: 100%;"
+     class="ag-theme-alpine"
+    domLayout='autoHeight'
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="rowSelection"
+    [rowData]="rowData"
+     (gridReady)="onGridReady($event)"
+    ></ag-grid-angular>
+
+</div>
+
+
+
+
+</div>
+</div>
+
+
+
+           

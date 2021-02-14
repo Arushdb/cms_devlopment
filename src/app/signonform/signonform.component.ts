@@ -233,7 +233,8 @@ LoginRoleServiceResult(res){
 		else if(str=="InvalidLogin"){
 			// Alert.show(commonFunction.getMessages('invalidLoginDetails'),commonFunction.getMessages('info'),null,null,null,errorIcon);
 			// reset();
-			this.userservice.log('account is Invalid');
+			this.message='account is Invalid';
+			//this.userservice.log('account is Invalid');
 		}	
 	}
 	else{
@@ -249,15 +250,15 @@ LoginRoleServiceResult(res){
 	// params["userName"]=userName;
 	// params["password"]=password;
   // params["application"]=application;
-  console.log(res);
+//  console.log(res);
 	if(this.roles.size() == 1){
 		// params["userGroupId"]=rolesXML.loginInfo.userGroupId;
 		// params["maxLogins"]=rolesXML.loginInfo.maxLogins;
-    console.log(res.loginInfo.loginInfo[0].userGroupId);
-		this.params=this.params.append("userGroupId",res.loginInfo.loginInfo[0].userGroupId);
-    this.params=this.params.append("maxLogins",res.loginInfo.loginInfo[0].maxLogins );
+  //  console.log(res.loginInfo.loginInfo[0].userGroupId);
+		this.params=this.params.set("userGroupId",res.loginInfo.loginInfo[0].userGroupId);
+    this.params=this.params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );
     
-    console.log(this.params);
+    //console.log(this.params);
 
 
 	}else{
@@ -268,7 +269,7 @@ LoginRoleServiceResult(res){
 
 	}
 	//params["date"]=new Date;
-	this.params.append("date",new Date().toString());
+	this.params=this.params.set("date",new Date().toString());
 	this.getLoginInfoService(this.params);
 }
 
@@ -287,7 +288,9 @@ this.userservice.getdata(params,myparam).subscribe(res=>{
 data = JSON.parse(res);
 console.log(data.loginInfo.loginInfo);
 if (isUndefined((data.loginInfo.loginInfo))){
-  this.userservice.log("Invalid login");
+  //this.userservice.log("Invalid login");
+  this.sts="";
+  this.message="Invalid login";
   return;
 }else{
   this.loginInfoResultHandler(data)
@@ -379,9 +382,12 @@ if (isUndefined((data.loginInfo.loginInfo))){
 	// param=param["userGroupName"]=roleName;
 	// param["application"]="CMS";
 
-	param=param.append("userGroupId",roleId);
-	param=param.append("userGroupName",roleName);
-	param=param.append("application","CMS");
+	param=param.set("userGroupId",roleId);
+	param=param.set("userGroupName",roleName);
+	param=param.set("application","CMS");  
+	param=param.set("angular_application","ANG");  // to get menues only for Angular
+	
+	param=param.set("requestFrom","ANGULAR");
 
 	//menuHttpService.send(param);
 	this.menuHttpService(param)
