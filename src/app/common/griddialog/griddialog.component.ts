@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AgGridAngular } from 'ag-grid-angular';
-import { AgGridEvent, ColDef, GridOptions, ValueSetterParams } from 'ag-grid-community';
+import { AgGridEvent, CellFocusedEvent, CellKeyPressEvent, ColDef, GridOptions, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
 import { NumeriCellRendererComponent } from 'src/app/numeri-cell-renderer/numeri-cell-renderer.component';
 import { UserService } from 'src/app/services/user.service';
@@ -298,7 +298,7 @@ export class GriddialogComponent implements OnInit {
         // enableValue: true,
         sortable: true,
         filter: true,
-        resizable: true,
+        //resizable: true,
       };
      
            
@@ -382,6 +382,25 @@ export class GriddialogComponent implements OnInit {
           }
           
         }
+        oncellKeyPress(event:CellKeyPressEvent){
+          console.log(event.node.rowIndex,event.column.getColId());
+
+          let params: StartEditingCellParams={rowIndex:event.node.rowIndex,colKey:event.column.getColId()};
+          // params.rowIndex =event.node.rowIndex;
+          // params.colKey=event.column.getColId();
+
+
+          this.gridOptions.api.startEditingCell(params);
+
+        }
+
+        oncellFocused(event:CellFocusedEvent){
+          console.log(event.rowIndex,event.column.getColId());
+          let params: StartEditingCellParams={rowIndex:event.rowIndex,colKey:event.column.getColId()};
+          this.gridOptions.api.startEditingCell(params);
+
+        }
+
 
       isSorted= function (arr :number[]):boolean{
         let sorted = true;

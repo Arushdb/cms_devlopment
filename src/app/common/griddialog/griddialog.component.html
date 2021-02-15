@@ -24,15 +24,20 @@
   [rowSelection]="rowSelection"
   [rowData]="rowDataEditGrid"
   (cellValueChanged)="oncellValueChanged($event)"
+  
+ 
+  
+  (cellFocused)="oncellFocused($event)"
  
   (gridReady)="onGridReadyGradeLimit($event)"
   ></ag-grid-angular>
 
 </div>
-      <div  *ngIf="showAddbutton===true" class ="btn-primary-spacing">
-       <button   type="button" class="btn btn-primary   mr-2 btn-sm" (click)="addbuttonclick()" >Add/Edit</button>
-      </div>
- <button   type="button" class="btn btn-primary  mr-2  btn-sm" (click)= "close()" >Close</button>
+      <div   class ="btn-primary-spacing">
+       <button    *ngIf="rowData.length>0 && showAddbutton" type="button" class="btn btn-primary   mr-2 btn-sm" (click)="addbuttonclick()" >Add/Edit</button>
+       <button   type="button" class="btn btn-primary  mr-2  btn-sm" (click)= "close()" >Close</button>
+ </div>
+
 <div>
 
     <ag-grid-angular

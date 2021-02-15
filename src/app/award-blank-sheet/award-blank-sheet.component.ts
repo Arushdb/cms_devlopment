@@ -419,12 +419,13 @@ onRowSelected(event){
   if(this.gridOptions.api.getSelectedNodes().length>1){
     this.userservice.log("Please select only One");
     this.gridOptions.api.deselectAll();
+    this.setoffButton();
     return;
   }
         
   if(event.node.selected){
     
-   
+    this.setoffButton();
     this.displaymkgrid=true;
     this.columnDefsmk =[]; 
     this.componentAC=[];
@@ -712,7 +713,7 @@ onRowSelected(event){
 
         console.log("Sheet status:",this.sheetstatus,"instructor count:",this.instructorCount
         ,"this.gradesCalculated:",this.gradesCalculated,"submitstatusofotherteacher",this.submitstatusofotherteacher
-        , "this.gradeauthorityholder",this.gradeauthorityholder
+        , "this.gradeauthorityholder",this.gradeauthorityholder,"allowEdit:",this.allowEdit
         ,"this.gradelimitdetail",this.gradelimitdetail,"editgrid",this.editgrid,"someoneElseHasAuthority:",this.someoneElseHasAuthority);
         /// set up buttons now
               if(this.columnDefsmk.length>0)
@@ -751,7 +752,7 @@ onRowSelected(event){
                       console.log("Step-2");
                       }
                 //step-3      
-                //if multi teacher  and  not a authority holder   and gradelimit authority Present
+                //if multi teacher  and  not a authority holder   
                 // and some one else has a authority  and  it should not be last sheet for submisiion ,submit button should  be on
                     if(String(this.instructorCount).toString()!=="1" 
                         && !this.gradeauthorityholder
@@ -1261,7 +1262,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
        
     else{
       this.allowEdit="N";
-      
+     this.userservice.log("More than one teacher is assigned to this subject and  no one has authority to enter grades"); 
       this.gradeauthorityholder=false;
       this.getCourseMarks();
       this.getCourseAuthorityDetails();
