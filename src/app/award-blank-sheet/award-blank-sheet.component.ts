@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, ValueSetterParams } from 'ag-grid-community';
+import { CellFocusedEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
 
@@ -411,7 +411,12 @@ getupdatedgradelimitForSaveResultHandler(res){
 	//this.saveMarks(this.saveCaller);
 }
 
+oncellFocused(event:CellFocusedEvent){
+  console.log(event.rowIndex,event.column.getColId());
+  let params: StartEditingCellParams={rowIndex:event.rowIndex,colKey:event.column.getColId()};
+  this.gridOptionsmk.api.startEditingCell(params);
 
+}
 
 
 onRowSelected(event){
