@@ -805,7 +805,7 @@ onRowSelected(event){
                   {
           
                       let definition: ColDef = 
-                      { headerName: column.evaluationIdName+"/"+column.group, field: column.evaluationId, width: 105 };
+                      { headerName: column.evaluationIdName+"/"+column.maximumMarks+"/"+column.group, field: column.evaluationId, width: 125 };
                 
                     definition.cellRendererFramework=NumeriCellRendererComponent; 
                     definition.cellRendererParams = {
