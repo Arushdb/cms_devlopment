@@ -2,14 +2,15 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CellFocusedEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
+import { CellFocusedEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 
-import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
+//import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
+import { NumeriCellRendererComponent } from 'src/app/numeri-cell-renderer/numeri-cell-renderer.component';
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
 
 import { GriddialogComponent } from 'src/app/common/griddialog/griddialog.component';
@@ -20,10 +21,8 @@ import 'node_modules/ag-grid-community/dist/styles/ag-grid.css';
 import 'node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 import    'src/app/common/subscription-container';
-import { subscribeOn } from 'rxjs/operators';
+
 import { SubscriptionContainer } from 'src/app/common/subscription-container';
-import { getWeekYearWithOptions } from 'date-fns/fp';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -412,10 +411,21 @@ getupdatedgradelimitForSaveResultHandler(res){
 }
 
 oncellFocused(event:CellFocusedEvent){
-  console.log(event.rowIndex,event.column.getColId());
-  let params: StartEditingCellParams={rowIndex:event.rowIndex,colKey:event.column.getColId()};
-  this.gridOptionsmk.api.startEditingCell(params);
+ 
+  let params: StartEditingCellParams
+  
+  if(!(event.column===null)){
+   
+     params={rowIndex:event.rowIndex,colKey:event.column.getColId()};
+    this.gridOptionsmk.api.startEditingCell(params);
 
+  }
+ 
+
+}
+
+onrowDoubleClicked(event:RowDoubleClickedEvent){
+console.log(event);
 }
 
 
@@ -778,7 +788,7 @@ onRowSelected(event){
               }
    
 		
-              this.setColumnsmk();
+              this.setNewColumnsmk();
 
       }
 
@@ -849,59 +859,130 @@ onRowSelected(event){
               }
       
         {
-          let groupdef:ColGroupDef;
-          let columndef: ColDef;
-        
-     
 
-         this.componentAC.forEach((column: any) =>
+
+          let groupdef:ColGroupDef={headerName:"",children:[],groupId:""};
+         
+          
+          let componentGroups:any[] =this.getgroups();
+          console.log(componentGroups);
+
+          for(let i=0;i<componentGroups.length;i++)
           {
-         
-       
-            //groupdef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
-            //groupdef.openByDefault=true;
-            columndef.headerName=column.evaluationId;
-            columndef.field=column.evaluationId;
-            columndef.width=100;
-
-            columndef.cellRendererFramework=NumeriCellRendererComponent; 
-            columndef.cellRendererParams = {
-            values: column.maximumMarks};
-            columndef.valueSetter=this.hasValuesetter;
-            columndef.editable=this.editgrid;
-            //columndef.columnGroupShow(open")
-                      
-            columndef.suppressNavigable=!this.editgrid;
-           // groupdef ={headerName:column.evaluationIdName+"/"+column.maximumMarks,children:[columndef]};
-            groupdef.headerName=column.evaluationIdName;
-            groupdef.children.push(columndef);
-           
-  
             
+              groupdef={headerName:"",children:[],groupId:""};
+
+              groupdef.headerName=componentGroups[i].group +"/"+componentGroups[i].marks;
+              
+             
+                           
+              let grpChildren=this.getGroupChildren(componentGroups[i].group);
+              console.log(grpChildren);
+             
+              groupdef.children=grpChildren;
+              groupdef.groupId=componentGroups[i].group;
+              //groupdef.headerClass='ag-header-group-cell';
+              
+              this.columnDefsmk.push(groupdef);
+            
+
+          }
          
-         });
-         this.columnDefsmk.push(groupdef);
-        
-      
        
-     
-        
-         //is.columnDefsmk.push()
      
         }
-      
-      
-      //  {
-      //  let definition: ColDef;
-      //  definition = { headerName: "TotalMarks", field:'totalMarks' , width: 100,editable:false ,pinned: 'right'};
-      //  this.columnDefsmk.push(definition);
-      //  definition = { headerName: "Grades", field:'grade',  width: 100,editable:false,pinned: 'right' };
-      //  this.columnDefsmk.push(definition);
+        {
+          let definition: ColDef;
+          definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false };
+          this.columnDefsmk.push(definition);
+          definition = { headerName: "GD", field:'grade',  width: 80,editable:false };
+          this.columnDefsmk.push(definition);
 
-      // }
+          }
 
+      
+    
+     
       
      }
+        getgroups():any[]
+        {
+                let start=1;
+                let grpary:any[]=[];
+                let obj ={group:"",marks:""}
+                let grparyobj:typeof obj[]=[];
+
+                let group="";
+               
+
+                for(let i=0;i<this.componentAC.length;i++)
+                {
+
+                      if(start===1){
+
+                        group= this.componentAC[i].group;  
+                       
+                                                                               
+                        start++;
+
+                      }
+                  
+                     if(String(group).toString()===String(this.componentAC[i].group).toString())
+                        {
+                          continue;
+                        }else{
+                          obj = Object.create(obj);
+                          obj.group=group;
+                          obj.marks=this.componentAC[i].maximumMarks;
+                          grparyobj.push(obj);
+                          group= this.componentAC[i].group; 
+
+                        }
+
+                    if(i===this.componentAC.length-1)
+                    {
+                      obj = Object.create(obj);
+                      
+                      obj.group=this.componentAC[i].group;
+                      obj.marks=this.componentAC[i].maximumMarks;
+                      grparyobj.push(obj);
+                      
+                    }
+
+                  
+                }
+
+          return grparyobj;
+        }
+        getGroupChildren(group):any[]
+        {
+                let columndef: ColDef={};
+                let children:any[]=[];
+              
+                this.componentAC.forEach(column=>
+                  {
+                        console.log(column.group,group);
+                      if(String(column.group).toString()===String(group).toString())
+                      {
+                          columndef={};
+                          columndef.headerName=column.evaluationIdName;
+                          columndef.field=column.evaluationId;
+                          columndef.width=100;
+
+                          columndef.cellRendererFramework=NumeriCellRendererComponent; 
+                          columndef.cellRendererParams = {
+                          values: column.maximumMarks};
+                          columndef.valueSetter=this.hasValuesetter;
+                          columndef.editable=this.editgrid;
+                          columndef.suppressNavigable=!this.editgrid;
+                          children.push(columndef);
+
+                      }
+
+                  });
+                  console.log(group,children);
+          return children;
+        }
         httpStatus(){
           let obj = {xmltojs:'Y',
           method:'None' };   
@@ -1267,10 +1348,11 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
        
     else{
       this.allowEdit="N";
-     this.userservice.log("More than one teacher is assigned to this subject and  no one has authority to enter grades"); 
+      //this.userservice.log("You do not have authority to enter grades"); 
       this.gradeauthorityholder=false;
       this.getCourseMarks();
       this.getCourseAuthorityDetails();
+      
      
 
       //window.alert("You do not have authority to enter grades");

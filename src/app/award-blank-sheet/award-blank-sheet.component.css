@@ -14,3 +14,8 @@ margin-bottom: 5px !important;
   .example-margin {
     margin: 0 10px;
   }
+  .ag-header-group-cell {
+    font-size: 50px;
+    color: red;
+}
+  

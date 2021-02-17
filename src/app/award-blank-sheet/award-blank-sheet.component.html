@@ -43,13 +43,13 @@
        
         [enterMovesDownAfterEdit]="true"
         [defaultColDef]="mydefaultColDef"   
-        (cellFocused)="oncellFocused($event)"
+       
       
         rowSelection="single"
         (cellValueChanged)="oncellValueChanged($event)"
         [enableCellChangeFlash]="true"
-
-      
+        (cellFocused)="oncellFocused($event)"
+            
        
          
         >
