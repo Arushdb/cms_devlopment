@@ -138,11 +138,16 @@ export class SignonformComponent implements OnDestroy  {
 		{
 			console.log(res);
 			let roles:any []=res.loginInfo.loginInfo;
-			this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
-			this.login_params=this.login_params.set("date",new Date().toString());
+			if(isUndefined(res.loginInfo.loginInfo)) {
+				roles=[];
+
+			}
+		
 			
 			if (roles.length>1)
 			{
+				this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
+			   this.login_params=this.login_params.set("date",new Date().toString());
 				roles.forEach(item=>{
 					if (String(item.userGroupId).toString()==="INS" && String(roles[0].status).toString()==="ACT"){
 						this.login_params=this.login_params.set("userGroupId","INS");
@@ -153,6 +158,8 @@ export class SignonformComponent implements OnDestroy  {
 			}
 			else if(roles.length===1)
 			{
+				this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
+			this.login_params=this.login_params.set("date",new Date().toString());
 				this.login_params=this.login_params.set("userGroupId",res.loginInfo.loginInfo[0].userGroupId);
 							
 				if (String(roles[0].status).toString()==="ACT"){

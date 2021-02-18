@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CellFocusedEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
@@ -123,7 +123,26 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private renderer:Renderer2,
 
-    ) { 
+    ) {
+      
+     // subscribe to the router events - storing the subscription so
+   // we can unsubscribe later. 
+
+      this.subs.add =this.router.events.subscribe((evt) => {
+        if (evt instanceof NavigationEnd) {
+          // this.gridOptionsmk.api.destroy();
+          // this.gridOptions.api.destroy();
+          this.displaymkgrid=false;
+          this.courseListGrid=[];
+        
+          //this.moduleCreationCompleteHandler();
+
+         this.ngOnInit();
+          
+        }
+    });
+
+
       this.gridOptions = <GridOptions>{
        // enableSorting: true,
        // enableFilter: true               
@@ -240,7 +259,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
 
    employeeCourseHttpServiceResultHandler(res){
 
-  console.log(res);
+  
     if (isUndefined(res.CodeList.root)){
       this.userservice.log("No Subject Assigned");
       this.goBack();
@@ -385,7 +404,7 @@ this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res
 
 getupdatedgradelimitForSaveResultHandler(res){
 
-  console.log(res);
+  
   
   this.gradelimitarraycoll=[];
   if(isUndefined(res.CodeList.root)){
@@ -425,7 +444,7 @@ oncellFocused(event:CellFocusedEvent){
 }
 
 onrowDoubleClicked(event:RowDoubleClickedEvent){
-console.log(event);
+
 }
 
 
@@ -623,9 +642,9 @@ onRowSelected(event){
                       this.editgrid=true;
                       this.saveButton=true;
 
-     
+                      let marksEntered =true;
 
-     //console.log(this.studentXml,res);
+        
   
 		this.gradesCalculated=true;
         
@@ -639,18 +658,22 @@ onRowSelected(event){
                 resultObj["studentName"]=obj1.studentName;
                 resultObj["totalMarks"]="0";
                 resultObj["grade"]="";
-        //console.log(res.MarksList.marks);
+
+           
+                for (var obj of this.componentAC)
+                {
+                
+                resultObj[obj.evaluationId]="Z";
+                }
+      
 
                 if(isUndefined(res.MarksList.marks))
-                {  // if marks not entered
+                {  
                         this.submitForApprovalButton=false;
-                        for (var obj of this.componentAC)
-                          {
-                          
-                          resultObj[obj.evaluationId]="Z";
-                          }
+                       
                           this.submitForApprovalButton=false ;
                           this.gradesCalculated=false;
+                          marksEntered=false;
 
                 }
                 else
@@ -661,7 +684,7 @@ onRowSelected(event){
 
                           if(String(obj1.rollNumber).toString()===String(obj2.rollNumber).toString())
                           {
-	                          
+                            
                                     if(String(obj2.marks).toString()!=="" )
                                         resultObj[obj2.evaluationId]=obj2.marks;
                                       
@@ -669,6 +692,8 @@ onRowSelected(event){
                                     {
                                         resultObj[obj2.evaluationId]="Z";
                                         this.submitForApprovalButton=false;
+                                        this.gradesCalculated=false;
+                                        marksEntered=false;
                                     }
 
                                     if(String(obj2.attendence).toString()=== "ABS" )
@@ -720,16 +745,25 @@ onRowSelected(event){
       
    		
                       this.studentmarks.push(resultObj);
+                  // check if any evaluation ID is left with Z value
+                      for (let obj of this.componentAC)
+                      {
+                      if(resultObj[obj.evaluationId]==="Z"){
+                        this.submitForApprovalButton=false;
+                        marksEntered=false;
 
-                     
+                      }
+                        
+                      }
+                      
+
 
         }
+            
 
+      
 
-        console.log("Sheet status:",this.sheetstatus,"instructor count:",this.instructorCount
-        ,"this.gradesCalculated:",this.gradesCalculated,"submitstatusofotherteacher",this.submitstatusofotherteacher
-        , "this.gradeauthorityholder",this.gradeauthorityholder,"allowEdit:",this.allowEdit
-        ,"this.gradelimitdetail",this.gradelimitdetail,"editgrid",this.editgrid,"someoneElseHasAuthority:",this.someoneElseHasAuthority);
+        
         /// set up buttons now
               if(this.columnDefsmk.length>0)
               this.gridOptionsmk.api.setRowData(this.studentmarks);
@@ -746,7 +780,8 @@ onRowSelected(event){
               {
                 //step-1
                 //   if single teacher  and grades are calculated  and authority holder  submit button should be on
-                    if(String(this.instructorCount).toString()==="1" && this.gradesCalculated && this.gradeauthorityholder)
+                    if(String(this.instructorCount).toString()==="1" && this.gradesCalculated && this.gradeauthorityholder
+                    && marksEntered)
                     {
                       this.submitForApprovalButton=true;
                       console.log("Step-1");
@@ -760,7 +795,8 @@ onRowSelected(event){
 
                     if(String(this.instructorCount).toString()!=="1" && this.gradesCalculated
                     && this.submitstatusofotherteacher==="Y"
-                    && this.gradeauthorityholder)
+                    && this.gradeauthorityholder
+                    && marksEntered)
                     
                       {
                       this.submitForApprovalButton=true;
@@ -773,7 +809,8 @@ onRowSelected(event){
                         && !this.gradeauthorityholder
                         //&& this.gradelimitdetail
                         && this.someoneElseHasAuthority
-                        && this.submitstatusofotherteacher==="N")
+                        && this.submitstatusofotherteacher==="N"
+                        && marksEntered)
                                                     
                     
                         {
@@ -786,6 +823,12 @@ onRowSelected(event){
                 
 
               }
+              console.log("Sheet status:",this.sheetstatus,"instructor count:",this.instructorCount
+              ,"this.gradesCalculated:",this.gradesCalculated,"submitstatusofotherteacher",this.submitstatusofotherteacher
+              , "this.gradeauthorityholder",this.gradeauthorityholder,"allowEdit:",this.allowEdit
+              ,"this.gradelimitdetail",this.gradelimitdetail,"editgrid",this.editgrid,"someoneElseHasAuthority:",
+              this.someoneElseHasAuthority,"marksEntered:",marksEntered);
+      
    
 		
               this.setNewColumnsmk();
@@ -809,7 +852,7 @@ onRowSelected(event){
                     this.columnDefsmk.push(definition);
                   }
 
-           // console.log(this.componentAC);
+         
 
                   this.componentAC.forEach((column: any) => 
                   {
@@ -865,20 +908,19 @@ onRowSelected(event){
          
           
           let componentGroups:any[] =this.getgroups();
-          console.log(componentGroups);
+         
 
           for(let i=0;i<componentGroups.length;i++)
           {
             
               groupdef={headerName:"",children:[],groupId:""};
 
-              groupdef.headerName=componentGroups[i].group +"/"+componentGroups[i].marks;
+              groupdef.headerName=componentGroups[i].group ;
               
              
                            
               let grpChildren=this.getGroupChildren(componentGroups[i].group);
-              console.log(grpChildren);
-             
+              
               groupdef.children=grpChildren;
               groupdef.groupId=componentGroups[i].group;
               //groupdef.headerClass='ag-header-group-cell';
@@ -913,6 +955,8 @@ onRowSelected(event){
                 let grparyobj:typeof obj[]=[];
 
                 let group="";
+
+               
                
 
                 for(let i=0;i<this.componentAC.length;i++)
@@ -933,7 +977,8 @@ onRowSelected(event){
                         }else{
                           obj = Object.create(obj);
                           obj.group=group;
-                          obj.marks=this.componentAC[i].maximumMarks;
+                          obj.marks= this.componentAC[i].maximumMarks;
+                          
                           grparyobj.push(obj);
                           group= this.componentAC[i].group; 
 
@@ -944,7 +989,7 @@ onRowSelected(event){
                       obj = Object.create(obj);
                       
                       obj.group=this.componentAC[i].group;
-                      obj.marks=this.componentAC[i].maximumMarks;
+                      obj.marks=String(Number(this.componentAC[i].maximumMarks));
                       grparyobj.push(obj);
                       
                     }
@@ -961,13 +1006,13 @@ onRowSelected(event){
               
                 this.componentAC.forEach(column=>
                   {
-                        console.log(column.group,group);
+                        
                       if(String(column.group).toString()===String(group).toString())
                       {
                           columndef={};
-                          columndef.headerName=column.evaluationIdName;
+                          columndef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
                           columndef.field=column.evaluationId;
-                          columndef.width=100;
+                          columndef.width=110;
 
                           columndef.cellRendererFramework=NumeriCellRendererComponent; 
                           columndef.cellRendererParams = {
@@ -980,7 +1025,7 @@ onRowSelected(event){
                       }
 
                   });
-                  console.log(group,children);
+                 
           return children;
         }
         httpStatus(){
@@ -1003,13 +1048,13 @@ onRowSelected(event){
 
 
           this.sheetstatus=String(res.root.exception[0].exceptionstring).toString();
-          console.log( this.sheetstatus);
+          
 
           
           this.getEvaluationComponents();
           
          
-        //console.log(this.sheetstatus);
+       
      
 
         }
@@ -1021,7 +1066,8 @@ onRowSelected(event){
           let maxmarks:number;
          
          if( isNaN(Number(params.colDef.cellRendererParams.values[0])) ){
-          this.userservice.log(params.column.getColId()+":Component Max marks invalid")
+          this.userservice.log(params.column.getColId()+":Component Max marks invalid");
+          
           return false;
 
          }else{
@@ -1031,7 +1077,7 @@ onRowSelected(event){
       
           let id =params.column.getColId();
 
-          if ((params.newValue !== undefined && params.newValue !== null)) 
+          if ((params.newValue !== undefined && params.newValue !== null && String(params.newValue).trim() !=="")) 
           
           
           {
@@ -1043,13 +1089,17 @@ onRowSelected(event){
                               return true;
 
                         }else{
+                          
+                          //this.userservice.log("Number enetered is not valid");
+                          params.data[id]="Invalid";
                           return false;
 
                         }
                         
                        
 
-                       }else{                    // if number is not entered
+                       }else{    
+                        params.data[id]="Invalid";                // if number is not entered
                         return false;
                        }
 
@@ -1060,7 +1110,8 @@ onRowSelected(event){
                   }
 
 
-                }else{   // if value is undefined or null
+                }else{   // if value is undefined or null or blank
+                  params.data[id]="Invalid";
                   return false;
                 }
        
@@ -1214,16 +1265,16 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     
       
  let arrayCollect:any[]=[];
-            //console.log(res);
+           
    if(!(isUndefined(res.CodeList.root)))
         arrayCollect=res.CodeList.root;
-        console.log(arrayCollect);
+       
   
      if(arrayCollect.length===0){  
      
-     // this.getInstructorCountForCourse();  // check count of instructor and check authority accordingly
+     
      }else{
-      //this.getInstructorCountForCourse();  // check count of instructor and check authority accordingly
+     
          if (String(arrayCollect[0].creatorId).toString() === String(arrayCollect[0].employeeId).toString()   )
              
          
@@ -1256,9 +1307,9 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       
       
         this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
-        //this.userservice.log(" in switch detail selected");
+       
         res = JSON.parse(res);
-       // console.log("course mark",res);
+      
         this.httpGetCourseMarks(res);
       
             })
@@ -1266,11 +1317,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
   }
 
       httpGetCourseMarks(res){
-   //console.log("Total Marks...................",res,res.courseDetails.Details[0]);
-        //var courseMarksXML = event.result as XML;
-//	Alert.show(courseMarksXML);
-//	var courseArrCol:ArrayCollection=new ArrayCollection();
-	try{
+   	try{
 	for  (var o of res.courseDetails.Details){
 		this.marksEndSemester=o.marksEndSemester;
 		this.subjectTotalMarks=o.totalMarks
@@ -1333,9 +1380,9 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
 
   }
   httpGetInstructorCountForCourse(res){
-    console.log(res);
+    
     this.instructorCount = res.CodeList.root[0].status;
-    console.log(res.CodeList);
+   
     try{
       
            
@@ -1352,7 +1399,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       this.gradeauthorityholder=false;
       this.getCourseMarks();
       this.getCourseAuthorityDetails();
-      
+
      
 
       //window.alert("You do not have authority to enter grades");
@@ -1366,7 +1413,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
 
 
   onClickgradelimit(){
-    console.log("hello");
+   
   }
 
 
@@ -1409,7 +1456,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
    
-   // console.log("course mark",res);
+  
     this.resultHandlerSubmit(res);
   
         })
@@ -1427,7 +1474,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
   /// Check sheet status of other user ie is it submitted or not 
   getCourseGradeLimitStatus(){
 
-    console.log(this.awardsheet_params);
+    
 
     this.awardsheet_params=this.awardsheet_params.set("semesterStartDate", this.awardsheet_params.get('semesterstartdt'));
     this.awardsheet_params=this.awardsheet_params.set("semesterEndDate", this.awardsheet_params.get('semesterenddt'));
@@ -1451,9 +1498,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
   getCourseGradeLimitSuccess(res)
   {
 
-    console.log(res);
-
-    console.log(this.LoggedInUser);
+    
     let gradelimitstatus:any[]=[];
     this.submitstatusofotherteacher="Y";
     let loggedinid:string="";
@@ -1464,13 +1509,13 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       {
       
                 gradelimitstatus=res.courseDetails.Details;
-                console.log(gradelimitstatus.length);
+               
                 let count=0;
 
                 for(let i=0;i<gradelimitstatus.length;i++)
                 {
                   
-                  console.log(pck,entity,gradelimitstatus[i].status,gradelimitstatus[i].ownerEntityId,gradelimitstatus[i].programCourseKey);
+                 
                               if( 
                                 (String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
                                 String(gradelimitstatus[i].ownerEntityId).toString() !==String(entity).toString()) ||
@@ -1480,14 +1525,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
                                
                             ) {
                               count++;
-                              console.log(
-                                String(gradelimitstatus[i].status).toString(),"Arush",
-                                String(gradelimitstatus[i].programCourseKey).toString(),
-                                String(pck).toString(),
-                                String(gradelimitstatus[i].ownerEntityId).toString(),
-                                String(entity).toString()
-
-                              )
+                             
                               
                               }
 
@@ -1498,9 +1536,9 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
                 }
                if(count>0){
                this.submitstatusofotherteacher="N";
-               console.log("value of count",count);
+              
                }else{
-                console.log("value in else  count",count);
+                
                }
       }
       else
@@ -1509,7 +1547,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
          this.submitstatusofotherteacher="N";
       }
     
-console.log(this.submitstatusofotherteacher);
+
 this.httpStatus();  // Check submitted status and Load award sheet
     // check the status of sheet of logged in Teacher.
 

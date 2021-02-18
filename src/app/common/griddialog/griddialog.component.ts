@@ -20,7 +20,7 @@ export class GriddialogComponent implements OnInit {
   public columnDefs:ColDef[];
   public defaultColDef;
   public rowSelection;
-  public rowData:any [];
+  public rowData:any []=[];
   public rowDataEditGrid:any []=[];
   private gradeparam:HttpParams;
   private gradelimits:number[]=[];
@@ -327,7 +327,7 @@ export class GriddialogComponent implements OnInit {
       
           let id =params.column.getColId();
 
-          if ((params.newValue !== undefined && params.newValue !== null)) 
+          if ((params.newValue !== undefined && params.newValue !== null && String(params.newValue).trim() !=="")) 
           
           
           {
@@ -341,13 +341,15 @@ export class GriddialogComponent implements OnInit {
                               return true;
 
                         }else{
+                          params.data[id]="Invalid";
                           return false;
 
                         }
                         
                        
 
-                       }else{                    // if number is not entered
+                       }else{   
+                        params.data[id]="Invalid";                 // if number is not entered
                         return false;
                        }
 
@@ -356,6 +358,7 @@ export class GriddialogComponent implements OnInit {
 
 
                 }else{   // if value is undefined or null
+                  params.data[id]="Invalid";
                   return false;
                 }
        
@@ -368,20 +371,60 @@ export class GriddialogComponent implements OnInit {
         oncellValueChanged(event:CellChangedEvent){
          let id =event.column.getColId();
          let value =event.newValue;
+         let zerocount =0;
         // console.log(this.gradeidx[id]);
 
          this.gradelimits[this.gradeidx[id]] =event.newValue;
+
+
+         this.gradelimits.forEach(item=>{
+           console.log(item);
+           if((String(item)==="0")){
+            zerocount++;
+           }
+
+         });
+
+         if(zerocount>1){
+           console.log("More than one zero");
+         }else{
+          console.log("Single zero");
+         }
+
+      if (this.checkIfArrayIsUnique(this.gradelimits)){
+
+        console.log("Array is uniques");
+      }else{
+        console.log("Array is not uniques");
+      }
+
         
         //console.log(this.gradelimits);
-        if(!(this.isSorted(this.gradelimits))){
+        console.log(this.gradelimits);
+        if(!(this.isSorted(this.gradelimits)) ){
           this.showsave=false;   
           window.alert("Grade limits not valid.Please check");
+          }else if (zerocount>1){
+            this.showsave=false; 
+
+          }else if(!(this.checkIfArrayIsUnique(this.gradelimits))){
+            this.showsave=false; 
+
           }else{
             this.showsave=true; 
 
           }
+
+
+
           
         }
+
+
+         checkIfArrayIsUnique(myArray) {
+          return myArray.length === new Set(myArray).size;
+        }
+        
         oncellKeyPress(event:CellKeyPressEvent){
           console.log(event.node.rowIndex,event.column.getColId());
 
@@ -623,6 +666,7 @@ export class GriddialogComponent implements OnInit {
       let obj = {xmltojs:'Y',
       method:'None' };   
       obj.method='/coursegradelimitpercourse/insertCourseGrade.htm';
+     // obj.method='/coursegradelimit/insertCourseGrade.htm';
      
       this.userservice.getdata(this.gradeparam,obj).subscribe(res=>{
       //this.userservice.log(" in switch detail selected");

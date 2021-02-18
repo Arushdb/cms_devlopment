@@ -90,8 +90,16 @@ export class UserService {
 
    /** Log a UserService message with the MessageService */
   public log(message: string) {
+    this.messagesrv.clear();
   this.messagesrv.add(`User Service: ${message}`);
   }
+
+  public clear(message: string) {
+    //this.messagesrv.clear();
+    }
+  
+
+
     
      }
 
