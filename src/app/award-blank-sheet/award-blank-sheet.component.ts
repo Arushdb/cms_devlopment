@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { CellFocusedEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
+import { CellEditingStoppedEvent, CellFocusedEvent, CellMouseOutEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from '../services/user.service';
 import {Location} from '@angular/common';
 
@@ -54,42 +54,42 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     gradelimitButton:boolean=false;
     instructorCount:string="" ;
   
-    gradeauthorityholder:boolean=false;
+    private gradeauthorityholder:boolean=false;
     submitstatusofotherteacher="";
 
  
- trigger:String="button";
+ 
   studentmarks=[];
   editing = false;
 
   //columnDefsmk:ColDef[]=[];  
-  buttonPressed:string=null;
+ 
   componentAC:any[];
   columnDefs: ColDef[]; 
   studentXml:any[]=[];
   public columnDefsmk : ColDef[]=[];                             
-    size=0;                            
+                            
   urlPrefix:any;
   param = new HttpParams()
   .set('application','CMS');
-  public myrowData=[];
+
   displayType:any;
   awardsheet_params:HttpParams=new HttpParams();
   gridOptions: GridOptions;
   gridOptionsmk: GridOptions;
   isEdit=false;
-  isCheck=true;
-  edit='Dont Edit';
+ 
+ 
   public defaultColDef;
   
   LoggedInUser: string;
   public courseListGrid=[];
   gradelimitdetail: boolean;
   courseapprstatus: boolean;
-  currentApprovalOrder: any;
+  
   style: { width: string; height: string; flex: string; };
   displaymkgrid: boolean=false;
-  saveCaller: string;
+  
   gradelimitarraycoll: any[];
   gradelimit: string;
   employeeCode: any;
@@ -100,7 +100,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   totalMarks: any;
   subjectTotalMarks: any;
   styleCourse: { width: string; height: string; flex: string; };
-  private pinnedTopRowData:any[]=[];
+
   
   styleMarks={
     width: '100%',
@@ -112,6 +112,8 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   spinnerstatus: boolean=false;
   gradesCalculated: boolean;
   someoneElseHasAuthority: boolean=false;
+  authorityHolderId: string;
+  canSubmit: boolean;
 
   constructor(
     private router:Router,
@@ -383,7 +385,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
 
  getupdatedgradeForSave(callingMethod:string):void{
 //	Alert.show(callingMethod);
-	this.saveCaller=callingMethod;
+	//this.saveCaller=callingMethod;
 	var param:Object =new Object();
 	var gradeobject:Object=new Object();
 		this.httprequestgetupdatedgradelimitForSave() ;
@@ -433,18 +435,23 @@ oncellFocused(event:CellFocusedEvent){
  
   let params: StartEditingCellParams
   
+  
   if(!(event.column===null)){
    
      params={rowIndex:event.rowIndex,colKey:event.column.getColId()};
     this.gridOptionsmk.api.startEditingCell(params);
+
 
   }
  
 
 }
 
-onrowDoubleClicked(event:RowDoubleClickedEvent){
 
+
+oncellEditingStopped(event:CellEditingStoppedEvent){
+  this.saveButton=true;
+  console.log("editing stopped",event);
 }
 
 
@@ -804,13 +811,16 @@ onRowSelected(event){
                       }
                 //step-3      
                 //if multi teacher  and  not a authority holder   
-                // and some one else has a authority  and  it should not be last sheet for submisiion ,submit button should  be on
+                // and some one else has a authority  and authority holder is not assigned its sheet ,submit button should  be on
                     if(String(this.instructorCount).toString()!=="1" 
                         && !this.gradeauthorityholder
                         //&& this.gradelimitdetail
                         && this.someoneElseHasAuthority
-                        && this.submitstatusofotherteacher==="N"
-                        && marksEntered)
+                        //&& this.submitstatusofotherteacher==="N"
+                        && marksEntered 
+                        && this.canSubmit
+                        
+                        )
                                                     
                     
                         {
@@ -827,7 +837,7 @@ onRowSelected(event){
               ,"this.gradesCalculated:",this.gradesCalculated,"submitstatusofotherteacher",this.submitstatusofotherteacher
               , "this.gradeauthorityholder",this.gradeauthorityholder,"allowEdit:",this.allowEdit
               ,"this.gradelimitdetail",this.gradelimitdetail,"editgrid",this.editgrid,"someoneElseHasAuthority:",
-              this.someoneElseHasAuthority,"marksEntered:",marksEntered);
+              this.someoneElseHasAuthority,"marksEntered:",marksEntered,"canSubmit:", this.canSubmit);
       
    
 		
@@ -1003,6 +1013,7 @@ onRowSelected(event){
         {
                 let columndef: ColDef={};
                 let children:any[]=[];
+               
               
                 this.componentAC.forEach(column=>
                   {
@@ -1013,6 +1024,7 @@ onRowSelected(event){
                           columndef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
                           columndef.field=column.evaluationId;
                           columndef.width=110;
+                          columndef.tooltipValueGetter= this.tooltipgetter;
 
                           columndef.cellRendererFramework=NumeriCellRendererComponent; 
                           columndef.cellRendererParams = {
@@ -1028,6 +1040,9 @@ onRowSelected(event){
                  
           return children;
         }
+
+        tooltipgetter =function (params):string {
+        return " 1) Press ENTER key after input of Marks  2) Use A to Mark Absent" }
         httpStatus(){
           let obj = {xmltojs:'Y',
           method:'None' };   
@@ -1274,10 +1289,13 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
      
      
      }else{
+      console.log("creatorId",arrayCollect[0].creatorId,"employeeId",arrayCollect[0].employeeId);
+
+      this.authorityHolderId=String(arrayCollect[0].employeeId).toString();
      
          if (String(arrayCollect[0].creatorId).toString() === String(arrayCollect[0].employeeId).toString()   )
              
-         
+        
                 {
                   this.gradeauthorityholder=true;
                   this.allowEdit="Y";
@@ -1502,44 +1520,91 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     let gradelimitstatus:any[]=[];
     this.submitstatusofotherteacher="Y";
     let loggedinid:string="";
-    let pck:string=this.awardsheet_params.get("programCourseKey")
-    let entity:string=this.awardsheet_params.get("entityId")
+    let pck:string=this.awardsheet_params.get("programCourseKey");
+    let entity:string=this.awardsheet_params.get("entityId");
+    let resultprocessed = false;
+    
+    this.canSubmit =true;
 
     if(!(isUndefined(res.courseDetails.Details))) 
       {
       
                 gradelimitstatus=res.courseDetails.Details;
+                console.log(gradelimitstatus);
                
-                let count=0;
+                let teachers:string;
+                  let teacherary=[];
 
                 for(let i=0;i<gradelimitstatus.length;i++)
                 {
                   
+                  teachers=String(gradelimitstatus[i].employeeId).toString();
+                
+                  teacherary =teachers.split(",");
                  
                               if( 
-                                (String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
-                                String(gradelimitstatus[i].ownerEntityId).toString() !==String(entity).toString()) ||
+                                (String(gradelimitstatus[i].status).toString()==="Not Submitted" ) 
+                                //&&
+                                //String(gradelimitstatus[i].ownerEntityId).toString() !==String(entity).toString()) ||
                                  
-                                (String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
-                                String(gradelimitstatus[i].programCourseKey).toString() !==String(pck).toString())
+                                //(String(gradelimitstatus[i].status).toString()==="Not Submitted"  &&
+                                //String(gradelimitstatus[i].programCourseKey).toString() !==String(pck).toString())
                                
                             ) {
-                              count++;
+
+                              if(!teacherary.includes(String(this.authorityHolderId).toString()))
+                              this.submitstatusofotherteacher="N";
                              
                               
-                              }
+                              } 
+
+
+                              if( 
+                                (String(gradelimitstatus[i].userId).toString()==="Declared" )) {
+                                  resultprocessed=true;
+
+                                }
+
+                              // if not a authority holder  ,check if  its award sheet  is also assigned to Authority Holder
+                              // if it is assigned then user can not submit its sheet . 
+                              if (!this.gradeauthorityholder){
+
+                          
+                                      // if it is a current loggd in user Sheet
+                                      if (String(gradelimitstatus[i].ownerEntityId).toString() ===String(entity).toString() &&
+                                      String(gradelimitstatus[i].programCourseKey).toString() ===String(pck).toString() &&
+                                      String(gradelimitstatus[i].status).toString()==="Not Submitted" 
+                                      
+                                      )
+                                                                    
+                                      {
+                                        //Scan  authority holder 
+                                       
+                                      
+                                        if(teacherary.includes(String(this.authorityHolderId).toString())){
+                                          this.canSubmit =false;
+                                          
+
+                                        }
+                                      
+
+
+                                      }
+                            }
 
 
                     //}
                     
                     
                 }
-               if(count>0){
-               this.submitstatusofotherteacher="N";
+              //   console.log(count);
+              //  if(count>0){
+              //  this.submitstatusofotherteacher="N";
               
-               }else{
+              
+              //  }else{
                 
-               }
+              //  }
       }
       else
       {
@@ -1547,6 +1612,22 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
          this.submitstatusofotherteacher="N";
       }
     
+
+      // if authorty holder and other users have not submitted sheet ,do not allow grading
+if (this.gradeauthorityholder && 
+  this.submitstatusofotherteacher==="N" &&
+  String(this.instructorCount).toString()!=="1"
+  ){
+this.allowEdit="N";
+this.userservice.log("Grades can only be entered after all other sheets are submitted");
+
+}
+
+if(resultprocessed){
+  this.allowEdit="N";
+  this.userservice.log("Result is already Processed ,Grading can not be changed ");
+}
+
 
 this.httpStatus();  // Check submitted status and Load award sheet
     // check the status of sheet of logged in Teacher.
