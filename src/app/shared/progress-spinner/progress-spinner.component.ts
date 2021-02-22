@@ -8,7 +8,7 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
   styleUrls: ['./progress-spinner.component.css']
 })
 export class ProgressSpinnerComponent implements OnInit {
- @Input() spinnerstatus :boolean=false;
+ @Input('spinnerstatus') spinnerstatus :boolean;
   constructor() { }
 
   ngOnInit(): void {

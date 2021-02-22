@@ -125,20 +125,19 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       
      // subscribe to the router events - storing the subscription so
    // we can unsubscribe later. 
+          this.subs.add =this.router.events.subscribe((evt) => {
+            if (evt instanceof NavigationEnd) {
+           //   console.log(evt);
+              // this.gridOptionsmk.api.destroy();
+              // this.gridOptions.api.destroy();
+              this.displaymkgrid=false;
+              this.courseListGrid=[];
+              this.ngOnInit();
 
-      this.subs.add =this.router.events.subscribe((evt) => {
-        if (evt instanceof NavigationEnd) {
-          // this.gridOptionsmk.api.destroy();
-          // this.gridOptions.api.destroy();
-          this.displaymkgrid=false;
-          this.courseListGrid=[];
-        
-          //this.moduleCreationCompleteHandler();
-
-         this.ngOnInit();
-          
-        }
-    });
+              
+            }
+        });
+    
 
 
       this.gridOptions = <GridOptions>{
@@ -186,6 +185,8 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    
+
   
     this.gridOptions.columnDefs=this.columnDefs;
 
@@ -223,12 +224,15 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     method:'None' };   
   obj.method='/awardsheet/getCourseList.htm';
   this.spinnerstatus=true;
+  console.log("getCourseList outer",this.spinnerstatus);
   this.subs.add=this.userservice.getdata(param,obj).subscribe(res=>{
     //this.userservice.log(" in switch detail selected");
+
+    console.log("getCourseList inner",this.spinnerstatus);
     res = JSON.parse(res);
     this.employeeCourseHttpServiceResultHandler(res);
 
-    this.spinnerstatus=false;
+  
    
 })
   }
@@ -237,14 +241,16 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   httpEmployeeCode(param){
     let obj = {xmltojs:'Y',
     method:'None' };   
-    this.spinnerstatus=true;
+  
   obj.method='/awardsheet/getEmployeeCode.htm';
   
   this.subs.add=this.userservice.getdata(param,obj).subscribe(res=>{
+
+    console.log("In employee codespinner status:",this.spinnerstatus);
     //this.userservice.log(" in switch detail selected");
     res = JSON.parse(res);
     this.resultHandlerEmployeeCode(res);
-    this.spinnerstatus=false;
+    
   
 })
    
@@ -259,13 +265,14 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
 
   
     if (isUndefined(res.CodeList.root)){
+      this.setoffButton();
       this.userservice.log("No Subject Assigned");
       this.goBack();
 
       return;
 
     }
-   
+    this.setoffButton();
    
 
     let employeeCourse =res;
@@ -452,6 +459,8 @@ oncellEditingStopped(event:CellEditingStoppedEvent){
 
 
 onRowSelected(event){
+
+  
  
   if(this.gridOptions.api.getSelectedNodes().length>1){
     this.userservice.log("Please select only One");
@@ -461,8 +470,10 @@ onRowSelected(event){
   }
         
   if(event.node.selected){
+   
     
     this.setoffButton();
+    this.spinnerstatus=true;
     this.displaymkgrid=true;
     this.columnDefsmk =[]; 
     this.componentAC=[];
@@ -473,7 +484,7 @@ onRowSelected(event){
 
   }else{
  
-  
+    this.spinnerstatus=false;
     this.columnDefsmk =[];
     this.displaymkgrid =false;
   }
@@ -612,6 +623,7 @@ onRowSelected(event){
         this.gradelimitButton=false;
         this.editgrid=false;
         this.saveButton=false;
+        this.spinnerstatus=false;
       }
 
       getStudentMarks(){
@@ -838,6 +850,7 @@ onRowSelected(event){
    
 		
               this.setNewColumnsmk();
+              this.spinnerstatus=false;
 
       }
 
@@ -1522,7 +1535,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     
     this.canSubmit =true;
 
-    if(!(isUndefined(res.courseDetails.Details))) 
+    if(!(isUndefined(res.courseDetails))) 
       {
       
                 gradelimitstatus=res.courseDetails.Details;
@@ -1604,7 +1617,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       }
       else
       {
-       
+        
          this.submitstatusofotherteacher="N";
       }
     
