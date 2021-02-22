@@ -14,11 +14,9 @@ import { NumeriCellRendererComponent } from 'src/app/numeri-cell-renderer/numeri
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
 
 import { GriddialogComponent } from 'src/app/common/griddialog/griddialog.component';
-import { alertComponent } from '../common/alert.component';
+//import { SharedModule } from 'src/app/shared/shared.module';
+import {alertComponent} from    'src/app/shared/alert/alert.component'
 
-
-import 'node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import 'node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 import    'src/app/common/subscription-container';
 

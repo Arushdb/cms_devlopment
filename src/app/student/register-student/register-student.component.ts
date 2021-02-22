@@ -13,8 +13,9 @@ import {MyItem} from 'src/app/interfaces/my-item';
 
 import {UserService} from  'src/app/services/user.service' ;
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { alertComponent } from 'src/app/common/alert.component';
-import { ThemePalette } from '@angular/material/core';
+
+import {alertComponent} from  'src/app/shared/alert/alert.component'
+
 import { CustomComboboxComponent } from '../custom-combobox/custom-combobox.component';
 import { GridReadyEvent } from 'ag-grid-community';
 

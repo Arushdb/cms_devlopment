@@ -26,20 +26,20 @@ import { FirstComponent } from './first/first.component';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ThirdComponent } from './third/third.component';
 import { AgGridModule } from 'ag-grid-angular';
-import 'ag-grid-enterprise';
+//import 'ag-grid-enterprise';
 import { MygridComponent } from './mygrid/mygrid.component';
 
 import {CookieService} from 'ngx-cookie-service';
 import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { MessageComponent } from './message/message.component';
-import {alertComponent  } from './common/alert.component';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 
-//import { LabelComponent } from './label/label.component';
-//import { ResultProcessingComponent } from './result-processing/result-processing.component';
+
+
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 import { NumericCellEditorComponent } from './numeric-cell-editor/numeric-cell-editor.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
@@ -50,10 +50,7 @@ import    {ProgressSpinnerComponent }  from  'src/app/common/progress-spinner/pr
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { HeaderComponent } from './header/header.component';
-
-//import { LabelComponent } from './label/label.component';
-//import { ResultProcessingComponent } from './result-processing/result-processing.component';
-//import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -75,10 +72,10 @@ import { HeaderComponent } from './header/header.component';
   
     MessageComponent,
   
-    alertComponent,
+  
   
     RxjsexampleComponent,
-    ProgressSpinnerComponent,
+    //ProgressSpinnerComponent,
   
   
     //LabelComponent,
@@ -93,7 +90,8 @@ import { HeaderComponent } from './header/header.component';
   
     GriddialogComponent,
   
-    HeaderComponent
+    HeaderComponent,
+   
   
    // CustomComboboxComponent
   
@@ -107,23 +105,24 @@ import { HeaderComponent } from './header/header.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatSliderModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
-    FormsModule,
-    MatDialogModule,
-  //  StudentModule,
-    AgGridModule.withComponents([]),
+  //   MatSliderModule,
+  //   LayoutModule,
+  //   MatToolbarModule,
+  //   MatButtonModule,
+  //   MatSidenavModule,
+  //   MatIconModule,
+  //   MatListModule,
+  //   MatMenuModule,
+  //   FormsModule,
+  //   MatDialogModule,
+  // //  StudentModule,
+     AgGridModule.withComponents([]),
    
    
-   MatAutocompleteModule,
-   MatProgressSpinnerModule,
-   MatCardModule,
+  //  MatAutocompleteModule,
+  //  MatProgressSpinnerModule,
+  //  MatCardModule,
+   SharedModule
    // MatFormFieldModule,
    
     //ReactiveFormsModule
@@ -131,15 +130,15 @@ import { HeaderComponent } from './header/header.component';
   
   ],
   entryComponents: [
-    alertComponent,
+  
     GriddialogComponent
   ],
   providers: [
    
     [
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
-      {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
-      CookieService
+      {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true}
+      
      
     ]
   ],

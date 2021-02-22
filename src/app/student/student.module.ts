@@ -14,6 +14,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CustomComboboxComponent } from './custom-combobox/custom-combobox.component';
+import {SharedModule} from   'src/app/shared/shared.module'
+//import { alertComponent } from '../shared/components/alert/alert.component';
 //import { CustomComboboxComponent } from '../common/custom-combobox/custom-combobox.component';
 
 
@@ -22,25 +24,30 @@ import { CustomComboboxComponent } from './custom-combobox/custom-combobox.compo
     RegisterStudentComponent,
    
     CustomComboboxComponent
+   
     
 
 
   ],
   imports: [
-    CommonModule,
+    //CommonModule,
     StudentRoutingModule,
-    AgGridModule.withComponents([]),
+   // AgGridModule.withComponents([]),
   
-    FormsModule,
+   // FormsModule,
+    //CommonModule,
    
     
-     MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule
+    //  MatAutocompleteModule,
+    // MatFormFieldModule,
+    // MatInputModule,
+    // ReactiveFormsModule,
+    SharedModule
     
-   // Collections
-  ]
+ 
+  ],
+    
+    exports:[]
 })
 
 
