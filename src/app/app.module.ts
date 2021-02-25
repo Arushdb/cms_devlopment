@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule}  from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { AppRoutingModule } from './app-routing.module';
@@ -39,25 +39,25 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 
 //import { LabelComponent } from './label/label.component';
-//import { ResultProcessingComponent } from './result-processing/result-processing.component';
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 import { NumericCellEditorComponent } from './numeric-cell-editor/numeric-cell-editor.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
 //import { GriddialogComponent } from './griddialog/griddialog.component';
-import { GriddialogComponent } from 'src/app/common/griddialog/griddialog.component';
+import { GriddialogComponent } from './common/griddialog/griddialog.component';
 import 'ag-grid-community';
-import    {ProgressSpinnerComponent }  from  'src/app/common/progress-spinner/progress-spinner.component';
+import    {ProgressSpinnerComponent }  from  './common/progress-spinner/progress-spinner.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { HeaderComponent } from './header/header.component';
+import { CustomComboboxComponent } from './common/custom-combobox/custom-combobox.component'; //added by Jyoti on 25 Feb 2021
 
 //import { LabelComponent } from './label/label.component';
-//import { ResultProcessingComponent } from './result-processing/result-processing.component';
 //import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
-
-
-
 //import {StudentModule} from  './student/student.module' ;
+import { StartactivityComponent } from './resultprocessing/startactivity/startactivity.component';  //added by Jyoti on 25 Feb 2021
+import { ConfirmwindowComponent } from './resultprocessing/confirmwindow/confirmwindow.component';  //added by Jyoti on 25 Feb 2021
+import { MatInputModule } from '@angular/material/input'; //added by Jyoti on 25 Feb 2021
+
 
 @NgModule({
   declarations: [
@@ -93,17 +93,15 @@ import { HeaderComponent } from './header/header.component';
   
     GriddialogComponent,
   
-    HeaderComponent
-  
-   // CustomComboboxComponent
-  
-    
-    
-    
+    HeaderComponent,
+    StartactivityComponent,
+    ConfirmwindowComponent,
+    CustomComboboxComponent
    
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -123,10 +121,10 @@ import { HeaderComponent } from './header/header.component';
    
    MatAutocompleteModule,
    MatProgressSpinnerModule,
-   MatCardModule,
-   // MatFormFieldModule,
-   
-    //ReactiveFormsModule
+   MatCardModule, 
+   MatInputModule,
+   MatFormFieldModule,
+    ReactiveFormsModule
    
   
   ],

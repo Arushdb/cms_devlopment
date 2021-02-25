@@ -13,8 +13,7 @@ import { RxjsexampleComponent } from './rxjsexample/rxjsexample.component';
 import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 
 //import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
-
-
+import { StartactivityComponent } from './resultprocessing/startactivity/startactivity.component';
 
 const routes:Routes=[
   //basic routes
@@ -31,9 +30,9 @@ const routes:Routes=[
         loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
         //{path:'registration_continue',component: RegisterStudentComponent
         {path:'registration_continue',component: RegisterStudentComponent},
-        {path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}}
-              
+        {path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}},       
         //{path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}}
+        {path:'startactivity',component: StartactivityComponent}
        // {path:'custom_combo',component: CustomComboboxComponent}
        
          //children:[{path:'custom_combo',component: CustomComboboxComponent}]

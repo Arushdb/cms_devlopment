@@ -66,6 +66,15 @@ export class TestComponent implements OnInit {
          }
        ] 
      
+     },
+     {  
+      displayname:"Process Control",   //added by Jyoti on 25 Feb 2021
+      children:[
+        {
+        displayname:"Start Activity",
+        route:'startactivity'
+        }
+       ]
      }
   
   ]
