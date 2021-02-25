@@ -1,0 +1,121 @@
+<div class="container-fluid">
+    <form class="card" [formGroup]="startactivityform" #form1="ngForm" (ngSubmit)="validationforOk()">
+      <div class="form-group">
+      <div class="card-header"><b>Activity Master Control</b></div>
+      <div class="card-body">
+       
+      <div class="row">
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showEntityCB"  [myControl]="startactivityform.get('f_entity')" name="entityCB" 
+              (OptSelected)="entityChangeHandler($event)" #combo 
+              [Options] ='entityCombo' 
+              [labeltext]='entitycombolabel' 
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showProcessCB"  [myControl]="startactivityform.get('f_process')" name="processCB"  
+              (OptSelected)="processChangeHandler($event)" #combo 
+              [Options] ='processCombo' 
+              [labeltext]='procombolabel' 
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showSemCB"  [myControl]="startactivityform.get('f_sem')" name="semCB" 
+              (OptSelected)="semesterChangeHandler($event)" #combo 
+              [Options] ='semesterCombo' 
+              [labeltext]='semcombolabel' 
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showPrgCB" [myControl]="startactivityform.get('f_program')" name="programCB" 
+              (OptSelected)="programChangeHandler($event)" #custcombo 
+              [Options] ='programCombo' 
+              [labeltext]='prgcombolabel'
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showBrCB" [myControl]="startactivityform.get('f_branch')" name="branchCB" 
+              (OptSelected)="branchChangeHandler($event)" #combo 
+              [Options] ='branchCombo' 
+              [labeltext]='brcombolabel' 
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+          <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+              <app-custom-combobox *ngIf="showSpCB" [myControl]="startactivityform.get('f_spc')" name="spclCB" 
+              (OptSelected)="specilizationChangeHandler($event)" #combo 
+              [Options] ='specializationCombo'
+              [labeltext]='spcombolabel' 
+              [combowidth] ="combowidth"></app-custom-combobox>
+          </div>
+      </div>
+  </div>
+    <div *ngIf="showOk">    
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary btn-primary-spacing  btn-sm " [disabled]="!enableOkBtn" >Ok</button> &nbsp;&nbsp;
+        <button id="reset" type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="reset()">Reset</button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-primary btn-primary-spacing  btn-sm " routerLink="/dashboard">Cancel</button><router-outlet></router-outlet>
+    </div>
+    <br> <br>
+    <div *ngIf="showProGridPanel" class="container border">
+              <label>{{entityProcesSemesterforProcess}}</label> &nbsp; &nbsp; &nbsp;
+              <button type="button" id="getButton" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "showActivityGrid()" >Actvity</button>      
+              <ag-grid-angular
+                          suppressHorizontalScroll = "false"
+                          style="width: 100%; height: 200px;"
+                          [rowData]="processGridList"
+                          [columnDefs]="columnDefs"
+                          #proagGrid
+                          (gridReady) ="OnProGridReady($event)"
+                          rowSelection="single"
+                          class="ag-theme-alpine"
+                          [defaultColDef]="defaultColDef"
+                          [scr]     >
+               </ag-grid-angular>
+               <app-spinner *ngIf = 'mask' [spinnerstatus]="mask"></app-spinner>
+    </div>
+    
+    <div *ngIf="showActGridPanel" class="container border">
+        <label>{{entityProcesSemesterforProcess}}</label> &nbsp; &nbsp; &nbsp;
+        <button type="button" id="startButton" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "forStartActivity()" >Start</button>  &nbsp; &nbsp; &nbsp;    
+        <button type="button" id="errButton" *ngIf="enableErrBtn" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "openPDF()" >View Errors</button> &nbsp; &nbsp; &nbsp;
+        <button type="button" id="errButton" *ngIf="enableCertBtn" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "getCertificate()" >View Certificate</button> &nbsp; &nbsp; &nbsp;
+        <button type="button" id="backButton" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "backFunction()" >Back</button>
+        <ag-grid-angular
+            suppressHorizontalScroll = "false"
+            style="width: 100%; height: 200px;"
+            [rowData]="activityGridList"
+            [columnDefs]="columnActDefs"
+            #agGrid
+            (gridReady) ="OngridReady($event)"
+            rowSelection="single"
+            class="ag-theme-alpine"
+            [defaultColDef]="defaultColDef"
+            (selectionChanged)="onActSelectionChanged($event)"
+            [scr]  >
+        </ag-grid-angular>
+        <app-spinner *ngIf = 'mask' [spinnerstatus]="mask"></app-spinner>
+    </div>
+    <br> 
+    <div *ngIf="showRejectedGridPanel"  class="container border">
+        <label>Rejected Records </label> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+        <button type="button" id="dtlButton" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "showDetails()" >Full Details</button>
+        <!--&nbsp; &nbsp; &nbsp;
+        <button type="button" id="printButton" class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "printGridData()" >Print Records</button> -->
+        <ag-grid-angular
+            suppressHorizontalScroll = "false"
+            style="width: 100%; height: 200px;"
+            [rowData]="rejectedGridData"
+            [columnDefs]="columnRejDefs"
+            #rejagGrid
+            (gridReady) ="OnRejGridReady($event)"
+            rowSelection="single"
+            class="ag-theme-alpine"
+            [defaultColDef]="defaultColDef">
+        </ag-grid-angular>
+        <app-spinner *ngIf = 'mask' [spinnerstatus]="mask"></app-spinner>
+    </div>
+</div>
