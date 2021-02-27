@@ -94,8 +94,8 @@ export class UserService {
   this.messagesrv.add(`User Service: ${message}`);
   }
 
-  public clear(message: string) {
-    //this.messagesrv.clear();
+  public clear() {
+    this.messagesrv.clear();
     }
   
 

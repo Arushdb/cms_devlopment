@@ -1,5 +1,5 @@
 import { HttpParams, HttpResponse } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Renderer2, } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -18,6 +18,7 @@ import {alertComponent} from  'src/app/shared/alert/alert.component'
 
 import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
 import { GridReadyEvent } from 'ag-grid-community';
+import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 
 
 
@@ -27,13 +28,14 @@ import { GridReadyEvent } from 'ag-grid-community';
   templateUrl: './register-student.component.html',
   styleUrls: ['./register-student.component.css']
 })
-export class RegisterStudentComponent implements AfterViewInit {
+export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
   combowidth: string;
   public displaybutton: boolean =false;
   //suppressRowDeselection = false;
   check=false;
+  subs = new SubscriptionContainer();
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
   // color: ThemePalette = 'primary';
@@ -42,6 +44,7 @@ export class RegisterStudentComponent implements AfterViewInit {
   constructor(private router:Router,
     private userservice:UserService,
     private route:ActivatedRoute,
+    private elementRef:ElementRef,
     
     
     private location:Location,
@@ -50,6 +53,11 @@ export class RegisterStudentComponent implements AfterViewInit {
 
     ) { 
       
+  }
+  ngOnDestroy(): void {
+    this.subs.dispose();
+    this.elementRef.nativeElement.remove();
+   
   }
   ngAfterViewInit(): void {
     
@@ -167,30 +175,13 @@ columnDefs = [
 
  
 
-//   getSelectedRows() {
-//     const selectedNodes = this.agGrid.api.getSelectedNodes();
-//     console.log(selectedNodes);
-//     const selectedData = selectedNodes.map(node => node.data );
-//     console.log(selectedData);
-//     const selectedDataStringPresentation = selectedData.map(node => node.courseCode + ' ' + node.coursename).join(', ');
 
-//     //alert(`Selected nodes: ${selectedDataStringPresentation}`);
-
-//     const dialogRef =this.dialog.open(alertComponent);
-//     dialogRef.afterClosed().subscribe(result => {
-//       console.log(`Dialog result: ${result}`);
-    
-    
-//     });
-
-
-// }
 
   gettencode(){
       let obj = {xmltojs:'Y',
       method:'/registrationforstudent/gettencodes.htm' };   
      this.mask=true;
-        this.userservice.getdata(this.params,obj).subscribe(res=>{
+     this.subs.add=  this.userservice.getdata(this.params,obj).subscribe(res=>{
           res= JSON.parse(res);
           this.gettencodeSuccess(res);
           this.mask=false;
@@ -265,7 +256,7 @@ columnDefs = [
       method:'None' };   
     obj.method='/registrationforstudent/getswitchdetail.htm';
     this.mask=true;
-    this.userservice.getdata(this.params,obj).subscribe(res=>{
+    this.subs.add= this.userservice.getdata(this.params,obj).subscribe(res=>{
       //this.userservice.log(" in switch detail selected");
       res = JSON.parse(res);
       this.mask=false;
@@ -378,7 +369,7 @@ getbrnservice(param){
     myparam.method='/registrationforstudent/getbranches.htm';
 
     this.mask=true;
-    this.userservice.getdata(this.params,myparam).subscribe(res=>{
+    this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
   
     res = JSON.parse(res);
     this.mask=false;
@@ -394,7 +385,7 @@ getspcservice(param){
     myparam.method='/registrationforstudent/getspeclizations.htm';
 
     this.mask=true;
-    this.userservice.getdata(this.params,myparam).subscribe(res=>{
+    this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
   
     res = JSON.parse(res);
     this.mask=false;
@@ -412,7 +403,7 @@ getcoursesservice(param){
     // this.params=this.params.append('switchType','NON');
     // this.params=this.params.append('module','');
     this.mask=true;
-    this.userservice.getdata(this.params,myparam).subscribe(res=>{
+    this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
   
     res = JSON.parse(res);
     this.combodata.splice(0,this.combodata.length);
@@ -740,7 +731,7 @@ goBack(): void {
       let obj = {xmltojs:'Y',
       method:'/registrationforstudent/registerstudent.htm' };   
       this.mask=true;
-      this.userservice.getdata(myparam1,obj).subscribe(res=>{
+      this.subs.add= this.userservice.getdata(myparam1,obj).subscribe(res=>{
         //   let data = null;
         //   xml2js.parseString( res, function (err, result){
         //    data = result;
