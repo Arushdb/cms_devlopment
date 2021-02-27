@@ -16,7 +16,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 import {alertComponent} from  'src/app/shared/alert/alert.component'
 
-import { CustomComboboxComponent } from '../custom-combobox/custom-combobox.component';
+import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
 import { GridReadyEvent } from 'ag-grid-community';
 
 

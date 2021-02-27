@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
-
 import { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
 import { alertComponent } from './alert/alert.component'
 import { MatSliderModule } from '@angular/material/slider';
@@ -13,24 +11,27 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AgGridModule } from 'ag-grid-angular';
+
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CustomComboboxComponent } from './custom-combobox/custom-combobox.component';
+import { MessageComponent } from 'src/app/shared/message/message.component';
 
 
 
 
 @NgModule({
   declarations: [
-      
-   
-   
+   // common components
     alertComponent,
-   
     ProgressSpinnerComponent,
+    CustomComboboxComponent,
+    MessageComponent
    
     
   ],
@@ -45,20 +46,28 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatListModule,
     MatMenuModule,
-    FormsModule,
     MatDialogModule,
-  //  StudentModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
     //AgGridModule.withComponents([]),
    
-   
-   MatAutocompleteModule,
-   MatProgressSpinnerModule,
-   MatCardModule,
+
+   FormsModule,
+   ReactiveFormsModule
   ],
   exports: [
-    CommonModule,
+     // common componentsc
+    
     alertComponent,
     ProgressSpinnerComponent,
+    CustomComboboxComponent,
+    MessageComponent,
+    
+    //shared Module
+    CommonModule,
     MatSliderModule,
     LayoutModule,
     MatToolbarModule,
@@ -67,16 +76,18 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatListModule,
     MatMenuModule,
-    FormsModule,
     MatDialogModule,
-    //AgGridModule,
-  //  StudentModule,
-    //AgGridModule.withComponents([]),
-   
-   
-   MatAutocompleteModule,
-   MatProgressSpinnerModule,
-   MatCardModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+
+    //AgGridModule
+
   ]
 })
 export class SharedModule { }

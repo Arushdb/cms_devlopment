@@ -20,33 +20,31 @@ const routes:Routes=[
  
   {path:'login',component:SignonformComponent},
   
-    // { 
-    // path: 'dashboard',canActivate:[AuthGuard],
-    // component: DashboardComponent,
-    // children : [
-    //     { path: 'main', component: MenusComponent },
+    { 
+    path: 'dashboard',canActivate:[AuthGuard],
+    component: DashboardComponent,
+    children : [
+        { path: 'main', component: MenusComponent },
        
-      //  { path: 'StudentMod',
-       // loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
+        { path: 'StudentMod',
+        loadChildren: () => import('./student/student.module').then(m => m.StudentModule)} ,       
         //{path:'registration_continue',component: RegisterStudentComponent
-          // {path:'Internal_award_sheet',
-          // loadChildren:()=>import('./award-sheet/award-sheet.module').then(m=>m.AwardSheetModule)},
-   
-
-        //{path:'registration_continue',component: RegisterStudentComponent},
+        {path:'registration_continue',component: RegisterStudentComponent},
         //{path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}}
               
      
         
-    
-    
-
+        
+        
+    ],
+    runGuardsAndResolvers: "always",
+},
    
 
         
 
 
-       {path:'',redirectTo:'login',pathMatch:'full'}
+        {path:'',redirectTo:'login',pathMatch:'full'}
   
 
 ];
