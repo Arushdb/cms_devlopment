@@ -1295,7 +1295,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
        
   
      if(arrayCollect.length===0){  
-     
+      this.userservice.log("No one has authority to enter grades");
      
      }else{
       console.log("creatorId",arrayCollect[0].creatorId,"employeeId",arrayCollect[0].employeeId);
