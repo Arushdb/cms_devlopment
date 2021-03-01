@@ -22,6 +22,7 @@ const routes:Routes=[
   loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
  // {path:'registration_continue',component: RegisterStudentComponent},   
 
+ 
 
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
   ],         
@@ -29,7 +30,7 @@ const routes:Routes=[
 
   },
 
- 
+  {path:'**',redirectTo:'login',pathMatch:'full'}
 
 ];
 

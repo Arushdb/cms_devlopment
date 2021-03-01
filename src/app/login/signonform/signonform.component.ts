@@ -66,6 +66,7 @@ export class SignonformComponent implements OnDestroy  {
 			//func:Function;
 			subs = new SubscriptionContainer();
 			login_params: HttpParams ;
+			userid:string="";
 			constructor(private router:Router,
 			private userservice:UserService,
 			private authService: AuthService ,
@@ -106,10 +107,16 @@ export class SignonformComponent implements OnDestroy  {
 //On click of login button
  		Login(form)
 		{
-	
+	 let user =window.btoa(form.inputUser);
+	 let pwd =window.btoa(form.inputPassword);
+	 this.userid=form.inputUser;
+	// console.log(user,pwd);
+
 			this.login_params = this.login_params
-			.set('userName',form.inputUser)
-			.set('password', form.inputPassword)
+			//.set('userName',form.inputUser)
+			.set('userName',user)
+			.set('password', pwd)
+			//.set('password', form.inputPassword)
 			
 			;
 			
@@ -197,6 +204,7 @@ export class SignonformComponent implements OnDestroy  {
 			
 			data = JSON.parse(res);
 			
+			
 			if (isUndefined((data.loginInfo.loginInfo))){
 			
 				this.sts="";
@@ -224,7 +232,12 @@ export class SignonformComponent implements OnDestroy  {
 			info =res.loginInfo.loginInfo[0];
 			if(!(isUndefined(info))){
 				this.login_params=this.login_params.set("userGroupName",info.userGroupName);
-				console.log(this.login_params);
+				this.token=info.token;
+				//console.log(this.login_params);
+				localStorage.setItem('isLoggedIn', "true");  
+				localStorage.setItem('token', this.token); 
+				localStorage.setItem('id', this.userid); 
+
 				this.menuHttpService(this.login_params);
 			
 
@@ -269,9 +282,8 @@ export class SignonformComponent implements OnDestroy  {
 				}
 			};
 		
-			localStorage.setItem('isLoggedIn', "true");  
-			localStorage.setItem('token', this.token); 
-			localStorage.setItem('id', this.login_params.get('userName')); 
+			
+			//localStorage.setItem('id', this.login_params.get('userName')); 
 
 			this.router.navigate(['\dashboard'],navigationExtras);
 
