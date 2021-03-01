@@ -954,9 +954,9 @@ onRowSelected(event){
         }
         {
           let definition: ColDef;
-          definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false };
+          definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right"};
           this.columnDefsmk.push(definition);
-          definition = { headerName: "GD", field:'grade',  width: 80,editable:false };
+          definition = { headerName: "GD", field:'grade',  width: 80,editable:false,pinned:"right" };
           this.columnDefsmk.push(definition);
 
           }
