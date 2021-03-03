@@ -337,6 +337,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   // this.gridOptionsmk.api.setDomLayout('autoHeight');
    this.gridOptionsmk.api.setAlwaysShowVerticalScroll(true);
     this.gridOptionsmk.api.setDomLayout('normal');
+   
 
      
     this.gridOptionsmk.api.setColumnDefs(this.columnDefsmk);
@@ -460,7 +461,7 @@ oncellEditingStopped(event:CellEditingStoppedEvent){
 
 onRowSelected(event){
 
-  
+  this.userservice.clear();
  
   if(this.gridOptions.api.getSelectedNodes().length>1){
     this.userservice.log("Please select only One");
@@ -912,8 +913,8 @@ onRowSelected(event){
           let columndef: ColDef;
         
             groupdef={headerName:"Student", children: [
-             {headerName: "Roll Number",  field :'rollNumber' , width: 100,editable:false,pinned: 'left'},
-             { headerName: "Student Name",  field :'studentName' , width: 250,editable:false,pinned: 'left'}
+             {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left'},
+             { headerName: "Name",  field :'studentName' , width: 150,editable:false,pinned: 'left',tooltipField:'studentName'}
            
            ]};
            this.columnDefsmk.push(groupdef);
@@ -1030,9 +1031,11 @@ onRowSelected(event){
                       if(String(column.group).toString()===String(group).toString())
                       {
                           columndef={};
-                          columndef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
+                          //columndef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
+                          columndef.headerName=column.evaluationIdName;
+                          columndef.headerTooltip="Max Marks:"+column.maximumMarks;
                           columndef.field=column.evaluationId;
-                          columndef.width=110;
+                          columndef.width=80;
                           columndef.tooltipValueGetter= this.tooltipgetter;
 
                           columndef.cellRendererFramework=NumeriCellRendererComponent; 
