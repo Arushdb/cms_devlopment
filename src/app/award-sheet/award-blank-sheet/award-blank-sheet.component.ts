@@ -436,7 +436,7 @@ getupdatedgradelimitForSaveResultHandler(res){
 }
 
 oncellFocused(event:CellFocusedEvent){
- 
+  //this.saveButton=false;
   let params: StartEditingCellParams
   
   
@@ -1216,12 +1216,16 @@ onRowSelected(event){
   }
 
  
-  httpSavecell(){
+  httpSavecell(refreshgrid){
       let obj = {xmltojs:'Y',
       method:'None' };   
       obj.method='/awardsheet/saveStudentMarks.htm';
     
       this.subs.add=this.userservice.postdata(this.awardsheet_params,obj).subscribe(res=>{
+     if (refreshgrid){
+      this.getStudentMarks();
+     
+     }
     
     
       })
@@ -1237,21 +1241,35 @@ onRowSelected(event){
   let rowid =event.node.rowIndex;
   let row=this.studentmarks[rowid];
   let prvmarks=event.oldValue;
+  let refreshgrid=false;
 
-
+  console.log("Cell value changed",event,event.newValue,event.oldValue,row[colid]);
    let newArr = this.componentAC.filter((item)=>{
      return (item.evaluationId ===colid)  });   
     
     let idtype=newArr[0].idType;
 
 
-let payload= 
+let payload1= 
   row["rollNumber"]+"|"+colid +"|"+ idtype + 
   "|"+row[colid]+"|"+row["totalInternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
+let payload= 
+  row["rollNumber"]+"|"+colid +"|"+ idtype + 
+  "|"+event.newValue+"|"+row["totalInternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
+
+  console.log("payload1:",payload1,"Payload2:",payload);
+
+  if(row[colid]==event.newValue){
+    
+  }else{
+    refreshgrid=true;
+  
+
+  }
   
   
 this.awardsheet_params=this.awardsheet_params.set("data",payload);
- 	this.httpSavecell();
+ 	this.httpSavecell(refreshgrid);
 
 
 
