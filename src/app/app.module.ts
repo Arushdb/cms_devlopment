@@ -29,7 +29,9 @@ import {FormatInterceptorService} from './services/format-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { AgGridModule } from 'ag-grid-angular';
 
-import {AwardSheetModule} from './award-sheet/award-sheet.module'
+
+
+
 
 
 
@@ -38,6 +40,7 @@ import {AwardSheetModule} from './award-sheet/award-sheet.module'
 @NgModule({
   declarations: [
     AppComponent,
+   
  
          
     
@@ -52,7 +55,8 @@ import {AwardSheetModule} from './award-sheet/award-sheet.module'
     //AwardSheetModule,
     LoginModule,
     MenuModule,
-    AgGridModule.withComponents([]),
+    AgGridModule.withComponents([])
+    
   
    
   

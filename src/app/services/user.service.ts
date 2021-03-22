@@ -1,6 +1,7 @@
 import { HttpClient,  HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
+import {environment} from 'src/environments/environment'
 	
 
 @Injectable({
@@ -8,22 +9,31 @@ import { MessageService } from './message.service';
 })
 export class UserService {
 
+  url:string;
   constructor(private httpclient:HttpClient,
               private messagesrv:MessageService
     
-    ) {}
+    ) {
+  this.url=environment.url;
+  console.log("Envirnment:",this.url);
+
+    }
   
+
  //url="http://admission.dei.ac.in:8085/CMS" ;
- url="http://localhost:8080/CMS" ;
+ //url="http://localhost:8080/CMS" ;
+ 
+ 
   //url="http://125.17.153.215:8089/CMS" ;
   //url="http://10.154.0.112:8089/CMS" ;
 
-   
  
    
    application="CMS";
   
    getdata(params:HttpParams,myparam){
+    console.log("enviorment=",this.url);  
+ 
     var myurl ="";
     let headers: HttpHeaders= new HttpHeaders();
      

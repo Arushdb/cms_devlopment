@@ -138,7 +138,19 @@ export class SignonformComponent implements OnDestroy  {
 			data = JSON.parse(res);
 
 			this.LoginRoleServiceResult(data);
-			});
+			},err=>{
+                
+				//if (err.originalError.status=="0"){
+					this.message =err.originalError.statusText;
+					//console.log("in error",err.originalError);
+				//}
+				this.sts="INA";
+				this.subs.dispose();
+				return;
+			}	
+			
+			
+			);
 		}
 
  	

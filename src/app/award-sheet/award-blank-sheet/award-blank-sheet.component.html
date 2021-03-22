@@ -22,9 +22,12 @@
      <div>
         <button   type="button" class="btn btn-success mr-2  btn-sm " 
         (click)="getStudentMarks()" *ngIf="saveButton && displaymkgrid && columnDefsmk.length>0"  >Save</button>
+        <button   type="button" class="btn btn-success mr-2  btn-sm " 
+        (click)="generatepdf()"  *ngIf= "displaymkgrid" >Report</button>
         <button   type="button" class="btn btn-primary mr-2  btn-sm && columnDefsmk.length>0"
          (click)="onclickgradelimitbutton()" *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0" >GradeLimit</button>
         <button   type="button" class="btn btn-success mr-2  btn-sm " (click)="submitConfirm()" *ngIf="submitForApprovalButton && displaymkgrid">Submit</button>
+        
     </div>
 
     <div style='height: 700px; width: 100% ;display: flex; flex-direction: column;'  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
@@ -59,4 +62,6 @@
       
 </div>
 
+
 <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+
