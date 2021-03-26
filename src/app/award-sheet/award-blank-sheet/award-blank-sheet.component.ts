@@ -502,6 +502,8 @@ onRowSelected(event){
     this.awardsheet_params=this.awardsheet_params.set("displayType",this.displayType);
     this.awardsheet_params=this.awardsheet_params.set("sessionstartdt",event.data.startDate);
     this.awardsheet_params=this.awardsheet_params.set("sessionStart",event.data.startDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionStartDate",event.data.startDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionEndDate",event.data.endDate);
     this.awardsheet_params=this.awardsheet_params.set("sessionenddt",event.data.endDate);
     this.awardsheet_params=this.awardsheet_params.set("sessionEnd",event.data.endDate);
     this.awardsheet_params=this.awardsheet_params.set("semesterstartdt",event.data.semesterStartDate);
@@ -1709,7 +1711,30 @@ this.httpStatus();  // Check submitted status and Load award sheet
 
 
   }
+  generateMergeReport(){
+    let obj = {xmltojs:'N',
+    method:'None' };   
+    obj.method='/mergedAwardBlank/getComponentDetail.htm';
+   
+    this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    
+   
+   let  courseCode = this.awardsheet_params.get("courseCode");
+   
+        let reportPath='/MergedAwardSheets/'+courseCode+'.xls';
 
+
+    
+  reportPath = this.userservice.url+reportPath;
+ //console.log(reportPath);
+  //window.open(reportPath,"window1","");
+  window.open(reportPath);
+  
+        })
+
+
+  }
 
 
 }    // end of class 

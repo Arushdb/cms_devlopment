@@ -5,8 +5,18 @@
 .color-darkBlue{
 	color: #363c7b !important;
 }
+.color-darkorchid{
+	color: darkorchid !important;
+}
 .color-lightBlue{
 	color: #25a6d1 !important;
+}
+.color-darkviolet{
+	color: darkviolet;
+}
+.backround-dodgerblue{
+background-color:aqua;
+
 }
 .fs-I{
   font-style: italic;

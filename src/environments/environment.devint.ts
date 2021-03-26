@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url:"http://10.154.0.112:8089/CMS"
+  url:"http://10.154.0.112:8089/CMS",
+  
 };
 
 /*
