@@ -110,7 +110,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   someoneElseHasAuthority: boolean=false;
   authorityHolderId: string;
   canSubmit: boolean;
-
+  
   constructor(
     private router:Router,
     private userservice:UserService,
@@ -472,7 +472,7 @@ onRowSelected(event){
         
   if(event.node.selected){
    
-    
+   
     this.setoffButton();
     this.spinnerstatus=true;
     this.displaymkgrid=true;
@@ -484,7 +484,7 @@ onRowSelected(event){
    
 
   }else{
- 
+   
     this.spinnerstatus=false;
     this.columnDefsmk =[];
     this.displaymkgrid =false;
@@ -501,18 +501,31 @@ onRowSelected(event){
     this.awardsheet_params=this.awardsheet_params.set("courseCode",event.data.courseCode);
     this.awardsheet_params=this.awardsheet_params.set("displayType",this.displayType);
     this.awardsheet_params=this.awardsheet_params.set("sessionstartdt",event.data.startDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionStart",event.data.startDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionStartDate",event.data.startDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionEndDate",event.data.endDate);
     this.awardsheet_params=this.awardsheet_params.set("sessionenddt",event.data.endDate);
+    this.awardsheet_params=this.awardsheet_params.set("sessionEnd",event.data.endDate);
     this.awardsheet_params=this.awardsheet_params.set("semesterstartdt",event.data.semesterStartDate);
+    this.awardsheet_params=this.awardsheet_params.set("semesterStartDate",event.data.semesterStartDate);
     this.awardsheet_params=this.awardsheet_params.set("semesterenddt",event.data.semesterEndDate);
+    this.awardsheet_params=this.awardsheet_params.set("semesterEndDate",event.data.semesterEndDate);
     this.awardsheet_params=this.awardsheet_params.set("programId",event.data.programId);
     this.awardsheet_params=this.awardsheet_params.set("branchCode",event.data.branchId);
     this.awardsheet_params=this.awardsheet_params.set("specCode",event.data.specializationId);
     this.awardsheet_params=this.awardsheet_params.set("semesterCode",event.data.semesterCode);
+    this.awardsheet_params=this.awardsheet_params.set("semesterName",event.data.semesterCode);
     this.awardsheet_params=this.awardsheet_params.set("startDate",event.data.semesterStartDate);
     this.awardsheet_params=this.awardsheet_params.set("endDate",event.data.semesterEndDate);
     this.awardsheet_params=this.awardsheet_params.set("employeeCode",this.employeeCode);
     this.awardsheet_params=this.awardsheet_params.set("EmployeeName",event.data.employeeName);
     this.awardsheet_params=this.awardsheet_params.set("approvalOrder","1");
+    this.awardsheet_params=this.awardsheet_params.set("entityName",event.data.entityName);
+    this.awardsheet_params=this.awardsheet_params.set("programName",event.data.programName);
+    this.awardsheet_params=this.awardsheet_params.set("branchName",event.data.branchName);
+    this.awardsheet_params=this.awardsheet_params.set("spclName",event.data.specializationName);
+    this.awardsheet_params=this.awardsheet_params.set("fatherNameFlag","Y");
+    this.awardsheet_params=this.awardsheet_params.set("courseName",event.data.courseName);
 
 
                 //Steps
@@ -628,6 +641,7 @@ onRowSelected(event){
       }
 
       getStudentMarks(){
+        this.spinnerstatus=true;
         //this.displaymkgrid =false;
         this.httpStudentMarksList();
 
@@ -1529,7 +1543,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     
                                             
 
-    this
+    
     let obj = {xmltojs:'Y',
     method:'None' };   
     obj.method='/coursegradelimitpercourse/getCourseGradeLimit.htm';
@@ -1663,6 +1677,65 @@ this.httpStatus();  // Check submitted status and Load award sheet
     // check the status of sheet of logged in Teacher.
 
   }
+
+  generatepdf(){
+    let obj = {xmltojs:'N',
+    method:'None' };   
+    obj.method='/awardBlankCorrection/getComponentDetail.htm';
+   
+    this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    
+   let  sessionstartdt = this.awardsheet_params.get("sessionstartdt");
+   let  sessionenddt = this.awardsheet_params.get("sessionenddt");
+   let  entityName = this.awardsheet_params.get("entityName");
+   let  programName = this.awardsheet_params.get("programName");
+   let  branchName = this.awardsheet_params.get("branchName");
+   let  spclName = this.awardsheet_params.get("spclName");
+   let  semesterstartdt = this.awardsheet_params.get("semesterstartdt");
+   let  semesterenddt = this.awardsheet_params.get("semesterenddt");
+   let  courseCode = this.awardsheet_params.get("courseCode");
+   let  displayType = this.awardsheet_params.get("displayType");
+   let  semesterCode = this.awardsheet_params.get("semesterCode");
+
+    let reportPath='/AwardSheet/'+sessionstartdt+'-'+sessionenddt+'/'+entityName+
+							'/'+semesterstartdt+'-'+semesterenddt+'/'+programName+'_'+branchName+
+							'_'+spclName+'_'+semesterCode+'_'+courseCode+
+							' '+'('+displayType+')'+'.pdf';
+    
+  reportPath = this.userservice.url+reportPath;
+//console.log(reportPath);
+  window.open(reportPath);
+  
+        })
+
+
+  }
+  generateMergeReport(){
+    let obj = {xmltojs:'N',
+    method:'None' };   
+    obj.method='/mergedAwardBlank/getComponentDetail.htm';
+   
+    this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+    
+   
+   let  courseCode = this.awardsheet_params.get("courseCode");
+   
+        let reportPath='/MergedAwardSheets/'+courseCode+'.xls';
+
+
+    
+  reportPath = this.userservice.url+reportPath;
+ //console.log(reportPath);
+  //window.open(reportPath,"window1","");
+  window.open(reportPath);
+  
+        })
+
+
+  }
+
 
 }    // end of class 
     

@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service' ;
 
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
+import { environment } from 'src/environments/environment';
 
 
 interface User {
@@ -67,6 +68,7 @@ export class SignonformComponent implements OnDestroy  {
 			subs = new SubscriptionContainer();
 			login_params: HttpParams ;
 			userid:string="";
+			env:boolean=false;
 			constructor(private router:Router,
 			private userservice:UserService,
 			private authService: AuthService ,
@@ -79,7 +81,10 @@ export class SignonformComponent implements OnDestroy  {
 				.set('angular_application','ANG')
 				.set('requestFrom','ANGULAR')
 
-
+                 if(environment.production)
+				     this.env=true;
+					 else
+					 this.env=false;
 				
 
 			 }
@@ -138,7 +143,19 @@ export class SignonformComponent implements OnDestroy  {
 			data = JSON.parse(res);
 
 			this.LoginRoleServiceResult(data);
-			});
+			},err=>{
+                
+				//if (err.originalError.status=="0"){
+					this.message =err.originalError.statusText;
+					//console.log("in error",err.originalError);
+				//}
+				this.sts="INA";
+				this.subs.dispose();
+				return;
+			}	
+			
+			
+			);
 		}
 
  	
