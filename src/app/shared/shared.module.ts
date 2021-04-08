@@ -21,6 +21,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CustomComboboxComponent } from './custom-combobox/custom-combobox.component';
 import { MessageComponent } from 'src/app/shared/message/message.component';
+import { GriddialogComponent } from './griddialog/griddialog.component';
+import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 
@@ -31,7 +34,9 @@ import { MessageComponent } from 'src/app/shared/message/message.component';
     alertComponent,
     ProgressSpinnerComponent,
     CustomComboboxComponent,
-    MessageComponent
+    MessageComponent,
+    GriddialogComponent, 
+    NumeriCellRendererComponent
    
     
   ],
@@ -52,11 +57,12 @@ import { MessageComponent } from 'src/app/shared/message/message.component';
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
-    //AgGridModule.withComponents([]),
+    AgGridModule.withComponents([]),
    
 
    FormsModule,
-   ReactiveFormsModule
+   ReactiveFormsModule,
+   //AgGridModule.withComponents([]),
   ],
   exports: [
      // common componentsc
@@ -65,6 +71,9 @@ import { MessageComponent } from 'src/app/shared/message/message.component';
     ProgressSpinnerComponent,
     CustomComboboxComponent,
     MessageComponent,
+    GriddialogComponent, 
+    NumeriCellRendererComponent,
+
     
     //shared Module
     CommonModule,
@@ -85,8 +94,9 @@ import { MessageComponent } from 'src/app/shared/message/message.component';
 
     FormsModule,
     ReactiveFormsModule,
+   //AgGridModule.withComponents([]),
 
-    //AgGridModule
+    AgGridModule
 
   ]
 })

@@ -55,7 +55,7 @@ import { AgGridModule } from 'ag-grid-angular';
     //AwardSheetModule,
     LoginModule,
     MenuModule,
-    AgGridModule.withComponents([])
+    //AgGridModule.withComponents([])
     
   
    
