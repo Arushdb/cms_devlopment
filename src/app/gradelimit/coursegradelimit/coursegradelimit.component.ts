@@ -136,7 +136,7 @@ export class CoursegradelimitComponent implements OnInit, OnDestroy {
 
     this.subs.add=this._Activatedroute.data.subscribe(data => { 
     
-    this.displayType = data.displayType;
+    this.displayType = "I";
    
     this.employeeCourseHttpService(this.param);
   
@@ -189,7 +189,7 @@ export class CoursegradelimitComponent implements OnInit, OnDestroy {
    
    console.log(res);
   
-    if (isUndefined(res.courseDetails)){
+    if (isUndefined(res.courseDetails.Details)){
   
       this.userservice.log("No Subject Assigned");
       this.goBack();
