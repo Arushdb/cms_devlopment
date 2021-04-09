@@ -1,0 +1,19 @@
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner> 
+    <div style='height: 100%; display: flex; flex-direction: column;' *ngIf="courseListGrid.length>0">
+        <div [ngStyle]="styleCourse">         
+       <ag-grid-angular  
+      #agGrid style="width:100%; height: 200px;"
+      class="ag-theme-alpine"
+      [gridOptions] = "gridOptions"
+      (rowSelected)="onRowSelected($event)"
+    
+      rowSelection="multiple"
+ 
+      (gridReady) ="OnCoursegridReady($event)"
+      
+      >
+      </ag-grid-angular>    
+      
+  </div>
+ 
+ 

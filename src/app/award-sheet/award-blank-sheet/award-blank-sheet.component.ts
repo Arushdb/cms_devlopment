@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { CellEditingStoppedEvent, CellFocusedEvent, CellMouseOutEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
 import { UserService } from 'src/app/services/user.service';
 import {Location} from '@angular/common';
@@ -10,10 +10,10 @@ import {Location} from '@angular/common';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 
 //import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
-import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
+import { NumeriCellRendererComponent } from '../../shared/numeri-cell-renderer/numeri-cell-renderer.component';
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
 
-import { GriddialogComponent } from '../griddialog/griddialog.component';
+import { GriddialogComponent } from 'src/app/shared/griddialog/griddialog.component';
 
 import {alertComponent} from    'src/app/shared/alert/alert.component'
 
@@ -122,6 +122,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     private renderer:Renderer2,
 
     ) {
+      
       
      // subscribe to the router events - storing the subscription so
    // we can unsubscribe later. 
@@ -1510,7 +1511,8 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
   submitSheet(){
     this.awardsheet_params=this.awardsheet_params.set("status","SUB");
     let obj = {xmltojs:'Y',
-    method:'None' };   
+    method:'None' }; 
+    this.spinnerstatus=true;  
     obj.method='/awardsheet/submitForApproval.htm';
   
   
