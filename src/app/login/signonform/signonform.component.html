@@ -29,7 +29,8 @@
           <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
           <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 m-t-10 m-b-10">
             
-            <form class="form-signin" #form="ngForm" (ngSubmit)="Login(form.value)" >
+            <form class="form-signin" #form="ngForm" (ngSubmit)="Login(form.value)" 
+            >
               <div *ngIf="sts!='ACT'" >
                 <div class="alert alert-danger h3 mb-3 font-weight-normal" role="alert">{{message}}</div>
               </div>
@@ -41,10 +42,22 @@
               </div>
               <div class="form-group m-t-10 m-b-10">
                   <label for="inputPassword" class="sr-only">Password</label> 
-                  <input #pwd ="ngModel"  ngModel name = "inputPassword" 
-                          type="password" id="inputPassword"  
-                          class="form-control form-control-sm" 
+                  <input #pwd ="ngModel"  ngModel name = "inputPassword"    type="password" id="inputPassword"  ng-change= "onChange($event)"
+                          class="form-control form-control-sm" ng-model="myValue"
                           placeholder="Password" required>
+              
+                <app-custom-combobox   
+                (OptSelected)="OnOptionselected($event)"
+                #combo 
+                *ngIf="combodata.length>0" 
+                [Options] ='combodata' 
+                [labeltext]='combolabel' 
+                [combowidth] ="combowidth"
+                >
+                
+                </app-custom-combobox>
+                
+ 
               </div>
               <div class="checkbox form-group m-t-10 m-b-10">
                 <label>

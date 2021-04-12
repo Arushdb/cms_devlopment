@@ -11,6 +11,11 @@ import { AuthService } from 'src/app/services/auth.service' ;
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { environment } from 'src/environments/environment';
+import { SelectorListContext } from '@angular/compiler';
+import { getRtlScrollAxisType } from '@angular/cdk/platform';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
+import { MyItem } from 'src/app/interfaces/my-item';
 
 
 interface User {
@@ -41,6 +46,8 @@ export class SignonformComponent implements OnDestroy  {
 			public sts:string ="ACT";
 			message: string;  
 			returnUrl: string;  
+
+			
 			//userGroupId:string;
 			//maxLogins:string;
 			//httpparams:HttpParams ;
@@ -49,6 +56,7 @@ export class SignonformComponent implements OnDestroy  {
 
 			//roleSelectionAllowed: boolean;
 			token: any;
+			public combodata :MyItem []=[];
 		
 		
 
@@ -69,10 +77,13 @@ export class SignonformComponent implements OnDestroy  {
 			login_params: HttpParams ;
 			userid:string="";
 			env:boolean=false;
+	combolabel: string;
+	combowidth: string;
 			constructor(private router:Router,
 			private userservice:UserService,
 			private authService: AuthService ,
 			private elementRef:ElementRef,
+			public dialog: MatDialog
 			
 			) {
 				this.login_params =
@@ -141,6 +152,7 @@ export class SignonformComponent implements OnDestroy  {
 			this.subs.add=this.userservice.getdata(this.login_params,myparam).subscribe(res=>{
 			console.log(res);
 			data = JSON.parse(res);
+			//this.getRolefromuser(data);
 
 			this.LoginRoleServiceResult(data);
 			},err=>{
@@ -165,6 +177,8 @@ export class SignonformComponent implements OnDestroy  {
 		{
 			console.log(res);
 			let roles:any []=res.loginInfo.loginInfo;
+			
+			
 			if(isUndefined(res.loginInfo.loginInfo)) {
 				roles=[];
 
@@ -175,13 +189,20 @@ export class SignonformComponent implements OnDestroy  {
 			{
 				this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
 			   this.login_params=this.login_params.set("date",new Date().toString());
+			   this.combodata=[];
 				roles.forEach(item=>{
-					if (String(item.userGroupId).toString()==="INS" && String(roles[0].status).toString()==="ACT"){
-						this.login_params=this.login_params.set("userGroupId","INS");
-						this.getLoginInfoService();
+					this.combodata.push({id:item.userGroupId,label:item.userGroupName.toString()});
+					this.sts=item.status;
+				});
+
+
+				
+					// if (String(item.userGroupId).toString()==="INS" && String(roles[0].status).toString()==="ACT"){
+					// 	this.login_params=this.login_params.set("userGroupId","INS");
+					// 	this.getLoginInfoService();
 						
-					}
-				})
+					// }
+				
 			}
 			else if(roles.length===1)
 			{
@@ -205,7 +226,52 @@ export class SignonformComponent implements OnDestroy  {
 			;
   
 		}
+	getRolefromuser(res) {
+		this.combolabel = "Select Role" ;
+        this.combowidth = "100%";
 
+		
+		let roles:any[] =res.loginInfo.loginInfo;
+		if(roles.length===1){
+
+		
+		
+	}
+
+		roles.forEach(obj=>{
+		this.combodata.push({id:obj.userGroupId,label:obj.userGroupName.toString()});
+		})	
+		
+		console.log(this.combodata);
+		  
+			  
+		
+	}
+	onChange(obj){
+		this.combodata=[];
+		console.log("combo data",this.combodata);
+		console.log(obj);
+
+
+	}
+	OnOptionselected(obj){
+		
+		console.log("on option selected",obj.userGroupId);
+        if(this.sts=="ACT"){
+
+		this.login_params=this.login_params.set("userGroupId",obj.userGroupId);
+		this.getLoginInfoService();
+	} else{
+		this.sts="";
+		this.message="Invalid login";
+		this.subs.dispose();
+		this.combodata=[];
+		  return;
+
+	} 
+	
+	  }
+   
 
 
 		getLoginInfoService()
@@ -306,7 +372,7 @@ export class SignonformComponent implements OnDestroy  {
 
 		}
 
-  
+		
 
 }
 
