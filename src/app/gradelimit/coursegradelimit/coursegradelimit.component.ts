@@ -510,9 +510,7 @@ onRowSelected(event){
         
         let gradelimitstatus:any[]=[];
         let submitstatusofotherteacher="Y";
-        let loggedinid:string="";
-        let pck:string=this.awardsheet_params.get("programCourseKey");
-        let entity:string=this.awardsheet_params.get("entityId");
+        this.allowEdit="";
         let resultprocessed = false;
         let authorityHolderId =this.awardsheet_params.get("employeeId");
         
@@ -521,7 +519,7 @@ onRowSelected(event){
           {
           
                     gradelimitstatus=res.courseDetails.Details;
-                    console.log(gradelimitstatus);
+                    
                    
                     let teachers:string;
                     let teacherary=[];
@@ -530,25 +528,48 @@ onRowSelected(event){
                     {
                       
                       teachers=String(gradelimitstatus[i].employeeId).toString();
-                    
+                                        
                       teacherary =teachers.split(",");
-                     
+                                           
                                   if( 
                                     (String(gradelimitstatus[i].status).toString()==="Not Submitted" ) 
                                     
                                    
                                 ) {
+                                
     
                                   if(!teacherary.includes(String(authorityHolderId).toString()))
-                                  submitstatusofotherteacher="N";
-                                 
+                                {
+                                 submitstatusofotherteacher="N";
+                                 break;
+
+                                }
                                   
                                   } 
-    
+
+                                  if( 
+                                    (String(gradelimitstatus[i].status).toString()==="Approved" ) 
+                                    
+                                   
+                                ) {
+
+                                  if(teacherary.includes(String(authorityHolderId).toString()))
+                                  {
+                                   submitstatusofotherteacher="N";
+                                   this.userservice.log("You can not do grading now as your sheet is already submitted");
+                                   this.spinnerstatus=false;
+                                   return;
+                                   
+  
+                                  }
+                                    
+                                    } 
+
     
                                   if( 
                                     (String(gradelimitstatus[i].userId).toString()==="Declared" )) {
                                       resultprocessed=true;
+                                      break;
     
                                     }
     
