@@ -257,6 +257,7 @@ export class SignonformComponent implements OnDestroy  {
 	OnOptionselected(obj){
 		
 		console.log("on option selected",obj.userGroupId);
+		debugger;
         if(this.sts=="ACT"){
 
 		this.login_params=this.login_params.set("userGroupId",obj.userGroupId);
