@@ -51,6 +51,7 @@ export class CoursegradelimitComponent implements OnInit, OnDestroy {
 
   subs = new SubscriptionContainer();
   spinnerstatus: boolean=false;
+  instructorCount: any;
     
   constructor(
     private router:Router,
@@ -325,9 +326,10 @@ onRowSelected(event){
 
     this.awardsheet_params=this.awardsheet_params.set("marksEndSemester",event.data.marksEndSemester);
     this.awardsheet_params=this.awardsheet_params.set("totalMarks",event.data.totalMarks);
+    this.awardsheet_params=this.awardsheet_params.set("displayType",this.displayType);
     
-
-    this.getCourseGradeLimitStatus();         
+    this.getInstructorCountForCourse();
+      
     
        
          
@@ -509,11 +511,14 @@ onRowSelected(event){
     
         
         let gradelimitstatus:any[]=[];
-        let submitstatusofotherteacher="Y";
+        let submitstatusofotherteacher="";
+      
         this.allowEdit="";
         let resultprocessed = false;
         let authorityHolderId =this.awardsheet_params.get("employeeId");
-        
+
+         
+      
         
         if(!(isUndefined(res.courseDetails))) 
           {
@@ -530,6 +535,8 @@ onRowSelected(event){
                       teachers=String(gradelimitstatus[i].employeeId).toString();
                                         
                       teacherary =teachers.split(",");
+
+                       //Case 1 : sheets are  not submitted
                                            
                                   if( 
                                     (String(gradelimitstatus[i].status).toString()==="Not Submitted" ) 
@@ -537,31 +544,57 @@ onRowSelected(event){
                                    
                                 ) {
                                 
-    
+                                 // Sheets are not submitted by other teacher who is not grade authority holder
                                   if(!teacherary.includes(String(authorityHolderId).toString()))
                                 {
-                                 submitstatusofotherteacher="N";
+                                
+                                 this.allowEdit="N";
+                                 this.userservice.log("Grades can only be entered after all other sheets are submitted");
                                  break;
 
                                 }
+
+                                 
+
+
                                   
                                   } 
+
+                                 //Case 2 : sheet are submitted
 
                                   if( 
                                     (String(gradelimitstatus[i].status).toString()==="Approved" ) 
                                     
                                    
                                 ) {
-
+                                 // if grade authority holder is teacher   and sheet is submitted 
+                 
+                               
                                   if(teacherary.includes(String(authorityHolderId).toString()))
                                   {
-                                   submitstatusofotherteacher="N";
-                                   this.userservice.log("You can not do grading now as your sheet is already submitted");
+                                   
+                                   this.allowEdit="N";
+                                   this.userservice.log("You can not do grading now as your award sheet is already submitted");
                                    this.spinnerstatus=false;
-                                   return;
+                                   break;
+                                   
                                    
   
                                   }
+                                
+                                   // if grade authority holder is not a  teacher   and sheet has a single teacher.
+                                  if(!(teacherary.includes(String(authorityHolderId).toString())) && 
+                                  String(this.instructorCount).toString()==="1"
+                                  ){
+                                    this.allowEdit="N";
+                                    this.userservice.log("Single Teacher:You can not do grading now as award sheet is already submitted");
+                                   this.spinnerstatus=false;
+                                   break;
+
+
+                                  }
+
+                                  
                                     
                                     } 
 
@@ -610,7 +643,28 @@ onRowSelected(event){
     
       }
     
+      getInstructorCountForCourse(){
 
+        let obj = {xmltojs:'Y',
+        method:'None' };   
+      obj.method='/awardsheet/getInstructorCountForCourse.htm'
+      ;
+      
+      this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        //this.userservice.log(" in switch detail selected");
+        res = JSON.parse(res);
+        this.httpGetInstructorCountForCourse(res);
+      
+    })
+    
+    
+      }
+
+      httpGetInstructorCountForCourse(res){
+        this.instructorCount = res.CodeList.root[0].status;
+        this.getCourseGradeLimitStatus();       
+
+      }
  
   /// Check sheet status of other user ie is it submitted or not 
 
