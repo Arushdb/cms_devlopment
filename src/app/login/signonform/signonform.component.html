@@ -45,19 +45,28 @@
                   <input #pwd ="ngModel"  ngModel name = "inputPassword"    type="password" id="inputPassword"  ng-change= "onChange($event)"
                           class="form-control form-control-sm" ng-model="myValue"
                           placeholder="Password" required>
-              
+                
+              </div>
+
+              <div class="form-group m-t-10 m-b-10">
+                
+                <label for ="role" class="sr-only" >Select Role</label> 
                 <app-custom-combobox   
                 (OptSelected)="OnOptionselected($event)"
                 #combo 
-                *ngIf="combodata.length>0" 
+                name="role"
+                *ngIf="combodata.length>1" 
                 [Options] ='combodata' 
                 [labeltext]='combolabel' 
                 [combowidth] ="combowidth"
                 >
                 
                 </app-custom-combobox>
-                
+                <button (click) ="Onconfirm()" *ngIf="combodata.length>1 && optionselected"  class="btn btn-lg btn-primary btn-block"  >
+                  Confirm 
+                </button>
  
+
               </div>
               <div class="checkbox form-group m-t-10 m-b-10">
                 <label>
@@ -65,8 +74,10 @@
                 </label>
               </div>
             
-              <div class="form-group m-t-10 m-b-10">
-                  <button type ="submit" class="btn btn-lg btn-primary btn-block"  >
+              <div class="form-group m-t-10 m-b-10"  >
+                  <button type ="submit" class="btn btn-lg btn-primary btn-block"  
+                  *ngIf="combodata.length<2" 
+                   >
                     Sign in 
                   </button>
               </div>
