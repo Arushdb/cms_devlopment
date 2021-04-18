@@ -8,9 +8,8 @@ const routes:Routes=[
 
  
   
-  {path:'',  component: AwardBlankSheetComponent,data:{displayType:"I"},runGuardsAndResolvers: "always"},
-  
-
+ // {path:'Internal_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I"},runGuardsAndResolvers: "always"},
+ // {path:'',  component: AwardBlankSheetComponent,data:{displayType:"I"},runGuardsAndResolvers: "always"},
   
 
 ];        
