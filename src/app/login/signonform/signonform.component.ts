@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 
 
@@ -11,6 +11,13 @@ import { AuthService } from 'src/app/services/auth.service' ;
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { environment } from 'src/environments/environment';
+import { SelectorListContext } from '@angular/compiler';
+import { getRtlScrollAxisType } from '@angular/cdk/platform';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
+import { MyItem } from 'src/app/interfaces/my-item';
+import { formatCurrency } from '@angular/common';
+import { NgForm } from '@angular/forms';
 
 
 interface User {
@@ -36,43 +43,35 @@ interface User {
   styleUrls: ['./signonform.component.css']
 })
 export class SignonformComponent implements OnDestroy  {
+
+	@ViewChild('form') public userFrm: NgForm;
 	//@ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
   
 			public sts:string ="ACT";
-			message: string;  
+			message: string="";  
 			returnUrl: string;  
-			//userGroupId:string;
-			//maxLogins:string;
-			//httpparams:HttpParams ;
-		
-			//headers:HttpHeaders;
 
-			//roleSelectionAllowed: boolean;
-			token: any;
-		
-		
-
-			//universityId:String;
-			//userId:string;
 			
-			//userGroupName:string;
-			//urlPrefix:string;
-			//userName:string;
-			//password:string;
-			//application:string;
-			//universityName:string;
-			//startDate:string;
-			//endDate:string;
-			//expiryStatus:string;
-			//func:Function;
+		
+			token: any;
+			public combodata :MyItem []=[];
+		
+		
+
+		
 			subs = new SubscriptionContainer();
 			login_params: HttpParams ;
 			userid:string="";
 			env:boolean=false;
+			combolabel: string;
+			combowidth: string;
+			optionselected: boolean=false;
+			
 			constructor(private router:Router,
 			private userservice:UserService,
 			private authService: AuthService ,
 			private elementRef:ElementRef,
+			public dialog: MatDialog
 			
 			) {
 				this.login_params =
@@ -97,6 +96,7 @@ export class SignonformComponent implements OnDestroy  {
 
 		ngOnInit() 
 		{  
+			
 			this.userservice.clear();
 			this.returnUrl = '/dashboard';  
 					
@@ -112,6 +112,8 @@ export class SignonformComponent implements OnDestroy  {
 //On click of login button
  		Login(form)
 		{
+	this.message=""; 
+	this.optionselected=false;
 	 let user =window.btoa(form.inputUser);
 	 let pwd =window.btoa(form.inputPassword);
 	 this.userid=form.inputUser;
@@ -139,8 +141,10 @@ export class SignonformComponent implements OnDestroy  {
 
 			let  data= null;
 			this.subs.add=this.userservice.getdata(this.login_params,myparam).subscribe(res=>{
-			console.log(res);
+			
+				
 			data = JSON.parse(res);
+			//this.getRolefromuser(data);
 
 			this.LoginRoleServiceResult(data);
 			},err=>{
@@ -163,25 +167,40 @@ export class SignonformComponent implements OnDestroy  {
 
 		LoginRoleServiceResult(res)
 		{
-			console.log(res);
+			//console.log(res);
 			let roles:any []=res.loginInfo.loginInfo;
+			
+			
 			if(isUndefined(res.loginInfo.loginInfo)) {
 				roles=[];
-
+				this.throwerror();
+				return;
 			}
 		
 			
 			if (roles.length>1)
+			
 			{
+				
 				this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
 			   this.login_params=this.login_params.set("date",new Date().toString());
+			   this.combodata=[];
+			   this.combolabel = "Select Role" ;
+        		this.combowidth = "50%";
+
 				roles.forEach(item=>{
-					if (String(item.userGroupId).toString()==="INS" && String(roles[0].status).toString()==="ACT"){
-						this.login_params=this.login_params.set("userGroupId","INS");
-						this.getLoginInfoService();
+					this.combodata.push({id:item.userGroupId,label:item.userGroupName.toString()});
+					this.sts=item.status;
+				});
+
+
+				
+					// if (String(item.userGroupId).toString()==="INS" && String(roles[0].status).toString()==="ACT"){
+					// 	this.login_params=this.login_params.set("userGroupId","INS");
+					// 	this.getLoginInfoService();
 						
-					}
-				})
+					// }
+				
 			}
 			else if(roles.length===1)
 			{
@@ -192,21 +211,56 @@ export class SignonformComponent implements OnDestroy  {
 				if (String(roles[0].status).toString()==="ACT"){
 					
 					this.getLoginInfoService();
+					}else{
+						this.throwerror();
+  						return;
 					}
 			
 			}
 			else
 			{
-				this.sts="";
-				this.message="Invalid login";
-				this.subs.dispose();
+				this.throwerror();
   				return;
 			}
 			;
   
 		}
 
+	throwerror(){
+		this.sts="";
+		this.message="Invalid login";
+		this.subs.dispose();
+		this.combodata=[];
+		this.userFrm.reset();
+	}
 
+	OnOptionselected(obj){
+		
+		console.log(obj);
+		this.optionselected = true;
+        if(this.sts=="ACT"){
+
+		this.login_params=this.login_params.set("userGroupId",obj.id);
+	
+	} else{
+		this.throwerror();
+		  return;
+
+	} 
+	
+	  }
+   
+		Onconfirm(){
+		
+			if(this.sts=="ACT"){
+				
+				this.getLoginInfoService();
+			} else{
+				this.throwerror();
+				  return;
+		
+			} 
+		}
 
 		getLoginInfoService()
 		{
@@ -223,10 +277,8 @@ export class SignonformComponent implements OnDestroy  {
 			
 			
 			if (isUndefined((data.loginInfo.loginInfo))){
-			
-				this.sts="";
-				this.message="Invalid login";
-				this.subs.dispose();
+			    //debugger ;
+				this.throwerror();
 				return;
 			}
 			else
@@ -259,8 +311,9 @@ export class SignonformComponent implements OnDestroy  {
 			
 
 			}else{
-				this.message="Invalid login";
-				this.subs.dispose();
+				
+				this.throwerror();
+				return;
 			}
 			
 			
@@ -306,7 +359,7 @@ export class SignonformComponent implements OnDestroy  {
 
 		}
 
-  
+		
 
 }
 
