@@ -19,6 +19,7 @@ import {alertComponent} from    'src/app/shared/alert/alert.component'
 
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { AgGridAngular } from 'ag-grid-angular';
+import { isThursday } from 'date-fns';
 
 
 
@@ -539,8 +540,15 @@ onRowSelected(event){
                 
    
           //this.getCourseGradeLimitStatus(); //check  status of other sheets .
-          this.httprequestgetupdatedgradelimitForSave(); // check if grade limit is present or not
+          if(this.displayType=="I"){
+            this.httprequestgetupdatedgradelimitForSave(); // check if grade limit is present or not
           this.getInstructorCountForCourse()
+
+          }else{
+              
+            this.httpStatus();
+          }
+          
           //this.getCourseAuthorityDetails(); // check is user has  grade limit authority
 
          
@@ -578,7 +586,7 @@ onRowSelected(event){
          let  flag:Boolean=true;
          if(!(isUndefined(res.ComponentList.component)))
           {
-
+               
       
        
               for (let object of res.ComponentList.component){
@@ -810,10 +818,22 @@ onRowSelected(event){
               }
               else
               {
-                //step-1
+                     // step-0  if display type is External or remedial
+
+                     if (this.displayType=="E"||this.displayType=="R"){
+
+                     
+                        this.submitForApprovalButton=false;
+
+                        if(this.gradesCalculated && marksEntered){
+                          this.submitForApprovalButton=true;
+                        }
+                    }
+
+                //step-1  for Internal award sheet only
                 //   if single teacher  and grades are calculated  and authority holder  submit button should be on
                     if(String(this.instructorCount).toString()==="1" && this.gradesCalculated && this.gradeauthorityholder
-                    && marksEntered)
+                    && marksEntered && this.displayType=="I")
                     {
                       this.submitForApprovalButton=true;
                       console.log("Step-1");
@@ -821,20 +841,21 @@ onRowSelected(event){
                     }
    
 
-                    //step-2
+                    //step-2   for Internal award sheet only
                 //if multi teacher  and   authority holder  and  grades calculated 
                 // and all other teacher submitted   submit button should  be on
 
                     if(String(this.instructorCount).toString()!=="1" && this.gradesCalculated
                     && this.submitstatusofotherteacher==="Y"
                     && this.gradeauthorityholder
-                    && marksEntered)
+                    && marksEntered
+                    && this.displayType=="I")
                     
                       {
                       this.submitForApprovalButton=true;
                       console.log("Step-2");
                       }
-                //step-3      
+                //step-3       for Internal award sheet only
                 //if multi teacher  and  not a authority holder   
                 // and some one else has a authority  and authority holder is not assigned its sheet ,submit button should  be on
                     if(String(this.instructorCount).toString()!=="1" 
@@ -844,6 +865,7 @@ onRowSelected(event){
                         //&& this.submitstatusofotherteacher==="N"
                         && marksEntered 
                         && this.canSubmit
+                        && this.displayType=="I"
                         
                         )
                                                     
@@ -993,10 +1015,20 @@ onRowSelected(event){
                 let group="";
 
                
-               
+            
 
                 for(let i=0;i<this.componentAC.length;i++)
                 {
+                      
+                      if(this.componentAC.length===1){
+                        group= this.componentAC[i].group;
+                        obj.group=group;
+                        obj.marks= this.componentAC[i].maximumMarks;
+                        grparyobj.push(obj);
+                        break;
+
+
+                      }
 
                       if(start===1){
 
@@ -1258,6 +1290,7 @@ onRowSelected(event){
   let row=this.studentmarks[rowid];
   let prvmarks=event.oldValue;
   let refreshgrid=false;
+  let payload:string;
 
   console.log("Cell value changed",event,event.newValue,event.oldValue,row[colid]);
    let newArr = this.componentAC.filter((item)=>{
@@ -1269,11 +1302,37 @@ onRowSelected(event){
 let payload1= 
   row["rollNumber"]+"|"+colid +"|"+ idtype + 
   "|"+row[colid]+"|"+row["totalInternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
-let payload= 
+// let payload= 
+//   row["rollNumber"]+"|"+colid +"|"+ idtype + 
+//   "|"+event.newValue+"|"+row["totalInternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
+
+  // if display type internal  or remedial save marks on internal field
+
+  if(this.displayType==="I"){
+    payload= 
   row["rollNumber"]+"|"+colid +"|"+ idtype + 
   "|"+event.newValue+"|"+row["totalInternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
 
-  console.log("payload1:",payload1,"Payload2:",payload);
+
+  }
+  // if display type External  save marks on internal field
+  if(this.displayType==="E"){
+    payload= 
+  row["rollNumber"]+"|"+colid +"|"+ idtype + 
+  "|"+event.newValue+"|"+row["totalExternal"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
+
+
+  }
+   // if display type Remedial  save marks on total marks field
+   if(this.displayType==="R"){
+    payload= 
+  row["rollNumber"]+"|"+colid +"|"+ idtype + 
+  "|"+event.newValue+"|"+row["totalMarks"]+"|"+"X"+"|"+prvmarks+"|"+"C"+";";
+
+
+  }
+
+
 
   if(row[colid]==event.newValue){
     
@@ -1323,7 +1382,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
   httpGetgetCourseAuthorityDetails(res){
   
 
-    
+
       
  let arrayCollect:any[]=[];
            
@@ -1462,6 +1521,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       //this.userservice.log("You do not have authority to enter grades"); 
       this.gradeauthorityholder=false;
       this.getCourseMarks();
+      
       this.getCourseAuthorityDetails();
 
      
