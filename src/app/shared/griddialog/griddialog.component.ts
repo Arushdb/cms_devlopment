@@ -682,10 +682,15 @@ export class GriddialogComponent implements OnInit {
       }
 
     getInsertCourseGradeSuccess(res){
-       console.log(res.basicDetails.Details);
+       
        let ary:[]=res.basicDetails.Details;
+       let str =String(res.basicDetails.Details[0].list_values).toString();
        if(ary.length>0)
-       this.userservice.log("Grade limits modified"+" and total students : "+res.basicDetails.Details[0].list_values);
+       
+       var matches =str.match(/(\d+)/);
+     
+    
+       this.userservice.log("Grade limits modified"+" for total students = "+matches[0]);
        this.dialogRef.close(true)
     }
 

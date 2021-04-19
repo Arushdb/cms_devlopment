@@ -203,7 +203,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   moduleCreationCompleteHandler():void{
 
     this.subs.add=this._Activatedroute.data.subscribe(data => { 
-    
+      this.spinnerstatus=false;
     this.displayType = data.displayType;
     this.urlPrefix="/awardsheet/"; 
     this.param=this.param.set('displayType',this.displayType);
@@ -264,7 +264,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
 
    employeeCourseHttpServiceResultHandler(res){
 
-  
+   
     if (isUndefined(res.CodeList.root)){
       this.setoffButton();
       this.userservice.log("No Subject Assigned");
@@ -634,6 +634,7 @@ onRowSelected(event){
       }
 
       setoffButton(){
+      // debugger;
         this.submitForApprovalButton=false;
         this.gradelimitButton=false;
         this.editgrid=false;
