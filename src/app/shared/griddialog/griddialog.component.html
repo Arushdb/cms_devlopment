@@ -4,8 +4,8 @@
 
  
   <div >
-    
-    <button   type="button" class="btn  btn-success  btn-sm " *ngIf="showgrid===true && showsave===true" (click)="saveGradeLimit()" >Save Grade Limits</button>
+       <button   type="button" class="btn  btn-success  btn-sm " *ngIf="showgrid===true && showsave===true " 
+    (click)="onConfirm()" >Confirm</button>
     <button   type="button" class="btn btn-primary  mr-2  btn-sm" *ngIf="showgrid" (click)= "close()" >Close</button> 
   </div>
 
@@ -24,7 +24,7 @@
   [rowSelection]="rowSelection"
   [rowData]="rowDataEditGrid"
   (cellValueChanged)="oncellValueChanged($event)"
-  
+  (cellEditingStopped)="oncellEditingStopped($event)"
  
   
   (cellFocused)="oncellFocused($event)"

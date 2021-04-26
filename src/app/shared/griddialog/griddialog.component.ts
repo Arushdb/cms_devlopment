@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, Inject, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, ɵConsole } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AgGridAngular } from 'ag-grid-angular';
 
 import { AgGridEvent, CellFocusedEvent, CellKeyPressEvent,
@@ -8,13 +8,15 @@ import { AgGridEvent, CellFocusedEvent, CellKeyPressEvent,
 import { CellChangedEvent } from 'ag-grid-community/dist/lib/entities/rowNode';
 import { NumeriCellRendererComponent } from '../numeri-cell-renderer/numeri-cell-renderer.component';
 import { UserService } from 'src/app/services/user.service';
+import { alertComponent } from '../alert/alert.component';
+import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 
 @Component({
   selector: 'app-griddialog',
   templateUrl: './griddialog.component.html',
   styleUrls: ['./griddialog.component.css']
 })
-export class GriddialogComponent implements OnInit {
+export class GriddialogComponent implements OnInit ,OnDestroy{
   @ViewChild('agGrid') agGrid: AgGridAngular;
   private gridApi;
   private gridColumnApi;
@@ -37,16 +39,18 @@ export class GriddialogComponent implements OnInit {
   public showAddbutton:boolean=false;
   public showgrid:boolean=false;
   public showsave:boolean=false;
+  subs = new SubscriptionContainer();
  
   style: { width: string; height: string; flex: string; };
   columnDefsEditGrid: ColDef[];
+  showconfirm: boolean;
   
   
   constructor(private dialogRef: MatDialogRef<GriddialogComponent> ,
     //@Inject(MAT_DIALOG_DATA) public data: {title: string,content:string,ok:boolean,cancel:boolean,color:string}) { }
     @Inject(MAT_DIALOG_DATA) public data,
     
-    private userservice:UserService) { 
+    private userservice:UserService, public dialog: MatDialog,private elementRef:ElementRef) { 
       this.showAddbutton=false;
 
       this.gridOptions = <GridOptions>{
@@ -369,11 +373,16 @@ export class GriddialogComponent implements OnInit {
 
         }
         
-   
+        ngOnDestroy(): void {
+          this.subs.dispose();
+          this.elementRef.nativeElement.remove();
+         
+        }
         oncellValueChanged(event:CellChangedEvent){
          let id =event.column.getColId();
          let value =event.newValue;
          let zerocount =0;
+        
         // console.log(this.gradeidx[id]);
 
          this.gradelimits[this.gradeidx[id]] =event.newValue;
@@ -410,7 +419,8 @@ export class GriddialogComponent implements OnInit {
             this.showsave=false; 
 
           }else if(!(this.checkIfArrayIsUnique(this.gradelimits))){
-            this.showsave=false; 
+            this.showsave=false;
+            window.alert("Duplicate grade limits.Please check"); 
 
           }else{
             this.showsave=true; 
@@ -446,6 +456,35 @@ export class GriddialogComponent implements OnInit {
 
         }
 
+        onConfirm(){
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.width="100%";
+          dialogConfig.height="50%";
+          this.gridOptions.api.stopEditing();
+         
+          const dialogRef=  this.dialog.open(alertComponent,
+            {data:{title:"Warning",content:"Please confirm ",ok:true,cancel:true,color:"warn"},
+            width:"20%",height:"20%"
+            });
+      
+            this.subs.add=dialogRef.afterClosed().subscribe((result:boolean) => {
+         
+          if (result===true){
+            this.saveGradeLimit();
+            
+          }else{
+      
+            return;
+          }
+         
+          
+        })
+      }
+
+        oncellEditingStopped(event){
+          //debugger;
+
+        }
 
       isSorted= function (arr :number[]):boolean{
         let sorted = true;
@@ -491,7 +530,7 @@ export class GriddialogComponent implements OnInit {
       method:'None' };   
       obj.method='/coursegradelimitpercourse/getCourseGradeLimit.htm';
      
-      this.userservice.getdata(this.gradeparam,obj).subscribe(res=>{
+      this.subs.add=this.userservice.getdata(this.gradeparam,obj).subscribe(res=>{
       //this.userservice.log(" in switch detail selected");
       res = JSON.parse(res);
       
@@ -670,7 +709,7 @@ export class GriddialogComponent implements OnInit {
       obj.method='/coursegradelimitpercourse/insertCourseGrade.htm';
      // obj.method='/coursegradelimit/insertCourseGrade.htm';
      
-      this.userservice.getdata(this.gradeparam,obj).subscribe(res=>{
+      this.subs.add=this.userservice.getdata(this.gradeparam,obj).subscribe(res=>{
       //this.userservice.log(" in switch detail selected");
       res = JSON.parse(res);
       
