@@ -374,7 +374,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
      
     this.gridOptionsmk.api.setColumnDefs(this.columnDefsmk);
     this.gridOptionsmk.api.setRowData(this.studentmarks);
-  
+   
     
    
     
@@ -1009,8 +1009,9 @@ onRowSelected(event){
           let columndef: ColDef;
         
             groupdef={headerName:"Student", children: [
-             {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left'},
-             { headerName: "Name",  field :'studentName' , width: 150,editable:false,pinned: 'left',tooltipField:'studentName'}
+             {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left',filter:true,sortable:true},
+             { headerName: "Name",  field :'studentName' , width: 150,editable:false,sortable:true,
+             pinned: 'left',tooltipField:'studentName',filter:true}
            
            ]};
            this.columnDefsmk.push(groupdef);
@@ -1051,7 +1052,7 @@ onRowSelected(event){
         }
         {
           let definition: ColDef;
-          definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right"};
+          definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right",sortable:true};
           this.columnDefsmk.push(definition);
           definition = { headerName: "GD", field:'grade',  width: 80,editable:false,pinned:"right" };
           this.columnDefsmk.push(definition);
@@ -1070,8 +1071,8 @@ onRowSelected(event){
       let columndef: ColDef;
 
     groupdef={headerName:"Student", children: [
-     {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left'},
-     { headerName: "Name",  field :'studentName' , width: 150,editable:false,pinned: 'left',tooltipField:'studentName'}
+     {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left',filter:true,sortable:true},
+     { headerName: "Name",  field :'studentName' , width: 150,editable:false,pinned: 'left',tooltipField:'studentName',filter:true}
    
    ]};
    this.columnDefsmk.push(groupdef);
@@ -1115,7 +1116,7 @@ onRowSelected(event){
 }
 {
   let definition: ColDef;
-  definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right"};
+  definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right",sortable:true};
   this.columnDefsmk.push(definition);
   
   }
