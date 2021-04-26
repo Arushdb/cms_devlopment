@@ -22,9 +22,10 @@ const routes:Routes=[
   //  { path:"Internal_award_sheet",
   //  loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} , 
   
-  {path:'Internal_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I"},runGuardsAndResolvers: "always"},
-  {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E"},runGuardsAndResolvers: "always"},
-  {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R"},runGuardsAndResolvers: "always"},
+  {path:'Internal_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Reg"},runGuardsAndResolvers: "always"},
+  {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E",courseType:"Reg"},runGuardsAndResolvers: "always"},
+  {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
+  {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
   
      
   

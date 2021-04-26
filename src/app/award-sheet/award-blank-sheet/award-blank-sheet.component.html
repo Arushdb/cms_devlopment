@@ -23,13 +23,16 @@
         <button   type="button" class="btn btn-success mr-2  btn-sm " 
         (click)="getStudentMarks()" *ngIf="saveButton && displaymkgrid && columnDefsmk.length>0"  >Save</button>
         <button   type="button" class="btn btn-primary mr-2  btn-sm && columnDefsmk.length>0"
-         (click)="onclickgradelimitbutton()" *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0 
-         && displayType=='I'" >GradeLimit</button>
+         (click)="onclickgradelimitbutton()" 
+         *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0 && displayType== 'I' && courseType=='Reg' "
+          >GradeLimit</button>
         <button   type="button" class="btn btn-success mr-2  btn-sm " (click)="submitConfirm()" *ngIf="submitForApprovalButton && displaymkgrid">Submit</button>
+   
         <button   type="button" class="btn btn-success mr-2  btn-sm " 
         (click)="generatepdf()"  *ngIf= "displaymkgrid && displayType=='I' " >Award-Blank-Report</button>
+        
         <button   type="button" class="btn btn-success mr-2  btn-sm " 
-        (click)="generateMergeReport()"  *ngIf= "displaymkgrid && displayType=='I'" >Merge-Report</button>
+        (click)="generateMergeReport()"  *ngIf= "displaymkgrid && displayType=='I'  && courseType=='Reg' " >Merge-Report</button>
 
     </div>
 

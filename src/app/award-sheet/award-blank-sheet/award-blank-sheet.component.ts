@@ -111,6 +111,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   someoneElseHasAuthority: boolean=false;
   authorityHolderId: string;
   canSubmit: boolean;
+  courseType: any;
   
   constructor(
     private router:Router,
@@ -206,11 +207,18 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     this.subs.add=this._Activatedroute.data.subscribe(data => { 
       this.spinnerstatus=false;
     this.displayType = data.displayType;
+    this.courseType = data.courseType;
+
     this.urlPrefix="/awardsheet/"; 
     this.param=this.param.set('displayType',this.displayType);
     
+    if(this.courseType=="Cor"){
+      this.employeeCoreService(this.param);
 
-    this.employeeCourseHttpService(this.param);
+    }else{
+      this.employeeCourseHttpService(this.param);
+    }
+    
   
 });
 		
@@ -238,6 +246,28 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
    
 })
   }
+  employeeCoreService(param){
+    let obj = {xmltojs:'Y',
+    method:'None' };   
+  obj.method='/corecourseawardsheet/getCourseList.htm';
+  this.spinnerstatus=true;
+  
+  this.subs.add=this.userservice.getdata(param,obj).subscribe(res=>{
+    //this.userservice.log(" in switch detail selected");
+
+    console.log("getCourseList inner",this.spinnerstatus);
+    res = JSON.parse(res);
+    this.employeeCoreServiceResultHandler(res);
+
+  
+   
+})
+  }
+  employeeCoreServiceResultHandler(res){
+    console.log(res);
+    this.employeeCourseHttpServiceResultHandler(res);
+
+  }
 
 
   httpEmployeeCode(param){
@@ -260,7 +290,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     
   }
   resultHandlerEmployeeCode(res){
-
+    console.log(res);
   }
 
    employeeCourseHttpServiceResultHandler(res){
@@ -540,7 +570,7 @@ onRowSelected(event){
                 
    
           //this.getCourseGradeLimitStatus(); //check  status of other sheets .
-          if(this.displayType=="I"){
+          if(this.displayType=="I" && this.courseType=="Reg"){
             this.httprequestgetupdatedgradelimitForSave(); // check if grade limit is present or not
           this.getInstructorCountForCourse()
 
@@ -551,12 +581,7 @@ onRowSelected(event){
           
           //this.getCourseAuthorityDetails(); // check is user has  grade limit authority
 
-         
-         
-       
-
-          	
-        											
+           											
 	}
   
   
@@ -578,6 +603,24 @@ onRowSelected(event){
          
   
       }
+
+      getcoreEvaluationComponents(){
+  
+  
+        let obj = {xmltojs:'Y',
+        method:'None' };   
+      obj.method='/corecourseawardsheet/getEvaluationComponents.htm';
+      
+      this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        //this.userservice.log(" in switch detail selected");
+        res = JSON.parse(res);
+        this.resultHandlerComponent(res);
+      
+    })
+
+       
+
+    }
   
       resultHandlerComponent(res){
   
@@ -587,7 +630,7 @@ onRowSelected(event){
          if(!(isUndefined(res.ComponentList.component)))
           {
                
-      
+         
        
               for (let object of res.ComponentList.component){
                   this.componentAC.push({evaluationId:object.evaluationId,evaluationIdName:object.evaluationIdName,group:object.group,
@@ -818,7 +861,7 @@ onRowSelected(event){
               }
               else
               {
-                     // step-0  if display type is External or remedial
+                     // step-0 -A if display type is External or remedial
 
                      if (this.displayType=="E"||this.displayType=="R"){
 
@@ -829,11 +872,22 @@ onRowSelected(event){
                           this.submitForApprovalButton=true;
                         }
                     }
+                // step-0 -B if display type is Internal and it is a core course
+                if (this.displayType=="I"&& this.courseType=="Cor"){
+                  this.submitForApprovalButton=false;
+
+                  if(marksEntered){
+                    this.submitForApprovalButton=true;
+                  }
+
+
+                }
+
 
                 //step-1  for Internal award sheet only
                 //   if single teacher  and grades are calculated  and authority holder  submit button should be on
                     if(String(this.instructorCount).toString()==="1" && this.gradesCalculated && this.gradeauthorityholder
-                    && marksEntered && this.displayType=="I")
+                    && marksEntered && this.displayType=="I" && this.courseType=="Reg")
                     {
                       this.submitForApprovalButton=true;
                       console.log("Step-1");
@@ -849,7 +903,8 @@ onRowSelected(event){
                     && this.submitstatusofotherteacher==="Y"
                     && this.gradeauthorityholder
                     && marksEntered
-                    && this.displayType=="I")
+                    && this.displayType=="I"
+                    && this.courseType=="Reg")
                     
                       {
                       this.submitForApprovalButton=true;
@@ -866,6 +921,7 @@ onRowSelected(event){
                         && marksEntered 
                         && this.canSubmit
                         && this.displayType=="I"
+                        && this.courseType=="Reg"
                         
                         )
                                                     
@@ -887,8 +943,10 @@ onRowSelected(event){
               this.someoneElseHasAuthority,"marksEntered:",marksEntered,"canSubmit:", this.canSubmit);
       
    
-		
+		          if(this.courseType=="Reg")
               this.setNewColumnsmk();
+              else
+              this.setcoreColumnsmk();
               this.spinnerstatus=false;
 
       }
@@ -1005,6 +1063,68 @@ onRowSelected(event){
      
       
      }
+
+     setcoreColumnsmk() {
+      {
+      let groupdef:ColGroupDef;
+      let columndef: ColDef;
+
+    groupdef={headerName:"Student", children: [
+     {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left'},
+     { headerName: "Name",  field :'studentName' , width: 150,editable:false,pinned: 'left',tooltipField:'studentName'}
+   
+   ]};
+   this.columnDefsmk.push(groupdef);
+       
+      }
+
+{
+
+
+  let groupdef:ColGroupDef={headerName:"",children:[],groupId:""};
+ 
+  
+  let componentGroups:any[] =this.getgroups();
+ 
+  let grpChildren:any;
+  for(let i=0;i<componentGroups.length;i++)
+  {
+    
+      groupdef={headerName:"",children:[],groupId:""};
+
+      groupdef.headerName=componentGroups[i].group ;
+      
+     
+         grpChildren=this.getCoreGroupChildren(componentGroups[i].group);
+
+      
+                   
+      
+      
+      groupdef.children=grpChildren;
+      groupdef.groupId=componentGroups[i].group;
+      //groupdef.headerClass='ag-header-group-cell';
+      
+      this.columnDefsmk.push(groupdef);
+    
+
+  }
+ 
+
+
+}
+{
+  let definition: ColDef;
+  definition = { headerName: "TOT", field:'totalMarks' , width: 80,editable:false ,pinned:"right"};
+  this.columnDefsmk.push(definition);
+  
+  }
+
+
+
+
+
+}
         getgroups():any[]
         {
                 let start=1;
@@ -1100,6 +1220,48 @@ onRowSelected(event){
                  
           return children;
         }
+        getCoreGroupChildren(group):any[]
+        {
+                let columndef: ColDef={};
+                let children:any[]=[];
+               
+              
+                this.componentAC.forEach(column=>
+                  {
+                        
+                      if(String(column.group).toString()===String(group).toString())
+                      {
+                          columndef={};
+                          //columndef.headerName=column.evaluationIdName+"/"+column.maximumMarks;
+                          columndef.headerName=column.evaluationIdName;
+                          columndef.headerTooltip="Max Marks:"+column.maximumMarks;
+                          columndef.field=column.evaluationId;
+                          columndef.width=80;
+                          columndef.tooltipValueGetter= this.tooltipgetter;
+
+                          columndef.cellRendererFramework=NumeriCellRendererComponent; 
+                          columndef.cellRendererParams = {
+                          values: column.maximumMarks};
+                          columndef.valueSetter=this.hasValuesetter;
+                        
+                          if(column.componentType=="1"){
+                            columndef.editable=this.editgrid;
+
+                          }else{
+                            columndef.editable=false;
+
+                          }
+                          
+                          columndef.suppressNavigable=!this.editgrid;
+                          children.push(columndef);
+
+                      }
+
+                  });
+                 
+          return children;
+        }
+
 
         tooltipgetter =function (params):string {
         return " 1) Press ENTER key after input of Marks  2) Use A to Mark Absent" }
@@ -1125,9 +1287,10 @@ onRowSelected(event){
           this.sheetstatus=String(res.root.exception[0].exceptionstring).toString();
           
 
-          
+          if(this.courseType=="Reg")
           this.getEvaluationComponents();
-          
+          else
+          this.getcoreEvaluationComponents();
          
        
      
@@ -1801,4 +1964,5 @@ this.httpStatus();  // Check submitted status and Load award sheet
 
 
 }    // end of class 
+
     
