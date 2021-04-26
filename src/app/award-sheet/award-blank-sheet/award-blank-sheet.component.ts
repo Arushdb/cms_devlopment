@@ -1707,6 +1707,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
 
 
   submitConfirm(){
+    this.gridOptionsmk.api.stopEditing();
   
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width="100%";
