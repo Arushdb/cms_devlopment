@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
+import {  Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ɵConsole } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { CellEditingStoppedEvent, CellFocusedEvent, CellMouseOutEvent, ColDef, ColDefUtil, ColGroupDef, GridOptions, GridReadyEvent, RowDoubleClickedEvent, StartEditingCellParams, ValueSetterParams } from 'ag-grid-community';
@@ -19,7 +19,7 @@ import {alertComponent} from    'src/app/shared/alert/alert.component'
 
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { AgGridAngular } from 'ag-grid-angular';
-import { isThursday } from 'date-fns';
+
 
 
 
@@ -140,7 +140,8 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
               
             }
         });
-    
+
+        
 
 
       this.gridOptions = <GridOptions>{
@@ -191,11 +192,13 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     
 
   
-    this.gridOptions.columnDefs=this.columnDefs;
+     this.gridOptions.columnDefs=this.columnDefs;
 
-    this.moduleCreationCompleteHandler();
+     this.moduleCreationCompleteHandler();
   
   }
+
+  
 
   hashValueGetter = function (params) {
   
@@ -299,7 +302,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     if (isUndefined(res.CodeList.root)){
       this.setoffButton();
       this.userservice.log("No Subject Assigned");
-      this.goBack();
+      //this.goBack();
 
       return;
 
@@ -671,6 +674,7 @@ onRowSelected(event){
       if(isUndefined(res.StudentList.student)){
         this.userservice.log("No Student found");
         this.setoffButton();
+        
         return;
       }
 
@@ -685,7 +689,7 @@ onRowSelected(event){
       }
 
       setoffButton(){
-      // debugger;
+      
         this.submitForApprovalButton=false;
         this.gradelimitButton=false;
         this.editgrid=false;
