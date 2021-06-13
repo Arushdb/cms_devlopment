@@ -1,0 +1,23 @@
+<div class="card m-3">
+    <h3 class="card-header bold">UPLOAD FILE  </h3>
+<div class="card-body">
+<form [formGroup]="registerForm"  enctype="multipart/form-data">
+<div class="form-row">
+    <div class="form-group col border">
+        <label>Upload file</label>
+        <input type="file" formControlName="file"  (change)="handleFileInput($event.target.files)"
+        
+        class="form-control" [ngClass]="{ 'is-invalid': submitted && f.file.errors }" />
+        
+        <div *ngIf="f.file.touched && f.file.errors" class="invalid-feedback">
+            <div *ngIf="f.file.errors.required">File is required</div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary mr-1"   type="submit" (click)="uploadFileToActivity()">upload</button>
+        <button class="btn btn-secondary" type="reset" >Cancel</button>
+    </div>
+</div>
+</form>
+</div>
+</div>
