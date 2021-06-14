@@ -18,6 +18,13 @@
         <button class="btn btn-secondary" type="reset" >Cancel</button>
     </div>
 </div>
+
+
+<div class="progress form-group" *ngIf="progress > 0">
+    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+    </div>
+</div>
+
 </form>
 </div>
 </div>

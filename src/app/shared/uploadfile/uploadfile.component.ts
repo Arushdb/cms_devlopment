@@ -1,3 +1,4 @@
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
@@ -15,6 +16,7 @@ export class UploadfileComponent implements OnInit {
   subs = new SubscriptionContainer();
   spinnerstatus: boolean;
   registerForm: FormGroup;
+  progress:number=10;
 
   constructor(private userservice:UserService,private formBuilder: FormBuilder) { }
 
@@ -38,43 +40,58 @@ handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
     
 
-    console.log('Arush',this.fileToUpload);
+    
 }
 
 uploadFileToActivity() {
  
 
-  let obj = {xmltojs:'Y',
+  let obj = {xmltojs:'N',
   method:'None' }; 
 
   console.log("inside upload file");  
 //obj.method='/studentlogin/getStudentLoginInfo.htm';
 //this.spinnerstatus=true;
 
-this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe(res=>{
-  //this.userservice.log(" in switch detail selected");
-
- console.log(res);
-// res = JSON.parse(res);
-  this.spinnerstatus=false;
+this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe((event: HttpEvent<any>)=>{
  
 
+  switch (event.type) {
+    case HttpEventType.Sent:
+    
+      console.log('Request has been made!');
+      break;
+    case HttpEventType.ResponseHeader:
+   
+      console.log('Response header has been received!');
+      break;
+    //case HttpEventType.UploadProgress:
+    case HttpEventType.UploadProgress:
+      //debugger;
+      this.progress = Math.round(event.loaded / event.total * 100);
+      console.log(`Uploaded! ${this.progress}%`);
+      break;
+    case HttpEventType.Response:
+        //debugger;
+      console.log('User successfully created!', event.body);
+      setTimeout(() => {
+        this.progress = 10;
+      }, 1500);
 
- 
+  }
 },error=>{
 
-  // console.log(error.originalError.message);
-  // console.log(error.status);
-  //this.message=error.originalError.message;
+  
 console.log("error in file upload",error);
   this.spinnerstatus=false;
-  
-})
-    //this.fileUploadService.postFile(this.fileToUpload).subscribe(data => {
-      // do something, if upload success
-      //}, error => {
-        //console.log(error);
-      //});
-  }
+ 
 
+    
+  });
+
+  
+  
+
+
+}
 }

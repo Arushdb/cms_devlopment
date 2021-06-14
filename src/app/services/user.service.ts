@@ -104,7 +104,10 @@ export class UserService {
 
         const formData: FormData = new FormData();
 
-    formData.append('filekey', fileToUpload, fileToUpload.name);
+    //
+    formData.append('name', "myfile");
+   formData.append('filekey', fileToUpload);
+    //formData.append('filekey', fileToUpload, fileToUpload.name);
 
     const customHeaders = new HttpHeaders({
       'Authorization': 'Bearer' + localStorage.getItem('token'),
@@ -131,7 +134,7 @@ export class UserService {
        
        
         return this.httpclient
-          .post(endpoint, formData, { headers: headers ,reportProgress: true, observe: 'events'})
+          .post(endpoint, formData, {headers:headers,reportProgress: true, observe: 'events'})
         //  return this.httpclient
         //    .post(endpoint, formData)
           
