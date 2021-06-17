@@ -22,7 +22,7 @@
 
      <div>
         <button   type="button" class="btn btn-success mr-2  btn-sm " 
-        (click)="getStudentMarks()" *ngIf="saveButton && displaymkgrid && columnDefsmk.length>0"  >Save</button>
+        (click)="calculateClasstotal('getmarks')" *ngIf="saveButton && displaymkgrid && columnDefsmk.length>0"  >Save</button>
         <button   type="button" class="btn btn-primary mr-2  btn-sm && columnDefsmk.length>0"
          (click)="onclickgradelimitbutton()" 
          *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0 && displayType== 'I' && courseType=='Reg' "
