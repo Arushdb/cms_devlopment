@@ -34,7 +34,8 @@ const routes:Routes=[
  // {path:'registration_continue',component: RegisterStudentComponent},   
 
  
-
+ { path: 'distance_center',
+  loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
   ],         
  
@@ -42,9 +43,7 @@ const routes:Routes=[
   },
 
   {path:'**',redirectTo:'login',pathMatch:'full'},
- 
-  { path: 'distance_center',
-  loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
+
 ];
 
 
