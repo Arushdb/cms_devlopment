@@ -1,0 +1,20 @@
+
+<div class="container-fluid">
+    <div class="form-group">
+    <div class="card-header"><b>Distance Center List</b></div>
+    <div class="card-body">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+           <app-custom-combobox 
+            (OptSelected)="entityChangeHandler($event)" #combo 
+            [Options] ='entityCombo' 
+            [labeltext]='entityCombolabel' 
+            [combowidth] ="combowidth">
+           </app-custom-combobox> 
+        </div>
+    </div>
+  <div *ngIf="showOk">    
+      &nbsp;&nbsp;
+      <button type="button" class="btn btn-primary btn-primary-spacing  btn-sm " [disabled]="!enableOkBtn" (click)="generateExcel()" >Download List</button> &nbsp;&nbsp;
+      <button type="button" class="btn btn-primary btn-primary-spacing  btn-sm " routerLink="/dashboard">Cancel</button><router-outlet></router-outlet>
+  </div>

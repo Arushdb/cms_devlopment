@@ -1,7 +1,7 @@
 import { HttpClient,  HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
-import {environment} from 'src/environments/environment'
+import {environment} from '../../environments/environment'; //'src/environments/environment'
 	
 
 @Injectable({
