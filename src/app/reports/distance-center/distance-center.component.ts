@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
 import { CustomComboboxComponent } from '../../shared/custom-combobox/custom-combobox.component';
 import { MyItem} from '../../interfaces/my-item';
 import { UserService} from  '../../services/user.service' ;
@@ -15,7 +15,7 @@ import { alertComponent } from '../../shared/alert/alert.component';
   templateUrl: './distance-center.component.html',
   styleUrls: ['./distance-center.component.css']
 })
-export class DistanceCenterComponent implements AfterViewInit {
+export class DistanceCenterComponent implements AfterViewInit,OnDestroy {
   @ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
   combowidth: string;
   entityCombolabel : string ='Select Study Center';
