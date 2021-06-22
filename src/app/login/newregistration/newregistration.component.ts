@@ -10,6 +10,7 @@ import { alertComponent } from 'src/app/shared/alert/alert.component';
 import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-newregistration',
   templateUrl: './newregistration.component.html',
@@ -37,8 +38,9 @@ export class NewregistrationComponent implements OnInit {
   entity_name: string;
   _studentdata:any;
 
-  display=true;
+  displaystudent=true;
   app_number: string;
+  registrationform: FormGroup;
 
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
@@ -269,7 +271,8 @@ getcoursesservice(){
 
 
 goBack(): void {
-  this.location.back();
+ 
+  this.displaystudent=true;
 }
  submit(){
 		
@@ -319,7 +322,7 @@ goBack(): void {
      }
      
      this.crselected="Credits Selected:"+this.creditselected;
-      debugger;
+      
           if(
           (this.creditselected>=this.mincreditrequired)&&(this.creditselected<=this.maxcreditrequired)
                      
@@ -570,11 +573,19 @@ onContinue(){
 
 
    }
+get f(){
+  return this.registrationform.controls
+}
 
-
-   Onchangedata(event){
-     console.log("change data ",event);
-     this.display=false;
+   Onchangedata(registrationform:FormGroup){
+     this.registrationform=registrationform;
+    
+     if(this.f.status.value==="valid")
+     this.displaystudent=false;
+    
+     
+     
+     
 
    }
 

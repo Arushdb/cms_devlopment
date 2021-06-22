@@ -1,23 +1,42 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpParams } from '@angular/common/http';
+//import { isNull } from '@angular/compiler/src/output/output_ast';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
+import {Location} from '@angular/common';
+import { UploadfileComponent } from 'src/app/shared/uploadfile/uploadfile.component';
 
 import { MustMatch } from 'src/app/shared/_helpers/must-match.validator';
+import { isUndefined } from 'typescript-collections/dist/lib/util';
+import { MatDialogRef } from '@angular/material/dialog';
+
+
+
+function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
+  const DIGIT_EXPS = /^\d*$/;
+  
+  if (!formControl.value.match(DIGIT_EXPS)) {
+
+    return {'NaN': true}
+  } 
+}
+
 
 @Component({
   selector: 'studentpersonaldetail',
   templateUrl: './studentpersonaldetail.component.html',
   styleUrls: ['./studentpersonaldetail.component.css']
 })
-export class StudentpersonaldetailComponent implements OnInit {
+export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
     @Input() studentdata :any;
-    @Output() changedata= new EventEmitter<any>();
+    @Output() changedata= new EventEmitter<FormGroup>();
+   // @ViewChild('upfile') upfile: UploadfileComponent;
 
+    //fileerror:boolean;
     
-
     subs = new SubscriptionContainer();
 
      not_edit_firstname :Boolean;
@@ -38,8 +57,9 @@ export class StudentpersonaldetailComponent implements OnInit {
 
      fileToUpload: File = null;
      upload=true;
+    
    
-
+    // subs = new SubscriptionContainer();
 
   registerForm: FormGroup;
     submitted = false;
@@ -59,12 +79,28 @@ export class StudentpersonaldetailComponent implements OnInit {
     admissionMode: string;
     appnumber: any;
   spinnerstatus: boolean;
+  option: string;
+  enrolvalid: boolean;
+  enrvaild: boolean;
+  filests: any;
+  filename: string;
+ 
 
-    constructor(private formBuilder: FormBuilder, private router: Router,
-      private userservice:UserService) {
+    constructor(private formBuilder: FormBuilder, 
+      private router: Router,
+      private userservice:UserService,
+      private elementRef:ElementRef,
+      private location:Location,
+      private dialogRef: MatDialogRef<StudentpersonaldetailComponent>) {
 
         
      }
+  ngOnDestroy(): void {
+    this.subs.dispose();
+    this.elementRef.nativeElement.remove();
+
+   
+  }
 
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
@@ -83,24 +119,22 @@ export class StudentpersonaldetailComponent implements OnInit {
             address: ['', Validators.required],
             phone: ['', Validators.required],
             adhnum: ['', Validators.required],
-            file: ['', Validators.required],
+          
+            enrolmentnumber: [''],
+            lastdegree: ['', Validators.required],
+
             firstnamehindi: ['', Validators.required],
             fathernamehindi: ['', Validators.required],
             mothernamehindi: ['', Validators.required],
-            //lastName: ['', Validators.required],
-            // validates date format yyyy-mm-dd
+         
             dob: ['', [Validators.required, Validators.pattern(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)]],
             email: ['', [Validators.required, Validators.email]],
-            // password: ['', [Validators.required, Validators.minLength(6)]],
-            // confirmPassword: ['', Validators.required],
-            // acceptTerms: [false, Validators.requiredTrue],
+            status:['']
             
         }
-        //, 
-        // {
-        //     //validator: MustMatch('password', 'confirmPassword')
-        // }
+      
         );
+        this.option="-1";
         
         console.log("Arush",this.studentdata);
         this.firstname=String(this.studentdata.studentdata.student[0].first_name[0]).trim();
@@ -119,7 +153,7 @@ export class StudentpersonaldetailComponent implements OnInit {
         this.appnumber=this.studentdata.appnumber;
 
         console.log("Arush",this.appnumber);
-     
+        this.filename=this.appnumber;
         this.registerForm.get('firstname').setValue(this.firstname);
         this.registerForm.get('fathername').setValue(this.fathername);
         this.registerForm.get('mothername').setValue(this.mothername);
@@ -163,76 +197,176 @@ export class StudentpersonaldetailComponent implements OnInit {
     get f() {
           
          return this.registerForm.controls; }
-
+    
         
 
-    translate(){
-       // this.router.navigateByUrl("https://www.google.com");
-        window.location.href = "https://www.google.com"
-        
+   
+
+    onOptionsSelected(value){
+      this.option=value;
+      this.userservice.clear();
+   
+
     }
 
     onSubmit() {
-        this.submitted = true;
-        
 
-        this.changedata.emit(this.registerForm.value);
-
-       // stop here if form is invalid
+   this.userservice.clear();
+   if (this.option=="Others" && !this.filests){
+     this.userservice.log("File not uploaded");
+return;
+   }
+          
         if (this.registerForm.invalid) {
+       
             return;
         }
+       
+        this.registerForm.get('status').setValue('valid');
+        this.changedata.emit(this.registerForm);
+      
 
+        
         // display form values on success
         alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
     }
+
+    
+    isEnrolmentValid(){
+      this.submitted = true;
+     
+      if (this.option=="DEI"){
+          
+           
+      this.registerForm.controls["enrolmentnumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+      //this.registerForm.controls["enrolmentnumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+      this.submitted=true;
+      let enrolmentnumber=this.f.enrolmentnumber.value;
+      
+      let myparam = {xmltojs:'Y',
+      method:'None' }; 
+       this.enrvaild=false;
+     
+     let  reg_params =new HttpParams();
+       myparam.method='/registrationform/getEnrolmentDetails.htm';
+       reg_params=reg_params.set("enrollmentno",enrolmentnumber);
+       this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
+     
+       res = JSON.parse(res);
+
+       this.resulthandlergetEnrolmentDetails(res);
+       console.log(res);
+        
+     },error=>{
+      this.enrvaild=false;
+      this.userservice.log("Please enter correct Enrolment number.");
+     
+       });
+
+       
+  
+  
+      }
+      else{
+          this.onSubmit();
+      }
+    }
+      resulthandlergetEnrolmentDetails(res){
+      let dob = String(res.studentdata.student[0].date_of_birth[0]).trim();
+      let fathername = String(res.studentdata.student[0].father_name[0]).trim();
+      let gender = String(res.studentdata.student[0].gender[0]).trim();
+      let studentname = String(res.studentdata.student[0].student_name[0]).trim();
+      console.log(studentname,fathername,gender,dob);
+      let str:string =studentname+fathername+gender+dob;
+      str=str.toLowerCase();
+      str=str.replace(/\s/g, "");
+      ;
+      let str1=this.f.firstname.value+
+      this.f.fathername.value+this.f.gender.value
+      +this.f.dob.value;
+      str1=str1.toLowerCase();
+      str1=str1.replace(/\s/g, "");
+      
+      if(str===str1){
+        this.enrvaild=true;
+        this.onSubmit();
+      }
+
+      else{
+
+      
+      this.enrvaild=false;
+      this.userservice.log("Please enter correct Enrolment number.");
+      }
+
+      
+      }
+
+     
 
     onReset() {
         this.submitted = false;
         this.registerForm.reset();
     }
 
-    handleFileInput(files: FileList) {
-        this.fileToUpload = files.item(0);
+    // handleFileInput(files: FileList) {
+    //     this.fileToUpload = files.item(0);
         
 
-        console.log('Arush',this.fileToUpload);
-    }
+    //     console.log('Arush',this.fileToUpload);
+    // }
 
-    uploadFileToActivity() {
+  //   uploadFileToActivity() {
      
 
-      let obj = {xmltojs:'Y',
-      method:'None' }; 
+  //     let obj = {xmltojs:'Y',
+  //     method:'None' }; 
     
-      console.log("inside upload file");  
-    //obj.method='/studentlogin/getStudentLoginInfo.htm';
-    //this.spinnerstatus=true;
+  //     console.log("inside upload file");  
     
-    this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe(res=>{
-      //this.userservice.log(" in switch detail selected");
+    
+  //   this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe(res=>{
+  //     //this.userservice.log(" in switch detail selected");
   
-     console.log(res);
-    // res = JSON.parse(res);
-      this.spinnerstatus=false;
+  //    console.log(res);
+  //   // res = JSON.parse(res);
+  //     this.spinnerstatus=false;
      
   
     
      
-  },error=>{
+  // },error=>{
   
-      // console.log(error.originalError.message);
-      // console.log(error.status);
-      //this.message=error.originalError.message;
-    console.log("error in file upload",error);
-      this.spinnerstatus=false;
+    
+  //   console.log("error in file upload",error);
+  //     this.spinnerstatus=false;
       
-  })
-        //this.fileUploadService.postFile(this.fileToUpload).subscribe(data => {
-          // do something, if upload success
-          //}, error => {
-            //console.log(error);
-          //});
+  // })
+        
+  //     }
+
+    
+      onCancel(){
+        this.elementRef.nativeElement.remove();
+        //this.location.back();
+        this.dialogRef.close();
+        this.location.replaceState('/');
+        this.router.navigate(['login']);
+
+      }  
+
+      onfileupload(_filests){
+        this.filests=_filests;
+      
       }
- 
+
+      onchange(){
+        //debugger;
+        this.userservice.clear();
+      }
+   
 }
+
+
+
+

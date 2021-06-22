@@ -1,6 +1,8 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Host, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map } from 'rxjs/operators';
+import { StudentpersonaldetailComponent } from 'src/app/login/studentpersonaldetail/studentpersonaldetail.component';
 import { UserService } from 'src/app/services/user.service';
 import { SubscriptionContainer } from '../subscription-container';
 
@@ -10,20 +12,31 @@ import { SubscriptionContainer } from '../subscription-container';
   styleUrls: ['./uploadfile.component.css']
 })
 export class UploadfileComponent implements OnInit {
+@Input() filepath:string;   
+@Input() filename:string;   
+@Output()  filestatus=new EventEmitter<boolean>();
 
   fileToUpload: File = null;
   submitted = false;
   subs = new SubscriptionContainer();
   spinnerstatus: boolean;
   registerForm: FormGroup;
-  progress:number=10;
+  progress:number=0;
+  fileuploaded: boolean=false;;
 
-  constructor(private userservice:UserService,private formBuilder: FormBuilder) { }
+  constructor(private userservice:UserService,private formBuilder: FormBuilder,
+     @Host() public myparent:StudentpersonaldetailComponent ) { }
 
   ngOnInit(): void {
+   
     this.registerForm = this.formBuilder.group({
       file: ['', Validators.required]
     });
+ 
+    this.progress=0;
+    this.fileuploaded=false;
+    this.filestatus.emit(this.fileuploaded);
+    console.log(this.filename);
   }
 
   get f() {
@@ -37,61 +50,92 @@ export class UploadfileComponent implements OnInit {
 // }
 
 handleFileInput(files: FileList) {
+
+  this.progress=0;
+  this.fileuploaded=false;
     this.fileToUpload = files.item(0);
+    if(this.fileToUpload==null){
+      this.filestatus.emit(this.fileuploaded);
+      this.userservice.log("Please select file.");
+      return;
+    }
+   
+    this.uploadFileToActivity();
     
 
     
 }
 
 uploadFileToActivity() {
- 
+
+  // console.log("submit status in parent ",this.myparent.submitted);
+  // console.log("file error status ",this.f.file.errors);
 
   let obj = {xmltojs:'N',
-  method:'None' }; 
+  method:'None', 
+  filepath:this.filepath,
+  filename:this.filename
+}; 
+  
+this.spinnerstatus=true;
+this.fileuploaded=false;
 
-  console.log("inside upload file");  
-//obj.method='/studentlogin/getStudentLoginInfo.htm';
-//this.spinnerstatus=true;
-
-this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe((event: HttpEvent<any>)=>{
+ this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe((event: HttpEvent<any>)=>{
  
 
-  switch (event.type) {
-    case HttpEventType.Sent:
+   switch (event.type) {
+     case HttpEventType.Sent:
     
-      console.log('Request has been made!');
-      break;
-    case HttpEventType.ResponseHeader:
+       console.log('Request has been made!');
+       break;
+     case HttpEventType.ResponseHeader:
    
-      console.log('Response header has been received!');
-      break;
-    //case HttpEventType.UploadProgress:
-    case HttpEventType.UploadProgress:
-      //debugger;
-      this.progress = Math.round(event.loaded / event.total * 100);
-      console.log(`Uploaded! ${this.progress}%`);
-      break;
-    case HttpEventType.Response:
-        //debugger;
-      console.log('User successfully created!', event.body);
-      setTimeout(() => {
-        this.progress = 10;
-      }, 1500);
+       console.log('Response header has been received!');
+       break;
+     //case HttpEventType.UploadProgress:
+     case HttpEventType.UploadProgress:
+     
+       this.progress = Math.round(event.loaded / event.total * 100);
+       console.log(`Uploaded! ${this.progress}%`);
+       break;
+     case HttpEventType.Response:
+     
+         this.fileuploaded=true;
+         this.spinnerstatus=false;
+         this.filestatus.emit(this.fileuploaded);
+         this.userservice.log("File Uploaded Successfully!");
+     
+       setTimeout(() => {
+       
+       }, 1500);
+       this.progress = 0;
 
-  }
-},error=>{
-
+   }
+  },error=>{
+   
+    if(error.originalError.status==501){
+      this.userservice.log(" Only pdf,png,jpg and jpeg files are allowed");
+    }else{
+      this.userservice.log("error in file upload");
+    }
   
-console.log("error in file upload",error);
-  this.spinnerstatus=false;
- 
+   this.spinnerstatus=false;
+   this.fileuploaded=false;
+   this.filestatus.emit(this.fileuploaded);
+   
 
     
-  });
+   });
+
 
   
-  
 
 
+}
+
+
+onfocus(){
+  this.fileuploaded=false;
+  console.log("mouse down");
 }
 }

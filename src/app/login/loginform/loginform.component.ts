@@ -7,6 +7,9 @@ import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { UserService } from 'src/app/services/user.service';
 import { HttpParams } from '@angular/common/http';
 import { NewregistrationComponent } from '../newregistration/newregistration.component';
+import { DatePipe } from '@angular/common'
+import { parse } from 'date-fns';
+import { alertComponent } from 'src/app/shared/alert/alert.component';
 
 //import { AccountService, AlertService } from '../_services';
 
@@ -32,7 +35,8 @@ export class LoginformComponent implements OnInit {
         private router: Router,
         public dialog: MatDialog,
         private userservice:UserService,
-        private dialogRef: MatDialogRef<LoginformComponent>
+        private dialogRef: MatDialogRef<LoginformComponent>,
+        private datepipe: DatePipe
        // private accountService: AccountService,
         //private alertService: AlertService
     ) {
@@ -167,38 +171,30 @@ export class LoginformComponent implements OnInit {
         res = JSON.parse(res);
         this.spinnerstatus=false;
         this.loading = false;
-        this.getStudentDetailsResultHandler(res);
+        this.getRegistrationDeadlines(res);
+       
 
 
       });
     
     }
     
-    getStudentDetailsResultHandler(res){
-        console.log(res);
-        console.log(res.studentdata.student[0].program_id[0]);
+    displaystudent(studentdata){
+      
 
-         res["appnumber"]=this.f.username.value;
+    
+      studentdata["appnumber"]=this.f.username.value;
         
         
       
         this.reg_params=this.reg_params.set("userName",this.f.username.value);
 
-      
-        console.log(this.reg_params);
-
-            
-            // let navigationExtras: NavigationExtras = {
-            //     queryParams: {
-            //         "reg_params": JSON.stringify(res)
-            //     }
-            // };
         
             const dialogConfig = new MatDialogConfig();
             dialogConfig.width="90%";
             dialogConfig.height="90%";
             dialogConfig.data={
-              "studentdata":res,
+              "studentdata":studentdata,
              
 
             }
@@ -218,4 +214,85 @@ export class LoginformComponent implements OnInit {
 
 
     }
+
+    getRegistrationDeadlines(res){
+   
+      let obj = {xmltojs:'Y',
+      method:'None' }; 
+      this.reg_params=this.reg_params.set("userName",this.f.username.value);
+      this.reg_params=this.reg_params.set("program_id",String(res.studentdata.student[0].program_id[0]).trim());
+      this.reg_params=this.reg_params.set("branch_code",String(res.studentdata.student[0].branch_code[0]).trim());
+      this.reg_params=this.reg_params.set("new_specialization",String(res.studentdata.student[0].new_specialization[0]).trim());
+      this.reg_params=this.reg_params.set("program_id",String(res.studentdata.student[0].program_id[0]).trim());
+      this.reg_params=this.reg_params.set("semester_code",String(res.studentdata.student[0].semester_code[0]).trim());
+      this.reg_params=this.reg_params.set("entity_id",String(res.studentdata.student[0].entity_id[0]).trim());
+     let studentdata =res;
+    
+      this.spinnerstatus=true;
+    obj.method='/registrationform/getRegistrationDeadlinesangular.htm';
+   
+    let result;
+    let currentdate = new Date();
+    let regallowed =false;
+   
+    this.subs.add=this.userservice.getdata(this.reg_params,obj).subscribe(res=>{
+     
+      result = JSON.parse(res);
+      this.spinnerstatus=false;
+      this.loading = false;
+      
+     let  regenddate =String(result.Deadlines.deadlines[0].registration_end_date[0]).trim().slice(0,10);
+      let regstartdate =String(result.Deadlines.deadlines[0].registration_start_date[0]).trim().slice(0,10);
+      
+    let end_date =parse(regenddate,'yyyy-MM-dd', new Date())
+    let start_date =parse(regstartdate,'yyyy-MM-dd', new Date())
+         
+   
+    if(currentdate>=start_date && currentdate<=end_date){
+      regallowed=true;
+      this.displaystudent(studentdata);
+    }
+      
+      else{
+        let message ="Registration not allowed "
+        const dialogRef=  this.dialog.open(alertComponent,
+          {data:{title:"Warning",content:message,
+          ok:true,cancel:false,color:"warn"}});  
+      }
+     
+     
+     
+    },error=>{
+    
+      let message="";
+
+      this.spinnerstatus=false;
+     
+      regallowed=false;
+      
+      if(error.originalError.status==501)
+      message="Registration dead lines have not been set up.Please contact EdRP";
+      else
+      message="Server error";
+      
+      const dialogRef=  this.dialog.open(alertComponent,
+        {data:{title:"Warning",content:message,
+        ok:true,cancel:false,color:"warn"}});
+      
+        dialogRef.afterClosed().subscribe(result => {
+         
+          if(result){
+           
+            return;
+           
+          }
+
+          });
+
+     
+    });
+  
+
+  
+  }
 }

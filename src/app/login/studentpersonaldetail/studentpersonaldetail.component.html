@@ -1,7 +1,7 @@
-<div class="card m-3">
+<div class="card m-3" #student>
     <h3 class="card-header bold">Student Personal Detail :Application Number :{{appnumber}} </h3>
     <div class="card-body">
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+        <form [formGroup]="registerForm" >
             <div class="form-row">
                 <div class="form-group col border">
                     <label>Student Name</label>
@@ -89,7 +89,7 @@
                         
                     </div>
                 </div>
-                <div class="form-group col-1">
+                <div class="form-group col-2">
                     <label>Minority</label>
                     <select formControlName="minority" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.minority.errors }">
                         <option value=""></option>
@@ -107,7 +107,7 @@
                     <label>Phone Number</label>
                     <input type="number" [readonly]="not_edit_phone" formControlName="phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
                     <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                        <div *ngIf="f.phone.errors.required">Father name is required</div>
+                        <div *ngIf="f.phone.errors.required">Phone Number is required</div>
                     </div>
                 </div>
                 <div class="form-group col-3 ">
@@ -137,7 +137,7 @@
                 <div class="form-group col border">
                     <label>Student Name in Hindi</label>
                     <input type="text" [readonly]="not_edit_firstname_hindi" formControlName="firstnamehindi" id="fname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstnamehindi.errors }" />
-                    <button type="button" class="btn btn-info bi bi-info-square">Info</button>
+                    <a href="https://translate.google.com/"  class="btn btn-info bi bi-info-square" rel="noopener noreferrer" target="_blank">Info</a>
                     <div *ngIf="submitted && f.firstnamehindi.errors" class="invalid-feedback">
                         <div *ngIf="f.firstnamehindi.errors.required">Student name in hindi is required</div>
                     </div>
@@ -146,7 +146,7 @@
                 
                 <div class="form-group col border">
                     <label>Father Name in Hindi</label>
-                    <input type="text" [readonly]="not_edit_fathername_hindi" formControlName="fathernamehindi" pattern="[\u0900-\u097F]+" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fathernamehindi.errors }" />
+                    <input type="text" [readonly]="not_edit_fathername_hindi" formControlName="fathernamehindi"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fathernamehindi.errors }" />
                    
                     <a href="https://translate.google.com/"  class="btn btn-info bi bi-info-square" rel="noopener noreferrer" target="_blank">Info</a>   
                     
@@ -158,47 +158,81 @@
                 <div class="form-group col border">
                     <label>Mother Name in Hindi</label>
                     <input type="text" [readonly]="not_edit_mothername_hindi" formControlName="mothernamehindi" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.mothernamehindi.errors }" />
-                    <button type="button" class="btn btn-info bi bi-info-square">Info</button>
+                    <a href="https://translate.google.com/"  class="btn btn-info bi bi-info-square" rel="noopener noreferrer" target="_blank">Info</a>
                     <div *ngIf="submitted && f.mothernamehindi.errors" class="invalid-feedback">
                         <div *ngIf="f.mothernamehindi.errors.required">Mother name in hindi is required</div>
                     </div>
                 </div>
             </div>
+
            
-            <!--
-            <div class="form-group form-check">
-                <input type="checkbox" formControlName="acceptTerms" id="acceptTerms" class="form-check-input" [ngClass]="{ 'is-invalid': submitted && f.acceptTerms.errors }" />
-                <label for="acceptTerms" class="form-check-label">Accept Terms & Conditions</label>
-                <div *ngIf="submitted && f.acceptTerms.errors" class="invalid-feedback">Accept Ts & Cs is required</div>
+            <div class="form-row" >
+                <div class="form-group col-3">
+                    <label>Last Degree Passed from</label>
+                    <select   formControlName="lastdegree" class="form-control" #mySelect  (change)="onOptionsSelected(mySelect.value)"
+                    [ngClass]="{ 'is-invalid': submitted && f.lastdegree.errors }">
+                        <option value="-1">Please Select</option>
+                        <option onselect="" value="DEI">DEI</option>
+                        <option value="Others">Others</option>
+                      
+                    </select>
+                  
+                    <div *ngIf="submitted && f.lastdegree.errors" class="invalid-feedback">
+                        <div *ngIf="f.lastdegree.errors.required">Last degree is required</div>
+                    </div>
+                   
+
+                </div>
+
+                <div class="form-group col-2 " *ngIf = "option=='DEI'">
+                    <label>Enrollment Number</label>
+                    <input type="text" (change)="onchange()" formControlName="enrolmentnumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.enrolmentnumber.errors }" />
+                  
+                    <div *ngIf="submitted && f.enrolmentnumber.errors" class="invalid-feedback">
+                        <div *ngIf="f.enrolmentnumber.errors.required">Enrollment number is required</div>
+                        <div *ngIf="f.enrolmentnumber.errors.NaN">Please enter numbers only</div>
+                                         
+                        <div *ngIf="f.enrolmentnumber.errors.minlength.requiredLength>f.enrolmentnumber.errors.minlength.actualLength">
+                            Please enter at least {{f.enrolmentnumber.errors.minlength.requiredLength}} digits enrolment number
+                        </div>
+                       
+                    </div>
+                    
+                   
+                   
+                   
+                </div>
+                
+            </div>
+<!--
+            <div class="form-row" *ngIf="option=='Others'">
+                <div class="form-group col ">
+                    <app-uploadfile formControlName="file" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.file.errors }" ></app-uploadfile>
+                    <div *ngIf="f.file.errors.required">File is required</div>
+
+                </div>
             </div>
             
-
-            <div class="form-row">
-                <div class="form-group col border">
-                    <label>Upload file</label>
-                    <input type="file" formControlName="file"  (change)="handleFileInput($event.target.files)"
-                    
-                    class="form-control" [ngClass]="{ 'is-invalid': submitted && f.file.errors }" />
-                    
-                    <div *ngIf="f.file.touched && f.file.errors" class="invalid-feedback">
-                        <div *ngIf="f.file.errors.required">File is required</div>
+            <button class="btn btn-secondary text-center mr-1"    (click)="isEnrolmentValid()" *ngIf = "option=='DEI' && !enrvaild">Confirm</button>
+           -->
+            <app-uploadfile [filepath]="'degree/'" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
+           
+        <!--
+            <div class="form-row" *ngIf="enrvaild || option=='Others'">
+            -->
+                <div class="form-row" >
+                <div class="text-center form-group col"  *ngIf="option!='-1'">
+                    <button *ngIf ="((filests && option=='Others')||option=='DEI') " type="submit" class="btn btn-primary mr-1"  (click) ="isEnrolmentValid()" >Submit</button>
+                    <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                     </div>
                     </div>
-                </div>
-                <div class="text-center">
-                    <button class="btn btn-primary mr-1"  (click)="uploadFileToActivity()">upload</button>
-                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
-                </div>
-            </div>
-
-        -->
-            <div class="text-center">
-                <button class="btn btn-primary mr-1">Register</button>
-                <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
-            </div>
+          
+           
         </form>
+
+
     </div>
 </div>
-<app-uploadfile></app-uploadfile>
-<ng-template *ngIf="upload">
-    <app-uploadfile></app-uploadfile>
-</ng-template>
+
+<app-message></app-message>
+

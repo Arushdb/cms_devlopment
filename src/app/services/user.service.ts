@@ -105,7 +105,8 @@ export class UserService {
         const formData: FormData = new FormData();
 
     //
-    formData.append('name', "myfile");
+   // formData.append('name', "myfile");
+    formData.append('name', myparam.filename);
    formData.append('filekey', fileToUpload);
     //formData.append('filekey', fileToUpload, fileToUpload.name);
 
@@ -124,7 +125,8 @@ export class UserService {
     }else{
       headers=headers.set('format', 'None');// do not format the response data from xml to json
     } 
-
+    headers=headers.set('filepath', myparam.filepath);
+    headers=headers.set('filename', myparam.filename);
   
 
        
