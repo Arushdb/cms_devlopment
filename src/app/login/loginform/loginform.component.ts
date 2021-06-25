@@ -27,6 +27,7 @@ export class LoginformComponent implements OnInit {
     reg_params:HttpParams=new HttpParams();
     sts:string="ACT";
     message: any;
+  dialogRefreg: MatDialogRef<NewregistrationComponent, any>;
   
 
     constructor(
@@ -191,6 +192,7 @@ export class LoginformComponent implements OnInit {
 
         
             const dialogConfig = new MatDialogConfig();
+            
             dialogConfig.width="90%";
             dialogConfig.height="90%";
             dialogConfig.data={
@@ -199,9 +201,9 @@ export class LoginformComponent implements OnInit {
 
             }
   
-        const dialogRef=  this.dialog.open(NewregistrationComponent,dialogConfig)
+        this.dialogRefreg=  this.dialog.open(NewregistrationComponent,dialogConfig)
       
-          this.subs.add=dialogRef.afterClosed().subscribe(result => {
+          this.subs.add=this.dialogRefreg.afterClosed().subscribe(result => {
         
    
           

@@ -63,19 +63,8 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
   registerForm: FormGroup;
     submitted = false;
+       
     
-     
-    firstname: string;
-    fathername: string;
-    mothername: string;
-    dob: string;
-    gender: string;
-    category: string;
-    email: string;
-    religion: string;
-    address: string;
-    phone: string;
-    adhnum: string;
     admissionMode: string;
     appnumber: any;
   spinnerstatus: boolean;
@@ -84,6 +73,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
   enrvaild: boolean;
   filests: any;
   filename: string;
+
  
 
     constructor(private formBuilder: FormBuilder, 
@@ -106,30 +96,55 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
         this.registerForm = this.formBuilder.group({
             //title: ['', Validators.required],
             appnumber: [''],
-            firstname: ['', Validators.required],
-            fathername: ['', Validators.required],
-            mothername: ['', Validators.required],
+            firstName: ['', Validators.required],
+            fatherFirstName: ['', Validators.required],
+            fatherMiddleName: [''],
+            fatherLastName: [''],
+
+            motherFirstName: ['', Validators.required],
+            motherMiddleName: [''],
+            motherLastName: [''],
            
             gender: ['', Validators.required],
             category: ['', Validators.required],
            
             religion: ['', Validators.required],
-            phyhand: ['', Validators.required],
+            physicallyHandicapped: ['', Validators.required],
             minority: ['', Validators.required],
-            address: ['', Validators.required],
-            phone: ['', Validators.required],
-            adhnum: ['', Validators.required],
+            perAddress: ['', Validators.required],
+            officePhone: ['', Validators.required],
+            aadhaarNumber: ['', Validators.required],
           
-            enrolmentnumber: [''],
+            enrollmentNumber: [''],
             lastdegree: ['', Validators.required],
 
-            firstnamehindi: ['', Validators.required],
-            fathernamehindi: ['', Validators.required],
-            mothernamehindi: ['', Validators.required],
+            studentNameinHindi: ['', Validators.required],
+            fatherNameinHindi: ['', Validators.required],
+            motherNameinHindi: ['', Validators.required],
          
-            dob: ['', [Validators.required, Validators.pattern(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)]],
-            email: ['', [Validators.required, Validators.email]],
-            status:['']
+            dateOfBirth: ['', [Validators.required, Validators.pattern(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)]],
+            primaryEmailId: ['', [Validators.required, Validators.email]],
+            status:[''],
+            studentId:[''],
+            sessionStartDate:[''],
+            sessionEndDate:[''],
+            programId:[''],
+            masterExists:[''],
+
+            regRollNumber:[''],
+            registrationNumber:[''],
+
+            entityId:[''],
+            branchCode:[''],
+            newSpecialization:[''],
+            semesterCode:[''],
+            sequenceNumber:[''],
+            admissionMode:[''],
+            attempt:[''],
+            rollNumberGroupCode:[''],
+            longField:['']
+           
+
             
         }
       
@@ -137,37 +152,50 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
         this.option="-1";
         
         console.log("Arush",this.studentdata);
-        this.firstname=String(this.studentdata.studentdata.student[0].first_name[0]).trim();
-        this.fathername=String(this.studentdata.studentdata.student[0].father_name[0]).trim();
-        this.mothername=String(this.studentdata.studentdata.student[0].motherFirstName[0]).trim();
-        this.dob=String(this.studentdata.studentdata.student[0].date_of_birth[0]).trim();
-        this.gender=String(this.studentdata.studentdata.student[0].gender[0]).trim();
-        this.category=String(this.studentdata.studentdata.student[0].category[0]).trim();
-        this.email=String(this.studentdata.studentdata.student[0].primary_email_id[0]).trim();
-        this.religion=String(this.studentdata.studentdata.student[0].religion[0]).trim();
+        //this.firstName=String(this.studentdata.studentdata.student[0].first_name[0]).trim();
         
-        this.address=String(this.studentdata.studentdata.student[0].address[0]).trim();
-        this.phone=String(this.studentdata.studentdata.student[0].homePhone[0]).trim();
-        this.adhnum=String(this.studentdata.studentdata.student[0].aadhaarNumber[0]).trim();
-        this.admissionMode=String(this.studentdata.studentdata.student[0].admissionMode[0]).trim();
         this.appnumber=this.studentdata.appnumber;
 
-        console.log("Arush",this.appnumber);
+    
         this.filename=this.appnumber;
-        this.registerForm.get('firstname').setValue(this.firstname);
-        this.registerForm.get('fathername').setValue(this.fathername);
-        this.registerForm.get('mothername').setValue(this.mothername);
-        this.registerForm.get('dob').setValue(this.dob);
-        this.registerForm.get('gender').setValue(this.gender);
-        this.registerForm.get('category').setValue(this.category);
-        this.registerForm.get('email').setValue(this.email);
-        this.registerForm.get('religion').setValue(this.religion);
-        this.registerForm.get('address').setValue(this.address);
-        this.registerForm.get('phone').setValue(this.phone);
-        this.registerForm.get('adhnum').setValue(this.adhnum);
+        this.registerForm.get('firstName').setValue(String(this.studentdata.studentdata.student[0].first_name[0]).trim());
+        this.registerForm.get('fatherFirstName').setValue(String(this.studentdata.studentdata.student[0].father_name[0]).trim());
+        this.registerForm.get('motherFirstName').setValue(String(this.studentdata.studentdata.student[0].motherFirstName[0]).trim());
+        this.registerForm.get('dateOfBirth').setValue(String(this.studentdata.studentdata.student[0].date_of_birth[0]).trim());
+        this.registerForm.get('gender').setValue(String(this.studentdata.studentdata.student[0].gender[0]).trim());
+        this.registerForm.get('category').setValue(String(this.studentdata.studentdata.student[0].category[0]).trim());
+        this.registerForm.get('perAddress').setValue(String(this.studentdata.studentdata.student[0].address[0]).trim());
+        this.registerForm.get('officePhone').setValue(String(this.studentdata.studentdata.student[0].homePhone[0]).trim());
+        this.registerForm.get('aadhaarNumber').setValue(String(this.studentdata.studentdata.student[0].aadhaarNumber[0]).trim());
+        this.registerForm.get('religion').setValue(String(this.studentdata.studentdata.student[0].religion[0]).trim());
+        this.registerForm.get('primaryEmailId').setValue(String(this.studentdata.studentdata.student[0].primary_email_id[0]).trim());
+        
+        
+     
+        this.registerForm.get('regRollNumber').setValue(String(this.studentdata.appnumber).trim());
+        this.registerForm.get('registrationNumber').setValue(String(this.studentdata.appnumber).trim());
+      
+       
         this.registerForm.get('appnumber').setValue(this.appnumber);
+        this.registerForm.get('studentId').setValue(String(this.studentdata.studentdata.student[0].student_id[0]).trim());
+        this.registerForm.get('sessionStartDate').setValue(String(this.studentdata.studentdata.student[0].session_start_date[0]).trim());
+        this.registerForm.get('sessionEndDate').setValue(String(this.studentdata.studentdata.student[0].session_end_date[0]).trim());
+        this.registerForm.get('programId').setValue(String(this.studentdata.studentdata.student[0].program_id[0]).trim());
+        this.registerForm.get('masterExists').setValue(String(this.studentdata.studentdata.student[0].masterExists[0]).trim());
+        this.registerForm.get('entityId').setValue(String(this.studentdata.studentdata.student[0].entity_id[0]).trim());
+        this.registerForm.get('branchCode').setValue(String(this.studentdata.studentdata.student[0].branch_code[0]).trim());
+        this.registerForm.get('newSpecialization').setValue(String(this.studentdata.studentdata.student[0].new_specialization[0]).trim());
+        this.registerForm.get('semesterCode').setValue(String(this.studentdata.studentdata.student[0].semester_code[0]).trim());
+        this.registerForm.get('sequenceNumber').setValue(String(this.studentdata.studentdata.student[0].sequence_number[0]).trim());
+        this.registerForm.get('admissionMode').setValue(String(this.studentdata.studentdata.student[0].admissionMode[0]).trim());
+        this.registerForm.get('attempt').setValue(String(this.studentdata.studentdata.student[0].attempt[0]).trim());
+        this.registerForm.get('rollNumberGroupCode').setValue(String(this.studentdata.studentdata.student[0].rollNumberGroupCode[0]).trim());
+        this.registerForm.get('longField').setValue(String(this.studentdata.studentdata.student[0].longField[0]).trim());
+        
+         
+        
 
-      if (this.admissionMode=="NEW"){
+      if (this.f.admissionMode.value=="NEW"){
         this.not_edit_firstname=true;
         this.not_edit_fathername=true;
         this.not_edit_mothername=true;
@@ -188,7 +216,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
       }
       
-      console.log("registration control",this.f.firstname);
+  
 
        
     }
@@ -223,6 +251,7 @@ return;
         }
        
         this.registerForm.get('status').setValue('valid');
+        
         this.changedata.emit(this.registerForm);
       
 
@@ -238,10 +267,10 @@ return;
       if (this.option=="DEI"){
           
            
-      this.registerForm.controls["enrolmentnumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+      this.registerForm.controls["enrollmentNumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
       //this.registerForm.controls["enrolmentnumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
       this.submitted=true;
-      let enrolmentnumber=this.f.enrolmentnumber.value;
+     
       
       let myparam = {xmltojs:'Y',
       method:'None' }; 
@@ -249,7 +278,7 @@ return;
      
      let  reg_params =new HttpParams();
        myparam.method='/registrationform/getEnrolmentDetails.htm';
-       reg_params=reg_params.set("enrollmentno",enrolmentnumber);
+       reg_params=reg_params.set("enrollmentno",this.f.enrollmentNumber.value);
        this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
      
        res = JSON.parse(res);
@@ -272,18 +301,18 @@ return;
       }
     }
       resulthandlergetEnrolmentDetails(res){
-      let dob = String(res.studentdata.student[0].date_of_birth[0]).trim();
-      let fathername = String(res.studentdata.student[0].father_name[0]).trim();
+      let dateOfBirth = String(res.studentdata.student[0].date_of_birth[0]).trim();
+      let fatherFirstName = String(res.studentdata.student[0].father_name[0]).trim();
       let gender = String(res.studentdata.student[0].gender[0]).trim();
       let studentname = String(res.studentdata.student[0].student_name[0]).trim();
-      console.log(studentname,fathername,gender,dob);
-      let str:string =studentname+fathername+gender+dob;
+      console.log(studentname,fatherFirstName,gender,dateOfBirth);
+      let str:string =studentname+fatherFirstName+gender+dateOfBirth;
       str=str.toLowerCase();
       str=str.replace(/\s/g, "");
       ;
-      let str1=this.f.firstname.value+
-      this.f.fathername.value+this.f.gender.value
-      +this.f.dob.value;
+      let str1=this.f.firstName.value+
+      this.f.fatherFirstName.value+this.f.gender.value
+      +this.f.dateOfBirth.value;
       str1=str1.toLowerCase();
       str1=str1.replace(/\s/g, "");
       

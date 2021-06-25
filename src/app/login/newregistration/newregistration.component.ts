@@ -10,7 +10,7 @@ import { alertComponent } from 'src/app/shared/alert/alert.component';
 import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-newregistration',
   templateUrl: './newregistration.component.html',
@@ -41,6 +41,9 @@ export class NewregistrationComponent implements OnInit {
   displaystudent=true;
   app_number: string;
   registrationform: FormGroup;
+  subjectJson: string;
+  courseobj: {};
+  courseary: any;
 
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
@@ -147,7 +150,8 @@ export class NewregistrationComponent implements OnInit {
    
    regdataAC:any ;
    //selecteddata=new Collections.Set<string>();
-     selecteddata:string=""; 
+     coursecode:string=""; 
+     coursename:string=""; 
    studentdetailAC:any ;
 
    spinnerstatus:boolean=false;
@@ -284,7 +288,8 @@ goBack(): void {
  
   const selectedNodes = this.agGrid.api.getSelectedNodes();
   const subjectselected = selectedNodes.map(node => node.data );
-    
+  
+    debugger;
 
     if (subjectselected.length==0){
       const dialogRef=  this.dialog.open(alertComponent,
@@ -293,7 +298,10 @@ goBack(): void {
     });
      return;
     }
-  
+     //this.subjectJson=   JSON.stringify(subjectselected);
+      this.courseobj={};
+      this.courseary=[];
+
     //for(var d:number=0;d<subjectselected.length;d++)
     for (var gridItem of subjectselected) 
     {
@@ -307,13 +315,30 @@ goBack(): void {
            
             {
             
-            	this.creditselected+=parseFloat(gridItem.credits);
+              this.courseobj={};
+            	this.creditselected+=parseFloat(gridItem.credits[0]);
+     
+                   
+             //this.coursecode= this.coursecode+gridItem.course_code[0]+",";
+             //this.coursename= this.coursename+gridItem.course_name[0]+",";
             
-             this.selecteddata= this.selecteddata+gridItem.courseCode+",";
-            	if(gridItem.courseclassification=="T"){
-            		this.credittheory += parseFloat(gridItem.credits);
+            
+             this.coursecode= gridItem.course_code[0];
+             this.coursename= gridItem.course_name[0];
+            
+            
+             this.courseobj['courseCode']=this.coursecode;
+            this.courseobj['courseName']=this.coursename;
+            this.courseobj['courseGroupCode']=String(this.coursename).slice(0,3);
+           
+
+            this.courseary.push(this.courseobj);
+
+            
+             if(gridItem.course_classification[0]=="T"){
+            		this.credittheory += parseFloat(gridItem.credits[0]);
             	}else{
-            		this.creditpractical += parseFloat(gridItem.credits);
+            		this.creditpractical += parseFloat(gridItem.credits[0]);
             	}
               	  	
             
@@ -381,127 +406,107 @@ goBack(): void {
     
      
 
-      
+      debugger;
     
     let  myparam1 = new HttpParams();
      //.set('application','CMS');
       var CurrentDateTime:Date = new Date();
 
-      myparam1= myparam1.append("application","CMS");
-      myparam1=myparam1.append("date",CurrentDateTime.toString());
-      myparam1=myparam1.append("selecteddata",this.selecteddata);
-      myparam1=myparam1.append("semester", this.semester );
-      myparam1=myparam1.append("programId",this.programId );
-      myparam1=myparam1.append("branchId",this.branchId);
-      myparam1=myparam1.append("specializationId",this.specializationId);
-      myparam1=myparam1.append("pck",this.pck);
-      myparam1=myparam1.append("credits",this.creditselected.toString());
-      myparam1=myparam1.append("semesterStartDate",this.semesterStartDate);
-      myparam1=myparam1.append("semesterEndDate",this.semesterEndDate);
-      myparam1=myparam1.append("attemptno",this.attemptno.toString());
-      myparam1=myparam1.append("entityId",this.entityId);
-      myparam1=myparam1.append("credittheory",this.credittheory.toString());
-      myparam1=myparam1.append("creditpractical",this.creditpractical.toString());
+      this.courseary=JSON.stringify(this.courseary);
 
-      //myparam1["application"]="CMS";
-      //Alert.show("Date :"+CurrentDateTime);
-          
-    console.log(myparam1);      
-         
-             
-          
-              
-              
-              
-        
-          //Arush on 27/10/18  If it is a switched student take values from myparam at global level else take from param.
-          
-          if (this.myparam["switchType"]!=null){
-            
-            myparam1=myparam1.append("currentpck",this.myparam["currentpck"]);
-            myparam1=myparam1.append("switchType",this.myparam["switchType"]);
-            myparam1=myparam1.append("switchoption",this.myparam["switchoption"]);
+      myparam1= myparam1.set("application","CMS");
+      myparam1=myparam1.set("date",CurrentDateTime.toString());
+      myparam1=myparam1.set("course_list",this.coursecode);
+      myparam1=myparam1.set("coursename_list",this.coursename);
+      myparam1=myparam1.set("coursedata",this.courseary);
+     
+      
+      const RegCredit = new FormControl('');
+      const theoryCredit = new FormControl('');
+      const pracCredit = new FormControl('');
+      const creditExcludeAudit = new FormControl('');
+      const rollNumberGroupCode = new FormControl('');
 
-            // myparam1["switchType"]=this.myparam["switchType"];
-            // myparam1["switchoption"] = this.myparam["switchoption"] ;
-            // myparam1["currentpck"] = this.myparam["currentpck"] ;
-        }else{
-          myparam1=myparam1.append("switchType", this.params.get("switchType")) ;
-          myparam1=myparam1.append("switchoption", this.params.get("switchoption")) ;
-          myparam1=myparam1.append("currentpck", this.params.get("currentpck")) 
-        }
-          
-   
-        this.urlPrefix = this.url+"registerstudent.htm";
-      //Mask.show(commonFunction.getMessages('pleaseWait'));
+      debugger;
 
+      this.registrationform.addControl('regCredit',RegCredit);
+      this.registrationform.addControl('theoryCredit',theoryCredit);
+      this.registrationform.addControl('pracCredit',pracCredit);
+      this.registrationform.addControl('creditExcludeAudit',creditExcludeAudit);
+      this.registrationform.addControl('rollNumberGroupCode',rollNumberGroupCode);
+     
+
+      this.f.regCredit.setValue(this.creditselected);
+      this.f.theoryCredit.setValue(this.credittheory);
+      this.f.pracCredit.setValue(this.creditpractical);
+      this.f.creditExcludeAudit.setValue(this.creditselected);
+      this.f.rollNumberGroupCode.setValue("G1");
+      
+      
+      let formobj =this.registrationform.getRawValue();
+      let serializedForm = JSON.stringify(formobj);
+
+     
+
+      myparam1=myparam1.set("registerationform",serializedForm);
+
+
+    
+      
+       
       let obj = {xmltojs:'Y',
-      method:'/registrationforstudent/registerstudent.htm' };   
+      method:'/registrationform/registerStudentangular.htm' };   
       this.mask=true;
       this.subs.add= this.userservice.getdata(myparam1,obj).subscribe(res=>{
-        //   let data = null;
-        //   xml2js.parseString( res, function (err, result){
-        //    data = result;
-        // });
-     
+          
         res = JSON.parse(res);
         this.mask=false;
-        this.registerstudentSuccess(res);
-        //this.userservice.log(res.registerDetails.Detail.message);
-     // console.log("output of registration",res.registerDetails.Detail.message);   
-      //registerstudentservice.send(myparam1) ;
+        const dialogConfig = new MatDialogConfig();
+        //dialogConfig.data=
+        let matdata ={title:"Success",content:"You are successfully registered"
+           ,ok:true,cancel:false,color:"accent" }
+
+        dialogConfig.data=matdata;
+        dialogConfig.backdropClass=['display-after-delay', 'backdrop-background'];
+        dialogConfig.width="30%";
+        dialogConfig.height="20%";
+        dialogConfig.panelClass='custom-modalbox'
+
+      //   const dialogRef=  this.dialog.open(alertComponent,
+      //     {data:{title:"Success",content:"You are successfully registered"
+      //     ,ok:true,cancel:false,color:"accent" },width:"30%",height:"20%"
+      // });
+         const dialogRef=  this.dialog.open(alertComponent,dialogConfig);
+         
+
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.dialogRef.close(false);
+        });      
+        
+        
+     
+      },error=>{
+        const dialogRef=  this.dialog.open(alertComponent,
+          {data:{title:"Warning",content:"Error in Registration,Please try again"
+          ,ok:true,cancel:false,color:"warn"},width:"30%",height:"20%"
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.dialogRef.close(false);
+        });      
+        
+        this.userservice.log("");
       });
    
-     // console.log(myparam1);     
+      
     }
    
     
     //}
     
-     registerstudentSuccess(res ){
-      //Mask.close();
-       //semDetail = event.result as XML;
-       
-       //Alert.show("regstatus:"+semDetail);
-       //vstack.selectedChild=errorpanel;
-       for (var  obj of  res.registerDetails.Detail ){
-         if(obj.available=="err"){
-     //errorlabel.text=obj.message;
-     this.userservice.log(obj.message);
-     this.router.navigate(['../dashboard']); 
-
-         return;
-       
- //		Alert.show("Error :"+obj.message);
-     
-         }
-           if(obj.available=="reg"){
-            // errorlabel.text ="You are successfully registered";
-            this.userservice.log("You are successfully registered");
-     
-     //vstack.selectedChild=errorpanel;
-     this.router.navigate(['../dashboard']);  
-     return;	
- //		Alert.show("Error :"+obj.message);
-     
-         }else{
-          this.userservice.log("Error in registration");
-             //errorlabel.text ="Error in registration";
-             this.router.navigate(['../dashboard']);  
-             return;
-             
-         }
-        
-         
-         
-       }
-       
-       
-       //vstack.selectedChild=errorpanel;
-       
-       //Alert.show("registerstudentsuccess"+semDetail);
-     }
-     
+    
+           
     
      
    
@@ -523,13 +528,10 @@ goBack(): void {
  
 onContinue(){
 
-  //this._activatedRoute.queryParams.subscribe(params => {
-    //console.log(params.menus);
-    
+ 
     
     console.log("Arush",this.data);
-    //let res=JSON.parse(this.data.reg_params);
-   // let res=this.data.studentdata;
+  
     this._studentdata=this.data.studentdata;
      
     
@@ -559,13 +561,7 @@ onContinue(){
         console.log(this._studentdata);
         console.log(this.reg_params);
 
-    //this.menus.push(data);
-    //let mymenu = params["menu"];
-    //this.menus.push(data);
-    //console.log(this.menus);
  
-
-  //console.log("on Continue");
  
   this.getcoursesservice();
   
@@ -579,6 +575,8 @@ get f(){
 
    Onchangedata(registrationform:FormGroup){
      this.registrationform=registrationform;
+
+     
     
      if(this.f.status.value==="valid")
      this.displaystudent=false;
