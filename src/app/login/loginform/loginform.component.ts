@@ -7,7 +7,7 @@ import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { UserService } from 'src/app/services/user.service';
 import { HttpParams } from '@angular/common/http';
 import { NewregistrationComponent } from '../newregistration/newregistration.component';
-import { DatePipe } from '@angular/common'
+
 import { parse } from 'date-fns';
 import { alertComponent } from 'src/app/shared/alert/alert.component';
 
@@ -37,7 +37,7 @@ export class LoginformComponent implements OnInit {
         public dialog: MatDialog,
         private userservice:UserService,
         private dialogRef: MatDialogRef<LoginformComponent>,
-        private datepipe: DatePipe
+     
        // private accountService: AccountService,
         //private alertService: AlertService
     ) {

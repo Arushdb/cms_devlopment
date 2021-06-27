@@ -33,9 +33,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
     @Input() studentdata :any;
     @Output() changedata= new EventEmitter<FormGroup>();
-   // @ViewChild('upfile') upfile: UploadfileComponent;
-
-    //fileerror:boolean;
+  
     
     subs = new SubscriptionContainer();
 
@@ -177,6 +175,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
       
        
         this.registerForm.get('appnumber').setValue(this.appnumber);
+        
         this.registerForm.get('studentId').setValue(String(this.studentdata.studentdata.student[0].student_id[0]).trim());
         this.registerForm.get('sessionStartDate').setValue(String(this.studentdata.studentdata.student[0].session_start_date[0]).trim());
         this.registerForm.get('sessionEndDate').setValue(String(this.studentdata.studentdata.student[0].session_end_date[0]).trim());
@@ -257,7 +256,7 @@ return;
 
         
         // display form values on success
-        alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
+       // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
     }
 
     
@@ -268,7 +267,7 @@ return;
           
            
       this.registerForm.controls["enrollmentNumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
-      //this.registerForm.controls["enrolmentnumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+     
       this.submitted=true;
      
       
@@ -277,10 +276,11 @@ return;
        this.enrvaild=false;
      
      let  reg_params =new HttpParams();
+    this.spinnerstatus=true;
        myparam.method='/registrationform/getEnrolmentDetails.htm';
        reg_params=reg_params.set("enrollmentno",this.f.enrollmentNumber.value);
        this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
-     
+        this.spinnerstatus=false;
        res = JSON.parse(res);
 
        this.resulthandlergetEnrolmentDetails(res);
@@ -289,6 +289,7 @@ return;
      },error=>{
       this.enrvaild=false;
       this.userservice.log("Please enter correct Enrolment number.");
+      this.spinnerstatus=false;
      
        });
 
@@ -338,42 +339,7 @@ return;
         this.registerForm.reset();
     }
 
-    // handleFileInput(files: FileList) {
-    //     this.fileToUpload = files.item(0);
-        
-
-    //     console.log('Arush',this.fileToUpload);
-    // }
-
-  //   uploadFileToActivity() {
-     
-
-  //     let obj = {xmltojs:'Y',
-  //     method:'None' }; 
-    
-  //     console.log("inside upload file");  
-    
-    
-  //   this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe(res=>{
-  //     //this.userservice.log(" in switch detail selected");
-  
-  //    console.log(res);
-  //   // res = JSON.parse(res);
-  //     this.spinnerstatus=false;
-     
-  
-    
-     
-  // },error=>{
-  
-    
-  //   console.log("error in file upload",error);
-  //     this.spinnerstatus=false;
-      
-  // })
-        
-  //     }
-
+   
     
       onCancel(){
         this.elementRef.nativeElement.remove();

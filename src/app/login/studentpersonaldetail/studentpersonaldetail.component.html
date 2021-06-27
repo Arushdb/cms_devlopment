@@ -1,3 +1,4 @@
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
 <div class="card m-3" #student>
     <h3 class="card-header bold">Student Personal Detail :Application Number :{{appnumber}} </h3>
     <div class="card-body">
@@ -213,9 +214,9 @@
                 </div>
             </div>
             
-            <button class="btn btn-secondary text-center mr-1"    (click)="isEnrolmentValid()" *ngIf = "option=='DEI' && !enrvaild">Confirm</button>
+            <button   class="btn btn-secondary text-center mr-1"    (click)="isEnrolmentValid()" *ngIf = "option=='DEI' && !enrvaild">Confirm</button>
            -->
-            <app-uploadfile [filepath]="'degree/'" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
+            <app-uploadfile [filepath]="'degree/'" [formsubmitted]="submitted" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
            
         <!--
             <div class="form-row" *ngIf="enrvaild || option=='Others'">
@@ -233,6 +234,8 @@
 
     </div>
 </div>
+<!--
 {{registerForm.value | json}}
+-->
 <app-message></app-message>
 

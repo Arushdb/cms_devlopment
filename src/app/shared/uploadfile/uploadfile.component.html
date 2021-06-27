@@ -1,4 +1,4 @@
-
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
 <div class="card m-3">
     <h3 class="card-header bold">Upload Last degree  </h3>
 <div class="card-body">
@@ -8,11 +8,11 @@
      
         <input type="file" formControlName="file"  (focus)="onfocus()" (change)="handleFileInput($event.target.files)"
         
-        class="form-control" [ngClass]="{ 'is-invalid': myparent.submitted && f.file.errors }"  />
+        class="form-control" [ngClass]="{ 'is-invalid': formsubmitted && f.file.errors }"  />
 
   
       
-        <div *ngIf=" myparent.submitted &&  f.file.errors" class="invalid-feedback">
+        <div *ngIf="formsubmitted &&  f.file.errors" class="invalid-feedback">
             <div *ngIf="f.file.errors.required">Please select file </div>
         </div>
         <div>

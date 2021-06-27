@@ -2,6 +2,7 @@ import { HttpClient,  HttpHeaders, HttpParams, HttpRequest } from '@angular/comm
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
 import {environment} from 'src/environments/environment'
+import { isUndefined } from 'typescript-collections/dist/lib/util';
 	
 
 @Injectable({
@@ -125,7 +126,9 @@ export class UserService {
     }else{
       headers=headers.set('format', 'None');// do not format the response data from xml to json
     } 
+    if( !isUndefined(myparam.filepath))
     headers=headers.set('filepath', myparam.filepath);
+    if( !isUndefined(myparam.filename))
     headers=headers.set('filename', myparam.filename);
   
 

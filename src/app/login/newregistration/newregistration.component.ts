@@ -11,6 +11,7 @@ import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-c
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
+import { isUndefined } from 'typescript-collections/dist/lib/util';
 @Component({
   selector: 'app-newregistration',
   templateUrl: './newregistration.component.html',
@@ -21,7 +22,7 @@ export class NewregistrationComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
   combowidth: string;
-  public displaybutton: boolean =false;
+  //public displaybutton: boolean =false;
   //suppressRowDeselection = false;
   check=false;
   subs = new SubscriptionContainer();
@@ -39,9 +40,9 @@ export class NewregistrationComponent implements OnInit {
   _studentdata:any;
 
   displaystudent=true;
-  app_number: string;
+ 
   registrationform: FormGroup;
-  subjectJson: string;
+ 
   courseobj: {};
   courseary: any;
 
@@ -77,9 +78,7 @@ export class NewregistrationComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  // OnSelectAll(){
-  //   this.agGrid.api.selectAll();
-  // }
+ 
   Onchange(){
     console.log(this.check);
     this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
@@ -87,7 +86,7 @@ export class NewregistrationComponent implements OnInit {
 
   OngridReady(parameters:GridReadyEvent){
     //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
-
+this.agGrid.defaultColDef=this.defaultColDef;
 
       if(this.mincreditrequired===this.creditavailable)
       
@@ -103,58 +102,25 @@ export class NewregistrationComponent implements OnInit {
   ngOnInit(): void {
     this.onContinue();
   }
-  itemselected:MyItem;
-  combolabel:string;
-   mask:boolean=false;
-   pgm: any;
-   branch: any;
-   spec: any;
-   sem: any;
+
    maxcredit: any;
    mincredit: any;
-   attempt: any;
+  
    crselected: any;
-   entity: any;
-  
-  
-    title = 'my-app';
-  semDetail:any;
-   tencode:any;
-   studentDetail:any;
-   url:string;
-   urlPrefix:string;
-  
-   programId:string;
-   branchId:string;
-   specializationId:string;
-    entityId:string;
-   semester:string;
+ 
   
    semesterStartDate:string;
    semesterEndDate:string
    pck:string;
    creditavailable:number;
    creditselected:number;
-  
    credittheory:number;
    creditpractical:number;
    maxcreditrequired:number;
    mincreditrequired:number;
-   attemptno:number;
-   wrkAC:any;
-   selectedbranchId:string ;
-   selectedspcId:string;
-
-  
-    
-   
-   regdataAC:any ;
-   //selecteddata=new Collections.Set<string>();
-     coursecode:string=""; 
-     coursename:string=""; 
-   studentdetailAC:any ;
-
-   spinnerstatus:boolean=false;
+   coursecode:string=""; 
+   coursename:string=""; 
+  spinnerstatus:boolean=false;
 
   public myrowData=[];
 
@@ -205,15 +171,13 @@ getcoursesservice(){
    method:'None' }; 
   
     myparam.method='/registrationform/getStudentcourses.htm';
-    // this.params=this.params.append('switchType','NON');
-    // this.params=this.params.append('module','');
-    this.mask=true;
+   
+    this.spinnerstatus=true;
     this.subs.add= this.userservice.getdata(this.reg_params,myparam).subscribe(res=>{
-  
+      this.spinnerstatus=false;
     res = JSON.parse(res);
     this.combodata.splice(0,this.combodata.length);
-    //this.combodata =[];
-    this.mask=false;
+   
     this.getcoursesSuccess(res );
   
     
@@ -225,8 +189,7 @@ getcoursesservice(){
 } 
 
  getcoursesSuccess(res ){
-	//semDetail = event.result as XML;
-  //regdataAC = new ArrayCollection();
+
  
   console.log("courses",res);
   
@@ -237,13 +200,12 @@ getcoursesservice(){
 	var start:number=0;
 	
 	
-	//Alert.show("arush"+semDetail);
+
 
 	for (var obj of  res.ElectiveSubjects.elective){
 		
 	
-		//	vstack.selectedChild=regpanel;
-			//vstack.selectedChild=regpanel;	
+	
 			 if(start==0){
 			 	
 		
@@ -289,7 +251,7 @@ goBack(): void {
   const selectedNodes = this.agGrid.api.getSelectedNodes();
   const subjectselected = selectedNodes.map(node => node.data );
   
-    debugger;
+ 
 
     if (subjectselected.length==0){
       const dialogRef=  this.dialog.open(alertComponent,
@@ -298,7 +260,7 @@ goBack(): void {
     });
      return;
     }
-     //this.subjectJson=   JSON.stringify(subjectselected);
+ 
       this.courseobj={};
       this.courseary=[];
 
@@ -357,7 +319,8 @@ goBack(): void {
              const dialogconf =new MatDialogConfig();
              dialogconf.disableClose=true;
              dialogconf.autoFocus=true;
-             let data={title:"",content:"Please confirm" ,ok:true,cancel:true,color:"warn"};
+             dialogconf.width='20%'
+             let data={title:"Please confirm",content:"" ,ok:true,cancel:true,color:"warn"};
              dialogconf.data=data;
            
 
@@ -406,7 +369,7 @@ goBack(): void {
     
      
 
-      debugger;
+     
     
     let  myparam1 = new HttpParams();
      //.set('application','CMS');
@@ -427,7 +390,7 @@ goBack(): void {
       const creditExcludeAudit = new FormControl('');
       const rollNumberGroupCode = new FormControl('');
 
-      debugger;
+     
 
       this.registrationform.addControl('regCredit',RegCredit);
       this.registrationform.addControl('theoryCredit',theoryCredit);
@@ -453,23 +416,42 @@ goBack(): void {
 
     
       
-       
+      const dialogConfig = new MatDialogConfig();
       let obj = {xmltojs:'Y',
       method:'/registrationform/registerStudentangular.htm' };   
-      this.mask=true;
+      //this.mask=true;
+      this.spinnerstatus=true;
       this.subs.add= this.userservice.getdata(myparam1,obj).subscribe(res=>{
-          
-        res = JSON.parse(res);
-        this.mask=false;
-        const dialogConfig = new MatDialogConfig();
-        //dialogConfig.data=
-        let matdata ={title:"Success",content:"You are successfully registered"
-           ,ok:true,cancel:false,color:"accent" }
+        this.spinnerstatus=false;
+        let resobj:any = JSON.parse(res);
+        let message="";
+        let title="";
+        let matdata={};
+        if (!isUndefined(resobj.Details)){
+    message ="You are successfully registered";
+    title="Success";
+    dialogConfig.width="20%";
+    dialogConfig.height="20%";
+     matdata ={title:title,content:message
+      ,ok:true,cancel:false,color:"accent", "success":true}
 
+   }else{
+    message =resobj.root.exception[0].exceptionstring[0];
+    title="Error in registration";
+    dialogConfig.width="40%";
+    dialogConfig.height="50%";
+    matdata ={title:title,content:message
+      ,ok:false,cancel:true,color:"warn","error":true }
+   }
+
+       
+       // this.mask=false;
+       
+        //dialogConfig.data=
+        
         dialogConfig.data=matdata;
         dialogConfig.backdropClass=['display-after-delay', 'backdrop-background'];
-        dialogConfig.width="30%";
-        dialogConfig.height="20%";
+       
         dialogConfig.panelClass='custom-modalbox'
 
       //   const dialogRef=  this.dialog.open(alertComponent,
@@ -487,6 +469,8 @@ goBack(): void {
         
      
       },error=>{
+    
+        this.spinnerstatus=false;
         const dialogRef=  this.dialog.open(alertComponent,
           {data:{title:"Warning",content:"Error in Registration,Please try again"
           ,ok:true,cancel:false,color:"warn"},width:"30%",height:"20%"
@@ -513,16 +497,16 @@ goBack(): void {
 
 
   
-   OnOptionselected(obj){
-     if(obj.id==="-1"){
-      this.displaybutton =false;
-     }else{
-      this.displaybutton =true;
-      this.itemselected=obj; 
-     }
-     console.log("on option selected",obj);
+  //  OnOptionselected(obj){
+  //    if(obj.id==="-1"){
+  //     this.displaybutton =false;
+  //    }else{
+  //     this.displaybutton =true;
+  //     this.itemselected=obj; 
+  //    }
+  //    console.log("on option selected",obj);
   
-   }
+  //  }
      
   
  

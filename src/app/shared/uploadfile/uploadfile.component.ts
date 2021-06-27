@@ -13,7 +13,9 @@ import { SubscriptionContainer } from '../subscription-container';
 })
 export class UploadfileComponent implements OnInit {
 @Input() filepath:string;   
-@Input() filename:string;   
+@Input() filename:string; 
+@Input() formsubmitted:boolean; 
+
 @Output()  filestatus=new EventEmitter<boolean>();
 
   fileToUpload: File = null;
@@ -25,7 +27,7 @@ export class UploadfileComponent implements OnInit {
   fileuploaded: boolean=false;;
 
   constructor(private userservice:UserService,private formBuilder: FormBuilder,
-     @Host() public myparent:StudentpersonaldetailComponent ) { }
+     @Host() public myparent1:StudentpersonaldetailComponent ) { }
 
   ngOnInit(): void {
    
@@ -68,18 +70,18 @@ handleFileInput(files: FileList) {
 
 uploadFileToActivity() {
 
-  // console.log("submit status in parent ",this.myparent.submitted);
-  // console.log("file error status ",this.f.file.errors);
+ 
 
   let obj = {xmltojs:'N',
   method:'None', 
   filepath:this.filepath,
   filename:this.filename
+ 
 }; 
-  
+debugger;
 this.spinnerstatus=true;
 this.fileuploaded=false;
-
+this.spinnerstatus=true;
  this.subs.add=this.userservice.postFile(this.fileToUpload,obj).subscribe((event: HttpEvent<any>)=>{
  
 
@@ -99,7 +101,7 @@ this.fileuploaded=false;
        console.log(`Uploaded! ${this.progress}%`);
        break;
      case HttpEventType.Response:
-     
+      this.spinnerstatus=false;
          this.fileuploaded=true;
          this.spinnerstatus=false;
          this.filestatus.emit(this.fileuploaded);
