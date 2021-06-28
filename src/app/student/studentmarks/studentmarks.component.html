@@ -1,0 +1,117 @@
+<div class="container">
+    <div>
+    <label >Enter Roll Number/Program below:
+        </label>
+    <app-custom-combobox id="rollNumberCombo"  aria-label="Roll Number"
+    (OptSelected)="OnRollNumberselected($event)"
+        #rollNumberCombo 
+      [Options] ='rollNumberdata' 
+    [labeltext]='combolabel' 
+    [combowidth] ="combowidth"
+    >
+
+</app-custom-combobox>
+</div>
+<div *ngIf="displaySemester">
+<label >Choose Semester:
+</label>
+<app-custom-combobox   
+(OptSelected)="OnSemesterselected($event)"
+#semesterCombo 
+[Options] ='semesterdata' 
+[labeltext]='semestercombolabel' 
+[combowidth] ="combowidth"
+>
+
+</app-custom-combobox>
+
+</div>
+    
+<div *ngIf="displayCourses">
+    <label >Enter course Code:
+    </label>
+<app-custom-combobox  
+(OptSelected)="OnOptionselected($event)"
+#courseCombo 
+  [Options] ='coursedata' 
+[labeltext]='coursecombolabel' 
+[combowidth] ="combowidth"
+>
+
+</app-custom-combobox>
+
+</div>
+
+
+<div class="container border"  *ngIf="coursedata.length>0 ">
+
+    <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onContinue()"  >Ok</button>
+    <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm ">Cancel</button>
+
+</div>
+</div>
+<div style='height: 200px; width: 100% ;display: flex; flex-direction: column;'  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
+       
+      
+    <ag-grid-angular 
+    #mkGrid 
+    style="height:700px; width:100%" 
+  
+    class="ag-theme-alpine"
+    [gridOptions] = "gridOptionsmk"
+    (gridReady) ="OngridReady($event)"
+    [singleClickEdit]="true"
+  
+ 
+   
+    [enterMovesDownAfterEdit]="true"
+    [defaultColDef]="mydefaultColDef"   
+   
+  
+    rowSelection="single"
+    (cellValueChanged)="oncellValueChanged($event)"
+ 
+    (cellFocused)="oncellFocused($event)"
+    
+    (cellEditingStopped)="oncellEditingStopped($event)"
+        
+   
+     
+    >
+    </ag-grid-angular>        
+    <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+</div>
+<!--
+<div style='height: 700px; width: 100% ;display: flex; flex-direction: column;'  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
+       
+      
+    <ag-grid-angular 
+    #mkGrid 
+    style="height:700px; width:100%" 
+  
+    class="ag-theme-alpine"
+    [gridOptions] = "gridOptionsmk"
+    (gridReady) ="OngridReady($event)"
+    [singleClickEdit]="true"
+  
+ 
+   
+    [enterMovesDownAfterEdit]="true"
+    [defaultColDef]="mydefaultColDef"   
+   
+  
+    rowSelection="single"
+    (cellValueChanged)="oncellValueChanged($event)"
+ 
+    (cellFocused)="oncellFocused($event)"
+    
+    (cellEditingStopped)="oncellEditingStopped($event)"
+        
+   
+     
+    >
+    </ag-grid-angular>        
+ 
+</div>
+
+ -->
