@@ -416,54 +416,11 @@ getCourseSuccess(res){
 onContinue(){
   this.spinnerstatus=true;
   
-  this.getEvaluationComponents();
-  // this.awardsheet_params = this.awardsheet_params.set("time",new Date().toString());
-
-	// input.setUniversityId(request.getParameter("universityId"));
-	// 		input.setEntityId(request.getParameter("entityId"));
-	// 		input.setProgramId(request.getParameter("programId"));
-	// 		input.setBranchId(request.getParameter("branchId"));
-	// 		input.setSpecializationId(request.getParameter("specializationId"));
-	// 		input.setSemesterCode(request.getParameter("semesterCode"));
-	// 		input.setCourseCode(request.getParameter("courseCode"));
-	// 		input.setProgramCourseKey(request.getParameter("programCourseKey"));
-	// 		input.setSemesterStartDate(request.getParameter("semesterStartDate"));
-	// 		input.setSemesterEndDate(request.getParameter("semesterEndDate"));
-	// 		input.setRollNumber(request.getSession().getAttribute("userName").toString());
-
-
-
-  // this.awardsheet_params=this.awardsheet_params.set("courseCode",event.data.courseCode);
-  // this.awardsheet_params=this.awardsheet_params.set("programCourseKey",event.data.programCourseKey);
   this.myparam=this.myparam.set("courseCode",this.itemselected.id);
   this.myparam=this.myparam.set("displayType","I");
-  // this.awardsheet_params=this.awardsheet_params.set("sessionstartdt",event.data.startDate);
-  // this.awardsheet_params=this.awardsheet_params.set("sessionStart",event.data.startDate);
-  // this.awardsheet_params=this.awardsheet_params.set("sessionStartDate",event.data.startDate);
-  // this.awardsheet_params=this.awardsheet_params.set("sessionEndDate",event.data.endDate);
-  // this.awardsheet_params=this.awardsheet_params.set("sessionenddt",event.data.endDate);
-  // this.awardsheet_params=this.awardsheet_params.set("sessionEnd",event.data.endDate);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterstartdt",event.data.semesterStartDate);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterStartDate",event.data.semesterStartDate);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterenddt",event.data.semesterEndDate);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterEndDate",event.data.semesterEndDate);
-  // this.awardsheet_params=this.awardsheet_params.set("branchCode",event.data.branchId);
-  // this.awardsheet_params=this.awardsheet_params.set("specCode",event.data.specializationId);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterCode",event.data.semesterCode);
-  // this.awardsheet_params=this.awardsheet_params.set("semesterName",event.data.semesterCode);
-  // this.awardsheet_params=this.awardsheet_params.set("startDate",event.data.semesterStartDate);
-  // this.awardsheet_params=this.awardsheet_params.set("endDate",event.data.semesterEndDate);
-  // this.awardsheet_params=this.awardsheet_params.set("employeeCode",this.employeeCode);
-  // this.awardsheet_params=this.awardsheet_params.set("EmployeeName",event.data.employeeName);
-  // this.awardsheet_params=this.awardsheet_params.set("approvalOrder","1");
-  // this.awardsheet_params=this.awardsheet_params.set("entityName",event.data.entityName);
-  // this.awardsheet_params=this.awardsheet_params.set("programName",event.data.programName);
-  // this.awardsheet_params=this.awardsheet_params.set("branchName",event.data.branchName);
-  // this.awardsheet_params=this.awardsheet_params.set("spclName",event.data.specializationName);
-  // this.awardsheet_params=this.awardsheet_params.set("fatherNameFlag","Y");
-  // this.awardsheet_params=this.awardsheet_params.set("courseName",event.data.courseName);
 
-
+  this.getEvaluationComponents();
+  // this.awardsheet_params = this.awardsheet_params.set("time",new Date().toString());
 
 }
 
