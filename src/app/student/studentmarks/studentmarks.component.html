@@ -46,7 +46,6 @@
 <div class="container border"  *ngIf="coursedata.length>0 ">
 
     <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onContinue()"  >Ok</button>
-    <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm ">Cancel</button>
 
 </div>
 </div>
@@ -61,6 +60,7 @@
     [gridOptions] = "gridOptionsmk"
     (gridReady) ="OngridReady($event)"
     [singleClickEdit]="true"
+    aria-label="selectedCourse"
   
  
    
