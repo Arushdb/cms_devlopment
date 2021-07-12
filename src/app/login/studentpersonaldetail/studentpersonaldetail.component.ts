@@ -14,7 +14,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 
 
-function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
+export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
   const DIGIT_EXPS = /^\d*$/;
   
   if (!formControl.value.match(DIGIT_EXPS)) {

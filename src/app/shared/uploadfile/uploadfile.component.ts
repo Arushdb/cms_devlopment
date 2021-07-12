@@ -78,7 +78,7 @@ uploadFileToActivity() {
   filename:this.filename
  
 }; 
-debugger;
+//debugger;
 this.spinnerstatus=true;
 this.fileuploaded=false;
 this.spinnerstatus=true;
