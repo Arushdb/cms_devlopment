@@ -9,7 +9,7 @@ import { SignonformComponent } from 'src/app/login/signonform/signonform.compone
 
 
 import { StudentregistrationreportComponent } from './login/studentregistrationreport/studentregistrationreport.component';
-import { AdmmainComponent } from './newadmission/admmain/admmain.component';
+
 import { LoginformComponent } from './login/loginform/loginform.component';
 
 //import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';

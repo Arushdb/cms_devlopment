@@ -11,7 +11,7 @@ import { StudentpersonaldetailComponent } from './studentpersonaldetail/studentp
 import { NewregistrationComponent } from './newregistration/newregistration.component';
 import {StudentregistrationreportComponent} from './studentregistrationreport/studentregistrationreport.component'
 
-import { SidebarComponent } from './sidebar/sidebar.component';
+
 
 
 
