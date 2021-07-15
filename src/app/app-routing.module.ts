@@ -37,10 +37,10 @@ const routes:Routes=[
 })
 export class AppRoutingModule {
   constructor(
-    private readonly router: Router,
+    //private readonly router: Router,
   ) {
-    router.events
-      .subscribe(console.log);
+    //router.events
+      //.subscribe(console.log);
 
   }
   }

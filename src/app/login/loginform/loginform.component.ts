@@ -162,7 +162,7 @@ export class LoginformComponent implements OnInit {
         method:'None' }; 
       
           
-      obj.method='/registrationform/getStudentDetails.htm';
+      obj.method='/registrationform/getStudentDetailsangular.htm';
       this.spinnerstatus=true;
       
       this.subs.add=this.userservice.getdata(this.reg_params,obj).subscribe(res=>{
@@ -232,6 +232,7 @@ export class LoginformComponent implements OnInit {
     
       this.spinnerstatus=true;
     obj.method='/registrationform/getRegistrationDeadlinesangular.htm';
+    
    
     let result;
     let currentdate = new Date();

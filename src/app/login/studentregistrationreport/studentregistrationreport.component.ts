@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { debounce } from 'rxjs/operators';
-//import { onlyDigits } from '../studentpersonaldetail/studentpersonaldetail.component';
-import {report,reportList} from './studentregistrationreport.model'
+
+
 import {Location} from '@angular/common';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 
 export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
   const DIGIT_EXPS = /^\d*$/;
-  debugger;
+  //debugger;
   if (!formControl.value.match(DIGIT_EXPS)) {
 
     return {'NaN': true}
@@ -29,7 +29,7 @@ export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
 export class StudentregistrationreportComponent implements OnInit,OnDestroy {
 
   registerationReportForm:FormGroup;
-  myreport: report;
+ 
   option="";
   submitted=false;
   spinnerstatus=false;
@@ -100,13 +100,13 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
       
      }
     //console.log(this.registerationReportForm);
-debugger;
+
       if (this.registerationReportForm.invalid) {
        // console.log(this.f.registrationNumber.errors);
      //console.log(this.f.registrationNumber.errors.minlength.requiredLength);
         return;
     }
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerationReportForm.value, null, 4));
+   // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerationReportForm.value, null, 4));
     let params:HttpParams= new HttpParams();
     params=params.set("aadhaarNumber",this.f.aadhaarNumber.value)
                   .set("registrationNumber",this.f.registrationNumber.value)
@@ -123,7 +123,7 @@ debugger;
      if(!(isUndefined(resobj.info.result))){
       let str =resobj.info.result[0].message[0];
       //this.myfilename=this.f.registrationNumber.value;
-      debugger;
+      //debugger;
        let strary = String(str).split('/');
       
        this.myfilename =strary[strary.length-1];
@@ -144,7 +144,7 @@ debugger;
       
 
     },error=>{
-      debugger;
+      //debugger;
       this.userservice.log(error.originalError.statusText);
     });
     
