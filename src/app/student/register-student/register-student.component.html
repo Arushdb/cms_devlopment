@@ -16,7 +16,7 @@
 <div class="container border"  *ngIf="combodata.length>0 && displaybutton ">
       
                 <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onContinue()"  >Continue</button>
-                <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm ">Cancel</button>
+                <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="ngOnDestroy()">Cancel</button>
 
 </div>
 
@@ -41,7 +41,7 @@
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-primary btn-sm " (click)="submit()">Submit</button>
                     
-                    <button type="button" class="btn btn-primary btn-sm">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="ngOnDestroy()">Cancel</button>
                   </div>
                   <!--
                 <button class="btn btn-primary btn-primary-spacing  btn-sm " (click)="submit()">Submit</button>
