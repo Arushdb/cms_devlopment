@@ -1,0 +1,13 @@
+.success {
+    border: 5px outset green;
+    background-color: green;
+    text-align: center;
+    
+  }
+
+  .error {
+    border: 5px outset red;
+    background-color: lightblue;
+    text-align: center;
+    color:red
+  }

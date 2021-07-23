@@ -1,0 +1,44 @@
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+<div class="card m-3">
+    <h3 class="card-header bold">Upload Last degree  </h3>
+<div class="card-body">
+<form [formGroup]="registerForm"  enctype="multipart/form-data">
+<div class="form-row">
+    <div class="form-group col-md col-lg col-xs col-sm border">
+     
+        <input type="file" formControlName="file"  (focus)="onfocus()" (change)="handleFileInput($event.target.files)"
+        
+        class="form-control" [ngClass]="{ 'is-invalid': formsubmitted && f.file.errors }"  />
+
+  
+      
+        <div *ngIf="formsubmitted &&  f.file.errors" class="invalid-feedback">
+            <div *ngIf="f.file.errors.required">Please select file </div>
+        </div>
+        <div>
+        
+    </div>
+    </div>
+    <!--
+    <div class="col-md col-lg col-xs col-sm">
+            <button class="btn btn-primary mr-1"   type="submit" (click)="uploadFileToActivity()">upload</button>
+            <button class="btn btn-secondary" type="reset" >Cancel</button> 
+            
+    </div>
+    -->
+</div>
+
+<div class="form-row">
+<div class="progress form-group" *ngIf="progress > 0">
+    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress"></div>
+      
+    </div>
+    <div *ngIf="fileuploaded " >File uploaded successfully </div>
+</div>
+   
+
+
+</form>
+</div>
+</div>
+<app-spinner></app-spinner>

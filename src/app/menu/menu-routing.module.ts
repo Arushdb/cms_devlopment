@@ -5,7 +5,10 @@ import { AuthGuard } from '../guards/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MenusComponent } from './menus/menus.component';
 import { AwardBlankSheetComponent } from '../award-sheet/award-blank-sheet/award-blank-sheet.component';
+
+import { NewregistrationComponent } from '../login/newregistration/newregistration.component';
 import { StudentmarksComponent } from '../student/studentmarks/studentmarks.component';
+
 
 
 
@@ -27,7 +30,7 @@ const routes:Routes=[
   {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
-  
+  {path:'login/newregistration',component: NewregistrationComponent},
      
   
    { path: 'registration_continue',

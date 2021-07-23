@@ -4,6 +4,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 body { 
   font-family: Roboto, Arial, sans-serif;

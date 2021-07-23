@@ -19,9 +19,20 @@
 </div>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
-    </div>
+  <div class="row ">
+
+    <nav class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+      
+        <button mat-stroked-button  color ="accent" class="mt-5 " (click) ="onClickfirstSem()">Click here for First Semester Registration</button> 
+        <br>
+        <button mat-stroked-button color ="accent" [routerLink]="['/downloadreport']">Download First Semester Registration Report</button> 
+          
+     
+    </nav>
+
+  
+    
+
  
     <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12">
       <div class="container login-container">
@@ -88,7 +99,14 @@
       </div>
     </div>
   </div>
+  
 </div>
+<div>
+ 
+  
+  
+</div>
+
     
 <div class="footer fixed-bottom bk-grey">
   <div class="container-fluid">

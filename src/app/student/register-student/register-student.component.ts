@@ -1,6 +1,6 @@
 import { HttpParams, HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {Location} from '@angular/common';
@@ -52,11 +52,13 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
     private renderer:Renderer2
 
     ) { 
-      
+     
+   
   }
   ngOnDestroy(): void {
     this.subs.dispose();
     this.elementRef.nativeElement.remove();
+    this.location.back();
    
   }
   ngAfterViewInit(): void {
@@ -70,6 +72,8 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
     console.log(this.check);
     this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
   }
+
+  
 
   OngridReady(parameters:GridReadyEvent){
     //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
@@ -281,8 +285,8 @@ columnDefs = [
     console.log("Object available",obj.available);
     if(obj.available=="N"){
       console.log(" in Object available",obj.available);
-      this.params=this.params.append('switchType','NON');  
-      this.params=this.params.append('module','');  
+      this.params=this.params.set('switchType','NON');  
+      this.params=this.params.set('module','');  
    
     //this.params["module"]="";
     
@@ -292,16 +296,16 @@ columnDefs = [
     }else{
       
     //	Alert.show("entity detail"+obj.entitytype +"f"+obj.entityId);
-    this.params=this.params.append('module',''); 
-    this.params=this.params.append('switchType',obj.switchType); 
-    this.params=this.params.append('entitytype',obj.entitytype); 
-    this.params=this.params.append('entityId',obj.entityId ); 
-    this.params=this.params.append('entityName',obj.entityName ); 
-    this.params=this.params.append('switchoption',obj.switchoption ); 
-    this.params=this.params.append('currentpck',obj.programcoursekey ); 
-    this.params=this.params.append('newpck',obj.newpck ); 
-    this.params=this.params.append('semesterStartDate',obj.semesterStartDate ); 
-    this.params=this.params.append('semesterEndDate',obj.semesterEndDate ); 
+    this.params=this.params.set('module',''); 
+    this.params=this.params.set('switchType',obj.switchType); 
+    this.params=this.params.set('entitytype',obj.entitytype); 
+    this.params=this.params.set('entityId',obj.entityId ); 
+    this.params=this.params.set('entityName',obj.entityName ); 
+    this.params=this.params.set('switchoption',obj.switchoption ); 
+    this.params=this.params.set('currentpck',obj.programcoursekey ); 
+    this.params=this.params.set('newpck',obj.newpck ); 
+    this.params=this.params.set('semesterStartDate',obj.semesterStartDate ); 
+    this.params=this.params.set('semesterEndDate',obj.semesterEndDate ); 
     
       
       
@@ -313,7 +317,8 @@ columnDefs = [
         //vstack.selectedChild=errorpanel;	
         
         this.userservice.log("Switch setup not ready");
-        this.router.navigate(['../dashboard']);
+        //this.router.navigate(['../dashboard']);
+        this.ngOnDestroy();
         return;
       }	
      
@@ -329,7 +334,8 @@ columnDefs = [
         //vstack.selectedChild=errorpanel;	
 
         this.userservice.log("Switch setup not ready");
-        this.router.navigate(['../dashboard']);
+        this.ngOnDestroy();
+        //this.router.navigate(['../dashboard']);
         return;
       }	
       				
@@ -344,7 +350,8 @@ columnDefs = [
     
         //vstack.selectedChild=errorpanel;
         this.userservice.log("Switch setup not ready");
-        this.router.navigate(['../dashboard']);
+        this.ngOnDestroy();
+        //this.router.navigate(['../dashboard']);
         return;	
       
       }	
@@ -400,8 +407,8 @@ getcoursesservice(param){
    let myparam = {xmltojs:'Y',
    method:'None' };  
     myparam.method='/registrationforstudent/getcourses.htm';
-    // this.params=this.params.append('switchType','NON');
-    // this.params=this.params.append('module','');
+    // this.params=this.params.set('switchType','NON');
+    // this.params=this.params.set('module','');
     this.mask=true;
     this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
   
@@ -434,9 +441,10 @@ getcoursesservice(param){
 	for (var obj of  res.registerDetails.Detail){
 		
 		if(obj.available=='N'){
-      
+     
       this.myrowData.splice(0,this.myrowData.length);// clear the myrowdata array
       this.userservice.log(obj.message);
+      this.ngOnDestroy();
 			//errorlabel.text=obj.message;
 			//vstack.selectedChild=errorpanel;	
   //		Alert.show("Error :"+obj.message);
@@ -677,21 +685,21 @@ goBack(): void {
      //.set('application','CMS');
       var CurrentDateTime:Date = new Date();
 
-      myparam1= myparam1.append("application","CMS");
-      myparam1=myparam1.append("date",CurrentDateTime.toString());
-      myparam1=myparam1.append("selecteddata",this.selecteddata);
-      myparam1=myparam1.append("semester", this.semester );
-      myparam1=myparam1.append("programId",this.programId );
-      myparam1=myparam1.append("branchId",this.branchId);
-      myparam1=myparam1.append("specializationId",this.specializationId);
-      myparam1=myparam1.append("pck",this.pck);
-      myparam1=myparam1.append("credits",this.creditselected.toString());
-      myparam1=myparam1.append("semesterStartDate",this.semesterStartDate);
-      myparam1=myparam1.append("semesterEndDate",this.semesterEndDate);
-      myparam1=myparam1.append("attemptno",this.attemptno.toString());
-      myparam1=myparam1.append("entityId",this.entityId);
-      myparam1=myparam1.append("credittheory",this.credittheory.toString());
-      myparam1=myparam1.append("creditpractical",this.creditpractical.toString());
+      myparam1= myparam1.set("application","CMS");
+      myparam1=myparam1.set("date",CurrentDateTime.toString());
+      myparam1=myparam1.set("selecteddata",this.selecteddata);
+      myparam1=myparam1.set("semester", this.semester );
+      myparam1=myparam1.set("programId",this.programId );
+      myparam1=myparam1.set("branchId",this.branchId);
+      myparam1=myparam1.set("specializationId",this.specializationId);
+      myparam1=myparam1.set("pck",this.pck);
+      myparam1=myparam1.set("credits",this.creditselected.toString());
+      myparam1=myparam1.set("semesterStartDate",this.semesterStartDate);
+      myparam1=myparam1.set("semesterEndDate",this.semesterEndDate);
+      myparam1=myparam1.set("attemptno",this.attemptno.toString());
+      myparam1=myparam1.set("entityId",this.entityId);
+      myparam1=myparam1.set("credittheory",this.credittheory.toString());
+      myparam1=myparam1.set("creditpractical",this.creditpractical.toString());
 
       //myparam1["application"]="CMS";
       //Alert.show("Date :"+CurrentDateTime);
@@ -711,20 +719,20 @@ goBack(): void {
           
           if (this.myparam["switchType"]!=null){
             
-            myparam1=myparam1.append("currentpck",this.myparam["currentpck"]);
-            myparam1=myparam1.append("switchType",this.myparam["switchType"]);
-            myparam1=myparam1.append("switchoption",this.myparam["switchoption"]);
+            myparam1=myparam1.set("currentpck",this.myparam["currentpck"]);
+            myparam1=myparam1.set("switchType",this.myparam["switchType"]);
+            myparam1=myparam1.set("switchoption",this.myparam["switchoption"]);
 
             // myparam1["switchType"]=this.myparam["switchType"];
             // myparam1["switchoption"] = this.myparam["switchoption"] ;
             // myparam1["currentpck"] = this.myparam["currentpck"] ;
         }else{
-          myparam1=myparam1.append("switchType", this.params.get("switchType")) ;
-          myparam1=myparam1.append("switchoption", this.params.get("switchoption")) ;
-          myparam1=myparam1.append("currentpck", this.params.get("currentpck")) 
+          myparam1=myparam1.set("switchType", this.params.get("switchType")) ;
+          myparam1=myparam1.set("switchoption", this.params.get("switchoption")) ;
+          myparam1=myparam1.set("currentpck", this.params.get("currentpck")) 
         }
           
-   
+      
         this.urlPrefix = this.url+"registerstudent.htm";
       //Mask.show(commonFunction.getMessages('pleaseWait'));
 
@@ -761,8 +769,8 @@ goBack(): void {
          if(obj.available=="err"){
      //errorlabel.text=obj.message;
      this.userservice.log(obj.message);
-     this.router.navigate(['../dashboard']); 
-
+     //this.router.navigate(['../dashboard']); 
+     this.ngOnDestroy();
          return;
        
  //		Alert.show("Error :"+obj.message);
@@ -773,14 +781,16 @@ goBack(): void {
             this.userservice.log("You are successfully registered");
      
      //vstack.selectedChild=errorpanel;
-     this.router.navigate(['../dashboard']);  
+     //this.router.navigate(['../dashboard']); 
+     this.ngOnDestroy(); 
      return;	
  //		Alert.show("Error :"+obj.message);
      
          }else{
           this.userservice.log("Error in registration");
              //errorlabel.text ="Error in registration";
-             this.router.navigate(['../dashboard']);  
+             this.ngOnDestroy(); 
+             //this.router.navigate(['../dashboard']);  
              return;
              
          }
@@ -855,23 +865,23 @@ onContinue(){
    if(this.combolabel==="Select Speclization"){
     console.log("on  select specilization");
     if(this.itemselected.id=="00"){
-      this.params=this.params.append("switchType","NON")  ;
+      this.params=this.params.set("switchType","NON")  ;
     }else{
   
     }
-    this.params=this.params.append("specializationId", this.itemselected.id);   
+    this.params=this.params.set("specializationId", this.itemselected.id);   
     this.getcoursesservice(this.params);
    }else if(this.combolabel==="Select Branch"){
     //console.log("on  select Branch");
-    this.params=this.params.append("branchId", this.itemselected.id);
-    this.params =this.params.append("module","");
+    this.params=this.params.set("branchId", this.itemselected.id);
+    this.params =this.params.set("module","");
     this.getcoursesservice(this.params);
      
    }else if(this.combolabel==="Select Module"){
-    this.params=this.params.append("switchType","NON" );
-    this.params=this.params.append("module",this.itemselected.id );
-    this.myparam=this.myparam.append("module",this.itemselected.id );
-    this.params=this.params.append("switchType","NON" );
+    this.params=this.params.set("switchType","NON" );
+    this.params=this.params.set("module",this.itemselected.id );
+    this.myparam=this.myparam.set("module",this.itemselected.id );
+    this.params=this.params.set("switchType","NON" );
    
     if (this.myparam["switchType"]!=null){
       //this.getcourses(myparam);

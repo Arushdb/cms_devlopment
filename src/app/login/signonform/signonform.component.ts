@@ -18,6 +18,7 @@ import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-c
 import { MyItem } from 'src/app/interfaces/my-item';
 import { formatCurrency } from '@angular/common';
 import { NgForm } from '@angular/forms';
+import { LoginformComponent } from '../loginform/loginform.component';
 
 
 interface User {
@@ -358,7 +359,22 @@ export class SignonformComponent implements OnDestroy  {
 			this.router.navigate(['\dashboard'],navigationExtras);
 
 		}
+		onClickfirstSem(){
+			const dialogConfig = new MatDialogConfig();
+      		dialogConfig.width="30%";
+      		dialogConfig.height="60%";
 
+			const dialogRef=  this.dialog.open(LoginformComponent,dialogConfig)
+    
+    		this.subs.add=dialogRef.afterClosed().subscribe(result => {
+  		
+ 
+    		
+     		});      
+  
+
+			
+		}
 		
 
 }

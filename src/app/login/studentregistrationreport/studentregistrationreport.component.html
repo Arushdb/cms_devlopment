@@ -1,0 +1,111 @@
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+<div class="card m-3 col-5" #student>
+    <h3 class="card-header bold">Download  registration report </h3>
+    <div class="card-body">
+        <form [formGroup]="registerationReportForm" >
+            <div class="form-row">
+                <div class="form-group col-4 ">
+                    <label>Application Number</label>
+                    <input type="text"  formControlName="registrationNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.registrationNumber.errors }" />
+                    <div *ngIf="submitted && f.registrationNumber.errors" class="invalid-feedback">
+                        <div *ngIf="f.registrationNumber.errors.required">Application  is required</div>
+                        <div *ngIf="f.registrationNumber.errors.minlength.requiredLength>f.registrationNumber.errors.minlength.actualLength">
+                            Minimum length {{f.registrationNumber.errors.minlength.requiredLength}} is required</div>
+                       
+                    </div>
+                  
+                </div>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"    (change)="onChange()"
+                  formControlName="pdf" [(ngModel)]="selectedRadio" [value]="'aadhar'" 
+                  [ngClass]="{ 'is-invalid': submitted && f.pdf.errors }" >Download Report by Aadhar Number   
+                  <div *ngIf="submitted && f.pdf.errors" class="invalid-feedback">
+                    <div *ngIf="f.pdf.errors.required">Please select one value.</div>
+                </div>
+            </label>
+                </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"  (change)="onChange()" formControlName="pdf" [(ngModel)]="selectedRadio"
+                   [value]="'dob'"   
+                   [ngClass]="{ 'is-invalid': submitted && f.pdf.errors }" >Download Report by DOB and Phone
+               
+                   <div *ngIf="submitted && f.pdf.errors" class="invalid-feedback">
+                    <div *ngIf="f.pdf.errors.required">Please select one value.</div>
+                </div>
+            </label>
+               
+              </div>
+                      
+
+                <div class="form-row" *ngIf ="selectedRadio=='aadhar'">
+                    <div  class="form-group col-6 ">
+                                      
+                        <label>Aadhar Number</label>
+                        <input type="text"  formControlName="aadhaarNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.aadhaarNumber.errors }" />
+                        <div *ngIf="submitted && f.aadhaarNumber.errors" class="invalid-feedback">
+                            <div *ngIf="f.aadhaarNumber.errors.required">Aadhar Number  is required</div>
+                            
+                            <div *ngIf="f.aadhaarNumber.errors">
+                                Minimum length 12 is required</div>
+                         
+                            </div>
+                       
+                    </div>
+                </div>
+            
+                    
+            <div class="form-row" *ngIf ="selectedRadio=='dob'">
+                
+                     <div  class="form-group col ">
+                    <label>Phone Number</label>
+                    <input type="number"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
+                    <div *ngIf="submitted && f.contactNumber.errors" class="invalid-feedback">
+                        <div *ngIf="f.contactNumber.errors.required">Phone Number is required</div>
+                      
+                        <div *ngIf="f.contactNumber.errors.NaN">Please enter numbers only</div>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group col ">
+                    <label>Date of Birth</label>
+                    <input type="date"   formControlName="dateOfBirth" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }" />
+                    <div *ngIf="submitted && f.dateOfBirth.errors" class="invalid-feedback">
+                        <div *ngIf="f.dateOfBirth.errors.required">Date of Birth is required</div>
+                        <div *ngIf="f.dateOfBirth.errors.pattern">Date of Birth must be a valid date in the format YYYY-MM-DD</div>
+                    </div>
+                </div>
+           
+        </div>
+            
+             
+
+         
+           
+       
+                <div class="form-row" >
+                <div class="text-center form-group col"  >
+                    <button 
+                     type="submit" class="btn btn-primary mr-1"  (click)="onSubmit()"
+                      >Submit</button>
+                    <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                     </div>
+                    </div>
+          
+           
+        </form>
+
+
+    </div>
+
+    <div *ngIf = "myurl!==''">
+    <a  [href]="myurl"  [download]="myfilename" target="_blank" rel="noopener noreferrer" class="btn btn-link blink_me">
+       Click here to  download file.
+      </a>
+    </div>
+    
+</div>
+<app-message></app-message>

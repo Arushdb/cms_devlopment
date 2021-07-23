@@ -24,6 +24,7 @@ import { MessageComponent } from 'src/app/shared/message/message.component';
 import { GriddialogComponent } from './griddialog/griddialog.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { UploadfileComponent } from './uploadfile/uploadfile.component';
 
 
 
@@ -36,7 +37,7 @@ import { AgGridModule } from 'ag-grid-angular';
     CustomComboboxComponent,
     MessageComponent,
     GriddialogComponent, 
-    NumeriCellRendererComponent
+    NumeriCellRendererComponent, UploadfileComponent
    
     
   ],
@@ -58,6 +59,7 @@ import { AgGridModule } from 'ag-grid-angular';
     MatInputModule,
     MatFormFieldModule,
     AgGridModule.withComponents([]),
+
    
 
    FormsModule,
@@ -73,6 +75,7 @@ import { AgGridModule } from 'ag-grid-angular';
     MessageComponent,
     GriddialogComponent, 
     NumeriCellRendererComponent,
+    UploadfileComponent,
 
     
     //shared Module

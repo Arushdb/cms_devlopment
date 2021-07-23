@@ -1,7 +1,11 @@
-import { HttpClient,  HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient,  HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
+
+import { isUndefined } from 'typescript-collections/dist/lib/util';
+
 import {environment} from '../../environments/environment'; //'src/environments/environment'
+
 	
 
 @Injectable({
@@ -97,6 +101,53 @@ export class UserService {
   
       
       }
+
+      postFile(fileToUpload: File,myparam) {
+        let headers: HttpHeaders= new HttpHeaders();
+        const endpoint = this.url+'/uploadfile/uploadfile.htm';
+
+        const formData: FormData = new FormData();
+
+    //
+   // formData.append('name', "myfile");
+    formData.append('name', myparam.filename);
+   formData.append('filekey', fileToUpload);
+    //formData.append('filekey', fileToUpload, fileToUpload.name);
+
+    const customHeaders = new HttpHeaders({
+      'Authorization': 'Bearer' + localStorage.getItem('token'),
+      'Accepted-Encoding': 'application/json'
+    });
+  
+    const customOptions = {
+      headers: customHeaders,
+      reportProgress: true,
+    };
+
+    if(myparam.xmltojs=="Y"){
+      headers=headers.set('format', 'format');// format the response data from xml to json
+    }else{
+      headers=headers.set('format', 'None');// do not format the response data from xml to json
+    } 
+    if( !isUndefined(myparam.filepath))
+    headers=headers.set('filepath', myparam.filepath);
+    if( !isUndefined(myparam.filename))
+    headers=headers.set('filename', myparam.filename);
+  
+
+       
+      
+       //const endpoint = this.url;
+        
+       
+       
+        return this.httpclient
+          .post(endpoint, formData, {headers:headers,reportProgress: true, observe: 'events'})
+        //  return this.httpclient
+        //    .post(endpoint, formData)
+          
+    }
+
 
 
    /** Log a UserService message with the MessageService */
