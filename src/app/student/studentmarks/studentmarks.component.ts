@@ -181,6 +181,7 @@ semDetail:any;
  selectedCourse:string;
 
 
+
   
  
  regdataAC:any ;
@@ -416,7 +417,9 @@ getCourseSuccess(res){
 
 onContinue(){
   this.spinnerstatus=true;
+
   this.selectedCourse=this.itemselected.id;
+
   this.myparam=this.myparam.set("courseCode",this.itemselected.id);
   this.myparam=this.myparam.set("displayType","I");
 
@@ -769,6 +772,7 @@ setNewColumnsmk() {
   let columndef: ColDef;
 
     groupdef={headerName:"Course Code: "+this.selectedCourse, children: [
+
      {headerName: "RollNo",  field :'rollNumber' , width: 90,editable:false,pinned: 'left',filter:true,sortable:true},
      { headerName: "Name",  field :'studentName' , width: 150,editable:false,sortable:true,
      pinned: 'left',tooltipField:'studentName',filter:true}

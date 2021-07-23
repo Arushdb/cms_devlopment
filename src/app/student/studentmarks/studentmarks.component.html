@@ -46,7 +46,6 @@
 <div class="container border"  *ngIf="coursedata.length>0 ">
 
     <button   type="button" class="btn btn-primary btn-primary-spacing  btn-sm " (click)="onContinue()"  >Ok</button>
-
 </div>
 </div>
 <div style='height: 200px; width: 100% ;display: flex; flex-direction: column;'  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
@@ -61,6 +60,7 @@
     (gridReady) ="OngridReady($event)"
     [singleClickEdit]="true"
     aria-label="selectedCourse"
+
   
  
    
