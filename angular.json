@@ -25,12 +25,9 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-            
               "src/styles.css"
             ],
-            "scripts": [
-            
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -117,12 +114,6 @@
                 }
               ]
             }
-
-
-
-
-
-
           }
         },
         "serve": {
@@ -188,5 +179,8 @@
       }
     }
   },
-  "defaultProject": "myapps"
+  "defaultProject": "myapps",
+  "cli": {
+    "analytics": false
+  }
 }

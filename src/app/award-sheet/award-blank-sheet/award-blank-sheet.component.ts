@@ -704,6 +704,37 @@ onRowSelected(event){
 
       }
 
+      calculateClasstotal(mode?:string){
+      
+        this.spinnerstatus=true;
+        let obj = {xmltojs:'Y',
+        method:'None' };   
+        obj.method='/awardsheet/calculateClasstotal.htm';
+      
+        this.subs.add=this.userservice.getdata(this.awardsheet_params,obj).subscribe(res=>{
+        //this.userservice.log(" in switch detail selected");
+        res = JSON.parse(res);
+        if(mode=="getmarks")
+        this.getStudentMarks();
+
+        if(mode=="submitsheet")
+        this.submitSheet();
+      
+        
+       
+        
+      
+    },error=>{
+
+      this.userservice.log("There is some issue at server ,Please try again");
+      this.spinnerstatus=false;
+    }
+    )
+      }
+      
+
+
+
       httpStudentMarksList(){
         let obj = {xmltojs:'Y',
         method:'None' };   
@@ -1442,6 +1473,7 @@ onRowSelected(event){
      if (refreshgrid){
       this.getStudentMarks();
      
+     
      }
     
     
@@ -1725,7 +1757,8 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       this.subs.add=dialogRef.afterClosed().subscribe((result:boolean) => {
    
     if (result===true){
-      this.submitSheet()
+      this.calculateClasstotal('submitsheet');
+      
     }else{
 
       return;

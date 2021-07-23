@@ -1,8 +1,11 @@
 import { HttpClient,  HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from './message.service';
-import {environment} from 'src/environments/environment'
+
 import { isUndefined } from 'typescript-collections/dist/lib/util';
+
+import {environment} from '../../environments/environment'; //'src/environments/environment'
+
 	
 
 @Injectable({

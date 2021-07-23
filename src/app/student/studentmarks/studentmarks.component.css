@@ -1,0 +1,16 @@
+.btn-primary-spacing 
+{
+margin-right: 10px;
+margin-bottom: 5px !important;
+}
+
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  .example-margin {
+    margin: 0 10px;
+  }

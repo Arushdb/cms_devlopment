@@ -5,7 +5,10 @@ import { AuthGuard } from '../guards/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MenusComponent } from './menus/menus.component';
 import { AwardBlankSheetComponent } from '../award-sheet/award-blank-sheet/award-blank-sheet.component';
+
 import { NewregistrationComponent } from '../login/newregistration/newregistration.component';
+import { StudentmarksComponent } from '../student/studentmarks/studentmarks.component';
+
 
 
 
@@ -35,15 +38,18 @@ const routes:Routes=[
  // {path:'registration_continue',component: RegisterStudentComponent},   
 
  
-
+ { path: 'distance_center',
+  loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
-  ],         
+ 
+ {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
+
+],         
  
 
   },
 
-  {path:'**',redirectTo:'login',pathMatch:'full'}
- 
+  {path:'**',redirectTo:'login',pathMatch:'full'},
 
 ];
 
