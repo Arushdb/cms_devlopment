@@ -15,13 +15,18 @@ import {MyItem} from 'src/app/interfaces/my-item';
 export class CustomComboboxComponent implements AfterViewInit,OnInit{
  @Input() Options :MyItem[] =[];
  @Input() labeltext :string;
+ @Input() comboid :string;
  @Input() combowidth :string="100%";
  @ViewChild('mylabel',{ read: ElementRef }) mylabel:ElementRef<HTMLLabelElement>; 
  @ViewChild('formfield',{ read: ElementRef }) formfield:ElementRef<MatFormField>; 
 
+
+
+
  @Output() OptSelected= new EventEmitter<MyItem>();
   myControl = new FormControl();
   filteredOptions: Observable<MyItem[]>;
+
 
   ngOnInit() {
      this.filteredOptions = this.myControl.valueChanges
@@ -55,19 +60,23 @@ export class CustomComboboxComponent implements AfterViewInit,OnInit{
 
 
     displayFn(item:MyItem):string{
-      
+    
+                  
        return  item && item.label ?item.label:"";
     }
 
     change(event){
       //console.log("change event",event);
-      let obj :MyItem={id:"-1",label:"notselected"} ;
+      //debugger;
+      //let obj :MyItem={id:"-1",label:"notselected"} ;
+      //this.OptSelected.emit(event.option.value);
     
 
-      this.OptSelected.emit(obj);
+     // this.OptSelected.emit(obj);
     }
 
-    ngModelChange() {
-      console.log('ngModelChange called');
+    OnngModelChange(event) {
+    
+      console.log('ngModelChange called',event);
     }
 }

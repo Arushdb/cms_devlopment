@@ -9,6 +9,10 @@ import { AwardBlankSheetComponent } from '../award-sheet/award-blank-sheet/award
 import { NewregistrationComponent } from '../login/newregistration/newregistration.component';
 import { StudentmarksComponent } from '../student/studentmarks/studentmarks.component';
 
+import { StartactivityComponent } from '../resultprocessing/startactivity/startactivity.component';
+
+
+
 
 
 
@@ -31,7 +35,8 @@ const routes:Routes=[
   {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
   {path:'login/newregistration',component: NewregistrationComponent},
-     
+  {path:'resultProcess',component: StartactivityComponent},
+         
   
    { path: 'registration_continue',
   loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 

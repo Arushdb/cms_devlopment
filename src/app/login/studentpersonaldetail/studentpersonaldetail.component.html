@@ -215,8 +215,10 @@
             </div>
             
             <button   class="btn btn-secondary text-center mr-1"    (click)="isEnrolmentValid()" *ngIf = "option=='DEI' && !enrvaild">Confirm</button>
+           
+            <app-uploadfile  #uploadfile [filepath]="'degree/'" [formsubmitted]="submitted" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
            -->
-            <app-uploadfile [filepath]="'degree/'" [formsubmitted]="submitted" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
+            <app-uploadfile  #uploadfile [filepath]="filepath" [formsubmitted]="submitted" [filename]="filename" *ngIf="option=='Others'"  (filestatus)="onfileupload($event)"  ></app-uploadfile>
            
         <!--
             <div class="form-row" *ngIf="enrvaild || option=='Others'">

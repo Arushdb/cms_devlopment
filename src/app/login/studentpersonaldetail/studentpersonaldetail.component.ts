@@ -6,10 +6,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
-import { UploadfileComponent } from 'src/app/shared/uploadfile/uploadfile.component';
 
-import { MustMatch } from 'src/app/shared/_helpers/must-match.validator';
-import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { MatDialogRef } from '@angular/material/dialog';
 
 
@@ -33,6 +30,8 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
     @Input() studentdata :any;
     @Output() changedata= new EventEmitter<FormGroup>();
+
+   // @ViewChild('uploadfile') public uploadfile:UploadfileComponent;
   
     
     subs = new SubscriptionContainer();
@@ -71,6 +70,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
   enrvaild: boolean;
   filests: any;
   filename: string;
+  filepath: string;
 
  
 
@@ -140,11 +140,16 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
             admissionMode:[''],
             attempt:[''],
             rollNumberGroupCode:[''],
-            longField:['']
+            longField:[''],
+          
+            
+            
            
 
             
         }
+
+       
       
         );
         this.option="-1";
@@ -155,7 +160,8 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
         this.appnumber=this.studentdata.appnumber;
 
     
-        this.filename=this.appnumber;
+        this.filename=this.appnumber+"_Lastdegree";
+       
         this.registerForm.get('firstName').setValue(String(this.studentdata.studentdata.student[0].first_name[0]).trim());
         this.registerForm.get('fatherFirstName').setValue(String(this.studentdata.studentdata.student[0].father_name[0]).trim());
         this.registerForm.get('motherFirstName').setValue(String(this.studentdata.studentdata.student[0].motherFirstName[0]).trim());
@@ -214,9 +220,13 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
 
       }
-      
-  
-
+     // console.log("Arush",String(this.f.sessionEndDate.value));
+    
+ let path ="";
+ let  sessionend = parseInt(String(this.f.sessionStartDate.value).slice(2,4))+1;
+    path = "Degree/"+String(this.f.sessionStartDate.value).slice(0,5)+String(sessionend)+"/"+this.f.entityId.value+"/"+this.f.programId.value;
+   // console.log("Arush",path);
+    this.filepath=path;
        
     }
 
