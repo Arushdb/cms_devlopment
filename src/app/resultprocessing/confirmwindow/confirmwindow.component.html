@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div *ngIf="can1Visible" mat-dialog-content>
+        Program: <b>{{programNm}}</b><br/>
+        Branch: <b>{{branchNm}}</b><br/>
+        Specialization: <b>{{spclNm}}</b><br/>
+        Semester Dates: <b>{{ssd}} &nbsp;&nbsp; {{sed}}</b><br/>
+        Stage:<b>{{actvitySeq}} &nbsp; {{activityName}}</b><br/>
+        Status: <b>{{activityStatus}}</b><br/>
+</div>
+<div *ngIf="can1Visible" mat-dialog-actions>  
+      <button  color="data.color" class ="mat-raised-button  mat-primary" (click)="confirmAlert()" >Confirm
+      </button>
+      &nbsp; &nbsp; &nbsp;
+      <button  color="data.color"  class ="mat-raised-button  mat-primary" (click)= "close()">Cancel</button>  
+      <app-spinner *ngIf="mask" [spinnerstatus]="mask">{{mask}}</app-spinner>
+</div>
+
+<div *ngIf="certifylblVisible"  mat-dialog-content class="text-primary">
+      This is to certify that Result Processing has been done successfully for {{semesterName}} <br/>
+      Entity	: {{entityName}} <br/>
+      Program	: {{programNm}} <br/>
+      Branch	: {{branchNm}} <br/>
+      and following documents has been printed successfully.<br/>
+      1. Progress Cards <br/>
+      2. Consolidated Chart<br/>
+      3. Result Statistics<br/>
+      4. Result Unsatisfactory Performance<br/>
+      All related cases (like scrutiny, result revised, etc) has also been resolved.<br/><br/>
+      Confirmed By : {{ user }}<br/>
+</div>
+<div *ngIf="certifylblVisible" mat-dialog-actions> 
+  <button  color="data.color" class ="mat-raised-button  mat-primary" (click)="generateConfirmPdf()" >Yes
+  </button>
+  &nbsp; &nbsp; &nbsp;
+  <button  color="data.color"  class ="mat-raised-button  mat-primary" (click)= "cancelConfirmWindow()">No</button>  
+  <app-spinner *ngIf="mask" [spinnerstatus]="mask">{{mask}}</app-spinner>
+</div>

@@ -6,12 +6,13 @@
            placeholder="Pick one"
            aria-label="Number"
            matInput
-          (change)="change($event)"
+       
+
            [formControl]="myControl"
            
            [matAutocomplete]="auto">
     
-           <mat-autocomplete  autoActiveFirstOption [displayWith]="displayFn"  #auto="matAutocomplete" 
+           <mat-autocomplete  autoActiveFirstOption="true" [displayWith]="displayFn"  #auto="matAutocomplete" 
            (optionSelected)='OptSelected.emit($event.option.value);'
            
            >
