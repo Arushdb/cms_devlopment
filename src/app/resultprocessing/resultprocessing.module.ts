@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { ResultprocessingRoutingModule } from './resultprocessing-routing.module';
+
 import { StartactivityComponent } from './startactivity/startactivity.component';
 import { ConfirmwindowComponent } from './confirmwindow/confirmwindow.component';
 import { MatDialogModule } from '@angular/material/dialog';
