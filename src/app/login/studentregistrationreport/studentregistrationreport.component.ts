@@ -58,7 +58,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
 
     this.registerationReportForm = this.formBuilder.group({
-      registrationNumber:["",Validators.compose([Validators.required,Validators.minLength(10)])],
+      registrationNumber:["",Validators.compose([Validators.required,Validators.minLength(6)])],
       
       aadhaarNumber:[""],
     

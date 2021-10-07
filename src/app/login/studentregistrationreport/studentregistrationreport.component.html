@@ -5,7 +5,7 @@
         <form [formGroup]="registerationReportForm" >
             <div class="form-row">
                 <div class="form-group col-4 ">
-                    <label>Application Number</label>
+                    <label>Application/Roll Number</label>
                     <input type="text"  formControlName="registrationNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.registrationNumber.errors }" />
                     <div *ngIf="submitted && f.registrationNumber.errors" class="invalid-feedback">
                         <div *ngIf="f.registrationNumber.errors.required">Application  is required</div>
