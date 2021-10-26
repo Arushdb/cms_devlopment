@@ -260,6 +260,19 @@ return;
         }
        
         this.registerForm.get('status').setValue('valid');
+        let strhindi:string;
+
+        //studentNameinHindi
+        //fatherNameinHindi;
+        //motherNameinHindi
+        //debugger;
+        strhindi =encodeURI(this.f.studentNameinHindi.value);
+        this.registerForm.get('studentNameinHindi').setValue(encodeURI(this.f.studentNameinHindi.value));
+        this.registerForm.get('fatherNameinHindi').setValue(encodeURI(this.f.fatherNameinHindi.value));
+        this.registerForm.get('motherNameinHindi').setValue(encodeURI(this.f.motherNameinHindi.value));
+        
+      //   strhindi = this.f.studentNameinHindi.value;
+      //  strhindi= encodeURI(strhindi);
         
         this.changedata.emit(this.registerForm);
       
