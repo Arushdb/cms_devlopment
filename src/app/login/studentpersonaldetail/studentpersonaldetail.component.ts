@@ -266,7 +266,7 @@ return;
         //studentNameinHindi
         //fatherNameinHindi;
         //motherNameinHindi
-      
+
         strhindi =encodeURI(this.f.studentNameinHindi.value);
         this.registerForm.get('studentNameinHindi').setValue(encodeURI(this.f.studentNameinHindi.value));
         this.registerForm.get('fatherNameinHindi').setValue(encodeURI(this.f.fatherNameinHindi.value));
