@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 //import { isNull } from '@angular/compiler/src/output/output_ast';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
@@ -26,7 +26,7 @@ export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
   templateUrl: './studentpersonaldetail.component.html',
   styleUrls: ['./studentpersonaldetail.component.css']
 })
-export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
+export class StudentpersonaldetailComponent implements OnInit,OnDestroy  {
 
     @Input() studentdata :any;
     @Output() changedata= new EventEmitter<FormGroup>();
@@ -83,6 +83,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy {
 
         
      }
+ 
   ngOnDestroy(): void {
     this.subs.dispose();
     this.elementRef.nativeElement.remove();
@@ -265,7 +266,7 @@ return;
         //studentNameinHindi
         //fatherNameinHindi;
         //motherNameinHindi
-        //debugger;
+      
         strhindi =encodeURI(this.f.studentNameinHindi.value);
         this.registerForm.get('studentNameinHindi').setValue(encodeURI(this.f.studentNameinHindi.value));
         this.registerForm.get('fatherNameinHindi').setValue(encodeURI(this.f.fatherNameinHindi.value));
@@ -293,7 +294,7 @@ return;
      
       this.submitted=true;
      
-      
+    
       let myparam = {xmltojs:'Y',
       method:'None' }; 
        this.enrvaild=false;
@@ -301,12 +302,17 @@ return;
      let  reg_params =new HttpParams();
     this.spinnerstatus=true;
        myparam.method='/registrationform/getEnrolmentDetails.htm';
-       reg_params=reg_params.set("enrollmentno",this.f.enrollmentNumber.value);
+       reg_params=reg_params
+       .set("enrollmentno",this.f.enrollmentNumber.value)
+       .set("firstName",this.f.firstName.value)
+       .set("fatherFirstName",this.f.fatherFirstName.value)
+      ;
+
        this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
         this.spinnerstatus=false;
        res = JSON.parse(res);
-
-       this.resulthandlergetEnrolmentDetails(res);
+       this.onSubmit();
+       //this.resulthandlergetEnrolmentDetails(res);
        console.log(res);
         
      },error=>{
@@ -324,7 +330,8 @@ return;
           this.onSubmit();
       }
     }
-      resulthandlergetEnrolmentDetails(res){
+     
+    resulthandlergetEnrolmentDetails(res){
       let dateOfBirth = String(res.studentdata.student[0].date_of_birth[0]).trim();
       let fatherFirstName = String(res.studentdata.student[0].father_name[0]).trim();
       let gender = String(res.studentdata.student[0].gender[0]).trim();
