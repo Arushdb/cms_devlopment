@@ -3,7 +3,7 @@
     <studentpersonaldetail *ngIf="displaystudent ;else studentblock"
     -->
     <studentpersonaldetail [hidden]="!displaystudent"
-    [studentdata] = "_studentdata"   (changedata)="Onchangedata($event)"
+    [studentdata] = "_studentdata"   (changedata)="Onchangedata($event)" [flag]="displaystudent"
         
     ></studentpersonaldetail>
 <!--

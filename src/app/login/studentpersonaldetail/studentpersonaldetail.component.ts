@@ -26,9 +26,11 @@ export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
   templateUrl: './studentpersonaldetail.component.html',
   styleUrls: ['./studentpersonaldetail.component.css']
 })
-export class StudentpersonaldetailComponent implements OnInit,OnDestroy  {
+export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChanges {
 
     @Input() studentdata :any;
+    @Input() flag :boolean;
+   
     @Output() changedata= new EventEmitter<FormGroup>();
 
    // @ViewChild('uploadfile') public uploadfile:UploadfileComponent;
@@ -83,6 +85,16 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy  {
 
         
      }
+  ngOnChanges(changes: SimpleChanges): void {
+  
+    if(changes.flag.currentValue){
+      this.registerForm.get('studentNameinHindi').setValue(decodeURI(this.f.studentNameinHindi.value));
+    this.registerForm.get('fatherNameinHindi').setValue(decodeURI(this.f.fatherNameinHindi.value));
+    this.registerForm.get('motherNameinHindi').setValue(decodeURI(this.f.motherNameinHindi.value));
+
+
+    }
+      }
  
   ngOnDestroy(): void {
     this.subs.dispose();
@@ -198,7 +210,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy  {
         this.registerForm.get('rollNumberGroupCode').setValue(String(this.studentdata.studentdata.student[0].rollNumberGroupCode[0]).trim());
         this.registerForm.get('longField').setValue(String(this.studentdata.studentdata.student[0].longField[0]).trim());
         
-         
+     
         
 
       if (this.f.admissionMode.value=="NEW"){
@@ -291,42 +303,47 @@ return;
           
            
       this.registerForm.controls["enrollmentNumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+      //this.registerForm.get("enrollmentNumber").setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+      this.f.enrollmentNumber.updateValueAndValidity();
      
       this.submitted=true;
-     
+      this.onSubmit();
+      return;
     
-      let myparam = {xmltojs:'Y',
-      method:'None' }; 
-       this.enrvaild=false;
+    //   let myparam = {xmltojs:'Y',
+    //   method:'None' }; 
+    //    this.enrvaild=false;
      
-     let  reg_params =new HttpParams();
-    this.spinnerstatus=true;
-       myparam.method='/registrationform/getEnrolmentDetails.htm';
-       reg_params=reg_params
-       .set("enrollmentno",this.f.enrollmentNumber.value)
-       .set("firstName",this.f.firstName.value)
-       .set("fatherFirstName",this.f.fatherFirstName.value)
-      ;
+    //  let  reg_params =new HttpParams();
+    // this.spinnerstatus=true;
+    //    myparam.method='/registrationform/getEnrolmentDetails.htm';
+    //    reg_params=reg_params
+    //    .set("enrollmentno",this.f.enrollmentNumber.value)
+    //    .set("firstName",this.f.firstName.value)
+    //    .set("fatherFirstName",this.f.fatherFirstName.value)
+    //   ;
 
-       this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
-        this.spinnerstatus=false;
-       res = JSON.parse(res);
-       this.onSubmit();
-       //this.resulthandlergetEnrolmentDetails(res);
-       console.log(res);
+    //    this.subs.add= this.userservice.getdata(reg_params,myparam).subscribe(res=>{
+    //     this.spinnerstatus=false;
+    //    res = JSON.parse(res);
+    //    this.onSubmit();
+    //    //this.resulthandlergetEnrolmentDetails(res);
+    //    console.log(res);
         
-     },error=>{
-      this.enrvaild=false;
-      this.userservice.log("Please enter correct Enrolment number.");
-      this.spinnerstatus=false;
+    //  },error=>{
+    //   this.enrvaild=false;
+    //   this.userservice.log("Please enter correct Enrolment number.");
+    //   this.spinnerstatus=false;
      
-       });
+    //    });
 
        
   
   
       }
       else{
+        this.f.enrollmentNumber.clearValidators();
+        this.f.enrollmentNumber.updateValueAndValidity();
           this.onSubmit();
       }
     }
