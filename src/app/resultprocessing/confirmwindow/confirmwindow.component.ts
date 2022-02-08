@@ -166,7 +166,7 @@ private cardGeneratedSuccess(res):void{
 			//Alert.show("Progress Card not generated yet","Error",0,null,null,errorIcon);
 			const mdialogRef=  this.mdialog.open(alertComponent,
 				{data:{title:"Error",content:"Progress Card not generated yet", ok:true,cancel:false,color:"warn"}});
- 
+				mdialogRef.disableClose = true;
        		this.closeConfirmWindow();
        }
 }
@@ -310,11 +310,13 @@ public confirmFunction():void
 		   //Alert.show(error+" roll numbers will be duplicate \n Please set correct starting sequence");
 		   const mdialogRef=  this.mdialog.open(alertComponent,
 			{data:{title:"Error",content:error+" roll numbers will be duplicate <br/> Please set correct starting sequence", ok:true,cancel:false,color:"warn"}});
+			mdialogRef.disableClose = true;
 	   }
 	   else if(total===""){
 			//Alert.show("Database Inconsistency:System Failure","Error",0,null,null,errorIcon); 	
-			const mdialogRef=  this.mdialog.open(alertComponent,
+			const mdialogRef1 =  this.mdialog.open(alertComponent,
 				{data:{title:"Error",content:"Database Inconsistency:System Failure", ok:true,cancel:false,color:"warn"}});	
+			mdialogRef1.disableClose = true;
 	   }	 
 	   else
 	    {
@@ -327,6 +329,7 @@ public confirmFunction():void
 		  // Alert.show("Total Records ="+" "+total+"\n"+"Records Processed Correctly ="+" "+correct+"\n"+"Records Gives Error ="+" "+error+"\n"+sts,"Result",4,null,onStart,successIcon);
 		   const mdialogRef=  this.mdialog.open(alertComponent,
 			{data:{title:"Result",content:"Total Records ="+" "+total +"<br/>Records Processed Correctly = "+correct +"<br/>Records Gives Error = "+error+ "<br/><b>" + sts + "</b>", ok:true,cancel:false,color:"success"}});	
+			mdialogRef.disableClose = true;
            /*if(activityCode=='MST'){
            	emailService.send([new Date]);
 		   } */

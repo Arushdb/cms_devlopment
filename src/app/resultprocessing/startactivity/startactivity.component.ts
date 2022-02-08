@@ -504,7 +504,7 @@ public validationforOk():void
     	
     	const dialogRef=  this.dialog.open(alertComponent,
 			   {data:{title:"Warning",content:"first Select all MandatoryFields", ok:true,cancel:false,color:"warn"}});
-		
+			   dialogRef.disableClose = true;
 		this.showActGridPanel = false;
 		this.showProGridPanel = false;
 		this.showRejectedGridPanel = false;
@@ -827,6 +827,7 @@ private activityGridResultHandler(res):void
 	{
 		const dialogRef=  this.dialog.open(alertComponent,
 			{data:{title:"Information",content:"No Data found for selected record", ok:true,cancel:false,color:"warn"}});
+			dialogRef.disableClose = true;
 	}	
 	else 
 	{
@@ -934,7 +935,7 @@ public forStartActivity():void
 					 // Alert.show((resourceManager.getString('Messages','activityCompleted')),(resourceManager.getString('Messages','error')),0,null,null,errorIcon);
 					  const dialogRef=  this.dialog.open(alertComponent,
 					  {data:{title:"Warning",content:"This activity is already completed!", ok:true,cancel:false,color:"warn"}});
-
+					  dialogRef.disableClose = true;
            	   	}
            	   else{
            	   	this.openPopUpToStartActivity();
@@ -952,7 +953,7 @@ public forStartActivity():void
 					  
 					  const dialogRef=  this.dialog.open(alertComponent,
 					  	{data:{title:"Warning",content:"This activity is already completed!", ok:true,cancel:false,color:"warn"}});
-					
+						  dialogRef.disableClose = true;
            		}
 	            else{
 					var openPopup:boolean = true;
@@ -966,6 +967,7 @@ public forStartActivity():void
 								 const dialogRef=  this.dialog.open(alertComponent,
 								    {data:{title:"Warning",content:"Previous activity is not Completed!", ok:true,cancel:false,color:"warn"}});
 								 //this.userservice.log("Previous activity is not Completed!");
+								 dialogRef.disableClose = true;
 	     					}
 	     					else{
 								openPopup = false;
@@ -996,6 +998,7 @@ private openPopUpToStartActivity():void
 		const dialogRef=  this.dialog.open(ConfirmwindowComponent, 
 			{data:{width:"100px", height:"100px", title:"Confirmation",content:gridItem, ok:true,cancel:false,color:"warn"}
 		});
+		dialogRef.disableClose = true;
 		dialogRef.afterClosed().subscribe(res => {
 			this.rejArrayList = res.result;
 			this.onStart();
@@ -1104,6 +1107,7 @@ public showDetails():void{
 	}		
 	const dialogRef=  this.dialog.open(alertComponent,
 		{data:{title:"Information",content:"Registration No./RollNo = "+ rollNum + "<br/><br/>Detailed Reason = "+rejReason, ok:true,cancel:false,color:"warn"}});	
+		dialogRef.disableClose = true;		
 	   
 	
 }

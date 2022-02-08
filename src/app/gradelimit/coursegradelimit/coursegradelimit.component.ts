@@ -437,7 +437,7 @@ onRowSelected(event){
     };
 
     const dialogRef=  this.dialog.open(GriddialogComponent,dialogConfig)
-    
+    dialogRef.disableClose = true;
     this.subs.add=dialogRef.afterClosed().subscribe(result => {
  
  

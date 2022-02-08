@@ -361,11 +361,11 @@ export class SignonformComponent implements OnDestroy  {
 		}
 		onClickfirstSem(){
 			const dialogConfig = new MatDialogConfig();
-      		dialogConfig.width="30%";
-      		dialogConfig.height="60%";
-
+      		//dialogConfig.width="30%";
+      		//dialogConfig.height="60%";
+			  
 			const dialogRef=  this.dialog.open(LoginformComponent,dialogConfig)
-    
+			dialogRef.disableClose = true;
     		this.subs.add=dialogRef.afterClosed().subscribe(result => {
   		
  

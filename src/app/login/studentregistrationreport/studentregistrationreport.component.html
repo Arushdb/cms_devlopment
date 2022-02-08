@@ -1,10 +1,10 @@
 <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
-<div class="card m-3 col-5" #student>
+<div class="card m-3" #student>
     <h3 class="card-header bold">Download  registration report </h3>
     <div class="card-body">
         <form [formGroup]="registerationReportForm" >
             <div class="form-row">
-                <div class="form-group col-4 ">
+                <div class="form-group">
                     <label>Application/Roll Number</label>
                     <input type="text"  formControlName="registrationNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.registrationNumber.errors }" />
                     <div *ngIf="submitted && f.registrationNumber.errors" class="invalid-feedback">
@@ -41,7 +41,7 @@
                       
 
                 <div class="form-row" *ngIf ="selectedRadio=='aadhar'">
-                    <div  class="form-group col-6 ">
+                    <div  class="form-group">
                                       
                         <label>Aadhar Number</label>
                         <input type="text"  formControlName="aadhaarNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.aadhaarNumber.errors }" />
@@ -59,7 +59,7 @@
                     
             <div class="form-row" *ngIf ="selectedRadio=='dob'">
                 
-                     <div  class="form-group col ">
+                     <div  class="form-group">
                     <label>Phone Number</label>
                     <input type="number"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
                     <div *ngIf="submitted && f.contactNumber.errors" class="invalid-feedback">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <div class="form-group col ">
+                <div class="form-group">
                     <label>Date of Birth</label>
                     <input type="date"   formControlName="dateOfBirth" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }" />
                     <div *ngIf="submitted && f.dateOfBirth.errors" class="invalid-feedback">

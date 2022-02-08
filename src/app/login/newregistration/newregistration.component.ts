@@ -258,6 +258,7 @@ goBack(): void {
         {data:{title:"Warning",content:"You selected :"+ 0+" credits ." +
         this.mincredit,ok:true,cancel:false,color:"warn"}
     });
+    dialogRef.disableClose = true;
      return;
     }
  
@@ -326,7 +327,7 @@ goBack(): void {
 
             const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
               
-
+            dialogRef.disableClose = true;
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
             if(result){
@@ -347,7 +348,7 @@ goBack(): void {
               "Please select at least :"+this.mincredit +" and not more than :"+this.maxcredit
               ,ok:true,cancel:false,color:"warn"}
           });
-
+          dialogRef.disableClose = true;
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
 
@@ -460,7 +461,7 @@ goBack(): void {
       // });
          const dialogRef=  this.dialog.open(alertComponent,dialogConfig);
          
-
+         dialogRef.disableClose = true;
 
       dialogRef.afterClosed().subscribe(result => {
         this.dialogRef.close(false);
@@ -475,7 +476,7 @@ goBack(): void {
           {data:{title:"Warning",content:"Error in Registration,Please try again"
           ,ok:true,cancel:false,color:"warn"},width:"30%",height:"20%"
       });
-
+      dialogRef.disableClose = true;
       dialogRef.afterClosed().subscribe(result => {
         this.dialogRef.close(false);
         });      

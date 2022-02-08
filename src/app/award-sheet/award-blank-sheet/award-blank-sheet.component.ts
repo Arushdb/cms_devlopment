@@ -1677,7 +1677,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
     };
 
     const dialogRef=  this.dialog.open(GriddialogComponent,dialogConfig)
-    
+    dialogRef.disableClose = true;
     this.subs.add=dialogRef.afterClosed().subscribe(result => {
   if(result)
  
@@ -1753,7 +1753,7 @@ this.awardsheet_params=this.awardsheet_params.set("data",payload);
       {data:{title:"Warning",content:"Please confirm ",ok:true,cancel:true,color:"warn"},
       width:"20%",height:"20%"
       });
-
+      dialogRef.disableClose = true;
       this.subs.add=dialogRef.afterClosed().subscribe((result:boolean) => {
    
     if (result===true){
