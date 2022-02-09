@@ -563,10 +563,11 @@ goBack(): void {
       const dialogRef=  this.dialog.open(alertComponent,
         {data:{title:"Warning",content:"You selected :"+ 0+" credits ." +
         this.mincredit,ok:true,cancel:false,color:"warn"}
-    });
+      });
+    dialogRef.disableClose = true;
      return;
     }
-  
+    this.selecteddata = "";
     //for(var d:number=0;d<subjectselected.length;d++)
     for (var gridItem of subjectselected) 
     {
@@ -633,7 +634,7 @@ goBack(): void {
 
             const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
               
-
+            dialogRef.disableClose = true;
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
             if(result){
@@ -654,7 +655,7 @@ goBack(): void {
               {data:{title:"Warning",content:"You selected :"+ this.creditselected +" credits ." +
               "Please select at least :"+semestermincredit,ok:true,cancel:false,color:"warn"}
           });
-
+          dialogRef.disableClose = true;
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
 

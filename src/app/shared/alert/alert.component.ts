@@ -17,6 +17,7 @@ export class alertComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dialogRef.updateSize();
   }
 
 

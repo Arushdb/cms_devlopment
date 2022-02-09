@@ -18,7 +18,7 @@
                 <button class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "goBack()" >Go Back</button>
         
 
-                <div class="d-flex flex-row align-items-start p-2 bd-highlight border" >
+                <div class="d-inline-flex flex-row align-items-start p-2 bd-highlight border flex-wrap" >
                     <div class="p-2 bd-highlight text-primary">{{entity_name}}</div>
                     <div class="p-2 bd-highlight text-primary"><label >Program:</label>{{program_name}}</div>
                     <div class="p-2 bd-highlight text-primary"><label >Branch: </label>{{branch_name}}</div>
@@ -45,9 +45,8 @@
                  
                 <div class="d-flex p-2 bd-highlight border" >
                    
-    
+    <!--suppressHorizontalScroll = "true"-->
                         <ag-grid-angular
-                            suppressHorizontalScroll = "true"
                             style="width: 100%; height: 500px;"
                             [rowData]="myrowData"
                             [columnDefs]="columnDefs"

@@ -115,7 +115,7 @@ public entityChangeHandler(obj):void
         //Alert.show("please select the study center ");
         const dialogRef=  this.dialog.open(alertComponent,
           {data:{title:"Information",content:"Please select the study center",ok:true,cancel:false,color:"warn"} });
-
+          dialogRef.disableClose = true;
         console.log("please select the study center");
       }
   }
@@ -141,7 +141,7 @@ public entityChangeHandler(obj):void
         //Alert.show("No data found");
         const dialogRef=  this.dialog.open(alertComponent,
           {data:{title:"Information",content:"No data found",ok:true,cancel:false,color:"warn"} });
-
+          dialogRef.disableClose = true;
         console.log("No data found");
       } 
       return;

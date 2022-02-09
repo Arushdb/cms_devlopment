@@ -193,7 +193,7 @@ export class LoginformComponent implements OnInit {
         
             const dialogConfig = new MatDialogConfig();
             
-            dialogConfig.width="90%";
+            //dialogConfig.width="90%";
             dialogConfig.height="90%";
             dialogConfig.data={
               "studentdata":studentdata,
@@ -202,7 +202,7 @@ export class LoginformComponent implements OnInit {
             }
   
         this.dialogRefreg=  this.dialog.open(NewregistrationComponent,dialogConfig)
-      
+        this.dialogRefreg.disableClose = true;
           this.subs.add=this.dialogRefreg.afterClosed().subscribe(result => {
         
    
@@ -260,7 +260,8 @@ export class LoginformComponent implements OnInit {
         let message ="Registration not allowed "
         const dialogRef=  this.dialog.open(alertComponent,
           {data:{title:"Warning",content:message,
-          ok:true,cancel:false,color:"warn"}});  
+          ok:true,cancel:false,color:"warn"}});
+          dialogRef.disableClose = true;  
       }
      
      
@@ -281,7 +282,7 @@ export class LoginformComponent implements OnInit {
       const dialogRef=  this.dialog.open(alertComponent,
         {data:{title:"Warning",content:message,
         ok:true,cancel:false,color:"warn"}});
-      
+        dialogRef.disableClose = true;
         dialogRef.afterClosed().subscribe(result => {
          
           if(result){
