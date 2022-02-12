@@ -332,8 +332,11 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     var count=0;
       
 		//	for (var obj of employeeCourse.root){
+      let prgName: string="";
 			for (var obj of employeeCourse.CodeList.root){
-				employeeCourseArrCol.push({select:false,entityId:obj.entityId, programId:obj.programId, programName:obj.programName, 
+        prgName = obj.programName; //added by Jyoti on 11 Feb 2022
+        prgName = prgName.toString().replace(/(\r\n|\n|\r)/gm," ");  //added by Jyoti on 11 eb 2022
+				employeeCourseArrCol.push({select:false,entityId:obj.entityId, programId:obj.programId, programName:prgName, 
 				branchId:obj.branchId, branchName:obj.branchName, specializationId:obj.specializationId, 
 				specializationName:obj.specializationName, semesterCode:obj.semesterCode, semesterName:obj.semesterName, 
 				semesterStartDate:obj.semesterStartDate, semesterEndDate:obj.semesterEndDate, courseCode:obj.courseCode, 
