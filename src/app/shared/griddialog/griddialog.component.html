@@ -1,10 +1,13 @@
-
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
 <div style='height: 100%; display: flex; flex-direction: column;'>
   <h1 mat-dialog-title>Grade Limits</h1>
 
  
   <div >
+    <!--
        <button   type="button" class="btn  btn-success  btn-sm " *ngIf="showgrid===true && showsave===true " 
+       -->
+       <button   type="button" class="btn  btn-success  btn-sm " *ngIf= "showgrid===true" 
     (click)="onConfirm()" >Confirm</button>
     <button   type="button" class="btn btn-primary  mr-2  btn-sm" *ngIf="showgrid" (click)= "close()" >Close</button> 
   </div>

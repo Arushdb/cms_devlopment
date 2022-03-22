@@ -27,8 +27,9 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
   public rowData:any []=[];
   public rowDataEditGrid:any []=[];
   private gradeparam:HttpParams;
-  private gradelimits:number[]=[];
+  private gradelimits:number[]=[0,0,0,0,0,0,0,0,0,0,0];
   private  gradeidx;
+  spinnerstatus: boolean=false;
   gridOptions: GridOptions;
   
   private pck:string;
@@ -39,6 +40,7 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
   public showAddbutton:boolean=false;
   public showgrid:boolean=false;
   public showsave:boolean=false;
+  public gradelimitsvalid:boolean=false;
   subs = new SubscriptionContainer();
  
   style: { width: string; height: string; flex: string; };
@@ -380,52 +382,9 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
         }
         oncellValueChanged(event:CellChangedEvent){
          let id =event.column.getColId();
-         let value =event.newValue;
-         let zerocount =0;
-        
-        // console.log(this.gradeidx[id]);
-
+                
          this.gradelimits[this.gradeidx[id]] =event.newValue;
 
-
-         this.gradelimits.forEach(item=>{
-           console.log(item);
-           if((String(item)==="0")){
-            zerocount++;
-           }
-
-         });
-
-         if(zerocount>1){
-           console.log("More than one zero");
-         }else{
-          console.log("Single zero");
-         }
-
-      if (this.checkIfArrayIsUnique(this.gradelimits)){
-
-        console.log("Array is uniques");
-      }else{
-        console.log("Array is not uniques");
-      }
-
-        
-        //console.log(this.gradelimits);
-        console.log(this.gradelimits);
-        if(!(this.isSorted(this.gradelimits)) ){
-          this.showsave=false;   
-          window.alert("Grade limits not valid.Please check");
-          }else if (zerocount>1){
-            this.showsave=false; 
-
-          }else if(!(this.checkIfArrayIsUnique(this.gradelimits))){
-            this.showsave=false;
-            window.alert("Duplicate grade limits.Please check"); 
-
-          }else{
-            this.showsave=true; 
-
-          }
 
 
 
@@ -434,8 +393,27 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
 
 
          checkIfArrayIsUnique(myArray) {
-          return myArray.length === new Set(myArray).size;
+           
+         let sts= true;
+         loop1:
+        for(let  i=0 ;i<myArray.length;i++){
+          loop2:
+          for(let  j=i+1 ;j<myArray.length;j++){
+            console.log(myArray[i]+":"+myArray[j]);
+             if (parseInt(myArray[i])==parseInt(myArray[j])){
+              sts = false;
+              break loop1;
+
+             }
+            
+
+          }
+
+      
+         // return myArray.length === new Set(myArray).size;
         }
+        return sts;
+      }
         
         oncellKeyPress(event:CellKeyPressEvent){
           console.log(event.node.rowIndex,event.column.getColId());
@@ -470,7 +448,12 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
             this.subs.add=dialogRef.afterClosed().subscribe((result:boolean) => {
          
           if (result===true){
+          // validate grade limit;
+             this.validategradelimits();
+             if (this.gradelimitsvalid)
             this.saveGradeLimit();
+            else
+            return;
             
           }else{
       
@@ -480,9 +463,53 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
           
         })
       }
+  validategradelimits() {
+
+    this.gradelimitsvalid=false;
+    
+    
+    // this.gradelimits.forEach(item=>{
+    //   console.log(item);
+    //   if((String(item)==="0")){
+    //    zerocount++;
+    //   }
+
+    // });
+
+    // if(zerocount>1){
+    //   console.log("More than one zero");
+    // }else{
+    //  console.log("Single zero");
+    // }
+
+ if (this.checkIfArrayIsUnique(this.gradelimits)){
+
+   console.log("Array is uniques");
+ }else{
+  this.gradelimitsvalid=false;
+  window.alert("Grade limits not valid.Please check");
+  console.log("Array is not uniques");
+  return this.gradelimitsvalid;
+   
+ }
+
+
+    if(!(this.isSorted(this.gradelimits)) ){
+        
+      this.gradelimitsvalid = false;
+      window.alert("Grade limits is not in order .Please check");
+ 
+  return this.gradelimitsvalid;
+    
+    
+    
+    }  
+  return(  this.gradelimitsvalid =true);
+   
+  }
 
         oncellEditingStopped(event){
-          //debugger;
+          
 
         }
 
@@ -526,6 +553,7 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
     }
 
     getCourseGradeLimit(){
+      this.spinnerstatus=true;
       let obj = {xmltojs:'Y',
       method:'None' };   
       obj.method='/coursegradelimitpercourse/getCourseGradeLimit.htm';
@@ -535,7 +563,7 @@ export class GriddialogComponent implements OnInit ,OnDestroy{
       res = JSON.parse(res);
       
       this.getCourseGradeLimitSuccess(res)
-    
+    this.spinnerstatus=false;
           })
 
     }
