@@ -4,13 +4,13 @@ import { debounce } from 'rxjs/operators';
 
 
 import {Location} from '@angular/common';
-import { SubscriptionContainer } from 'src/app/shared/subscription-container';
+import { SubscriptionContainer } from '../../shared/subscription-container';
 import { Router } from '@angular/router';
-import {FlleserviceService} from 'src/app/services/flleservice.service'
+import {FlleserviceService} from '../../services/flleservice.service'
 import { HttpParams } from '@angular/common/http';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../services/user.service';
 
 export function onlyDigits(formControl: FormControl): {[key: string]: boolean} {
   const DIGIT_EXPS = /^\d*$/;
@@ -53,7 +53,13 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
 
      }
    
-   
+   phoneNumkeyPress(event: any) {
+      const pattern = /[0-9\+\-\ ]/;
+      let inputChar = String.fromCharCode(event.charCode);
+      if (event.keyCode != 8 && !pattern.test(inputChar)) {
+        event.preventDefault();
+      }
+    }
 
   ngOnInit(): void {
 
@@ -63,7 +69,8 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
       aadhaarNumber:[""],
     
       pdf:["",[Validators.required]],
-      contactNumber:[''],
+      contactNumber:['',[ Validators.required,
+        Validators.pattern("^[0-9]*$")]],
       //dateOfBirth: ['1990-01-01']
       dateOfBirth: ['0000-00-00']
 
@@ -87,7 +94,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
       this.submitted=true;
       this.myurl='';
 
-
+     console.log("contactnumber", this.f.contactNumber.value);
      if (this.selectedRadio=="aadhar"){
        
        this.f.dateOfBirth.setErrors(null);

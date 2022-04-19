@@ -61,11 +61,11 @@
                 
                      <div  class="form-group">
                     <label>Phone Number</label>
-                    <input type="number"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
+                    <input (keypress)="phoneNumkeyPress($event)" required type="text"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
                     <div *ngIf="submitted && f.contactNumber.errors" class="invalid-feedback">
                         <div *ngIf="f.contactNumber.errors.required">Phone Number is required</div>
-                      
-                        <div *ngIf="f.contactNumber.errors.NaN">Please enter numbers only</div>
+                        <!--<div *ngIf="f.contactNumber.errors.NaN">Please enter numbers only</div> -->
+                        <div *ngIf="f.contactNumber.errors.pattern">Please enter numbers only</div>
                         
                     </div>
                 </div>
