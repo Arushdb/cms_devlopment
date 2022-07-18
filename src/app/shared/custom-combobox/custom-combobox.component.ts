@@ -12,11 +12,18 @@ import {MyItem} from 'src/app/interfaces/my-item';
   templateUrl: './custom-combobox.component.html',
   styleUrls: ['./custom-combobox.component.css']
 })
+
 export class CustomComboboxComponent implements AfterViewInit,OnInit{
- @Input() Options :MyItem[] =[];
+  Options: MyItem[] = [];
+ 
+  @Input('Options')  set onOptions(options: MyItem[]){
+  this.Options = options;
+  this.initAutoComplete()
+}
  @Input() labeltext :string;
  @Input() comboid :string;
  @Input() combowidth :string="100%";
+ 
  @ViewChild('mylabel',{ read: ElementRef }) mylabel:ElementRef<HTMLLabelElement>; 
  @ViewChild('formfield',{ read: ElementRef }) formfield:ElementRef<MatFormField>; 
 
@@ -29,11 +36,13 @@ export class CustomComboboxComponent implements AfterViewInit,OnInit{
 
 
   ngOnInit() {
-     this.filteredOptions = this.myControl.valueChanges
-       .pipe(
-         startWith(''),
-         map(value =>  this._filter(value))
-       );
+
+    this.initAutoComplete();
+    //  this.filteredOptions = this.myControl.valueChanges
+    //    .pipe(
+    //      startWith(''),
+    //      map(value =>  this._filter(value))
+    //    );
   
   }
 
@@ -79,4 +88,12 @@ export class CustomComboboxComponent implements AfterViewInit,OnInit{
     
       console.log('ngModelChange called',event);
     }
+    initAutoComplete(){
+      this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+    }
+   
 }

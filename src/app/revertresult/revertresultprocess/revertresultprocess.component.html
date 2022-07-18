@@ -1,0 +1,103 @@
+
+<div class="container"> 
+<div class="row" >
+    <div class="col-sm-3  col-md-4 col-lg-6 col-xl-6 " >
+        <button type="button" class="close" (click) = "onCancel()" aria-label="Close" >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          
+
+        <div class="card-body border border-primary">
+            <h3 class="card-header ">Revert Result Process</h3>
+          
+            <form [formGroup]="revertform"  (ngSubmit)="onSubmit(userForm)" 
+            #userForm="ngForm">
+
+                <div class="p-2 bd-highlight">
+                   
+                    <app-custom-combobox  
+                        (OptSelected)="Onsessionselected($event)"
+                        #sessionCombo 
+                         
+                        [Options] ='sessiondata' 
+                        [labeltext]='sessioncombolabel' 
+                        [combowidth] ="30"></app-custom-combobox>
+                        <app-custom-combobox  
+                        (OptSelected)="OnentitySelected($event)"
+                        #entityCombo 
+                                             
+                        [Options] ='entitydata' 
+                        [labeltext]='entitycombolabel' 
+                        [combowidth] ="combowidth"></app-custom-combobox>
+
+                    <app-custom-combobox  
+                        (OptSelected)="Onpgmselected($event)"
+                       
+                    
+                        #programCombo 
+                    
+                        
+                        [Options] ='programdata' 
+                        [labeltext]='programcombolabel' 
+                        [combowidth] ="combowidth"></app-custom-combobox>
+                   
+                    <app-custom-combobox  
+                        (OptSelected)="Onbrnselected($event)"
+                        #branchCombo 
+                       
+                        
+                        [Options] ='branchdata' 
+                        [labeltext]='branchcombolabel' 
+                        [combowidth] ="combowidth"></app-custom-combobox>
+                    <app-custom-combobox  
+                        (OptSelected)="Onspcselected($event)"
+                        #spcCombo 
+                   
+                        
+                        [Options] ='spcdata' 
+                        [labeltext]='spccombolabel' 
+                        [combowidth] ="combowidth"></app-custom-combobox>
+                        <app-custom-combobox  
+                        (OptSelected)="Onsemselected($event)"
+                        #semCombo 
+                   
+                        [Options] ='semesterdata' 
+                        [labeltext]='semestercombolabel' 
+                        [combowidth] ="combowidth"></app-custom-combobox>
+                                               
+                    
+                </div>
+
+                <div class="p-2 bd-highlight">
+                    <label>Enter Any One Roll No of class to be reverted (Not Repeater)</label>
+                    <input type="text"  formControlName="rollno" class="form-control"  />
+                    
+                  
+                </div>
+
+                <div class="form-row" >
+                    <div class="text-center form-group col"  >
+                        <button  type="submit" class="btn btn-primary mr-1"  >Submit</button>
+                        <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                         </div>
+                        </div>
+                       
+                        <button (click)="userForm.reset({entityId:''})" >RESET</button>         
+            </form>
+
+        </div>
+
+
+    </div>
+   
+
+
+
+  
+    
+
+
+    </div>
+
+</div>
+
