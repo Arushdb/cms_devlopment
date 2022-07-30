@@ -35,6 +35,7 @@ return null;
 })
 export class RevertresultprocessComponent implements OnInit ,OnDestroy{
  
+  @ViewChild('modeCombo') modeCombo:CustomComboboxComponent; 
   @ViewChild('entityCombo') entityCombo:CustomComboboxComponent; 
   @ViewChild('sessionCombo') sessionCombo:CustomComboboxComponent; 
   @ViewChild('programCombo') programCombo:CustomComboboxComponent; 
@@ -42,17 +43,20 @@ export class RevertresultprocessComponent implements OnInit ,OnDestroy{
   @ViewChild('spcCombo') spcCombo:CustomComboboxComponent; 
   @ViewChild('semCombo') semCombo:CustomComboboxComponent; 
  
-
+  mycolor='blue';
   programcombolabel: string;
   sessioncombolabel: string;
   semestercombolabel: string;
   branchcombolabel: string;
   spccombolabel: string;
   entitycombolabel: string;
+  modecombolabel: string;
+  rollnolabel="Enter Any One Roll No of class to be reverted (Not Repeater)";
 
   subs = new SubscriptionContainer();
   public rowData=[];
 
+  public modedata :MyItem []=[];
   public entitydata :MyItem []=[];
   public semesterdata :MyItem []=[];
   public programdata :MyItem []=[];
@@ -70,9 +74,8 @@ export class RevertresultprocessComponent implements OnInit ,OnDestroy{
   _spcName: any;
   _entity: any;
   _entityName: any;
+  _mode: any;
   
-
-
   
   revertform:FormGroup;
 
@@ -103,6 +106,7 @@ hashValueGetter = function (params) {
   
    
   ];
+  private _modeName: any;
   
     constructor(private formBuilder: FormBuilder, 
     private router: Router,
@@ -127,6 +131,12 @@ hashValueGetter = function (params) {
       , {id:'SM11',label:"SM11"}
       , {id:'SM12',label:"SM12"}
       );
+
+      this.modedata.push( 
+        {id:'reg',label:"Regular"},
+        {id:'rem',label:"Remedial"},
+        {id:'ind',label:"Individual"}
+      )
       
     this.sessioncombolabel="Select Session";
     this.programcombolabel = "Select Program" ;
@@ -134,6 +144,7 @@ hashValueGetter = function (params) {
     this.branchcombolabel ="Select Branch";
     this.spccombolabel = "Select Speclization";
     this.entitycombolabel= "Select Faculty";
+    this.modecombolabel= "Select Mode";
    
     this.combowidth = "100%";
   
@@ -162,6 +173,8 @@ hashValueGetter = function (params) {
     this.revertform = this.formBuilder.group({
           
       sessionStartDate: [" ", [Validators.required,customComboValidator(this._ses)]],
+      mode: [" "],
+      count:0,
       programCourseKey: [" "],
       semesterStartDate: [" "],
       semesterEndDate: [" "],
@@ -176,6 +189,31 @@ hashValueGetter = function (params) {
 
  
   
+  Onmodeselected(obj){
+   
+    this.revertform.get('mode').setValue(obj.id);
+    this._mode=obj.id;
+    this._modeName=obj.label;
+   
+    this.sessionCombo.myControl.setValue({"":""});
+    this.programCombo.myControl.setValue({"":""});
+    this.branchCombo.myControl.setValue({"":""});
+    this.entityCombo.myControl.setValue({"":""});
+    this.spcCombo.myControl.setValue({"":""});
+    this.semCombo.myControl.setValue({"":""});
+  debugger;
+
+    if(this._mode==='reg'  ){
+      this.rollnolabel="Enter Any One Roll No of class to be reverted ";
+    }else if(this._mode==='rem'){
+      this.rollnolabel="Enter Any One Roll No of Remedial student to be reverted";
+         
+    }else{
+      this.rollnolabel="Enter Roll No to be reverted (Not Remedial)";
+    }
+    
+     
+  }
   Onpgmselected(obj){
    
     this.revertform.get('programId').setValue(obj.id[0]);
@@ -250,8 +288,9 @@ hashValueGetter = function (params) {
   onSubmit(userForm: NgForm){
 
   if (this.revertform.status!="VALID"){
-
+debugger;
     this.programService.log("Input not Valid");
+    this.f.rollno.markAsTouched();
     return;
   }
 
@@ -440,9 +479,11 @@ this.programService.vaildateProgram(serializedForm).subscribe(res=>
     }
     else
   {
-      let resultObj:Object=new Object();
+    this.rowData=[]; 
+    let count=0;
+    let resultObj:Object=new Object();
       data.Details.Detail.forEach(element => {
-    
+     count++;
       resultObj["rollno"]=element.rollno[0];
       
       resultObj["status"]=element.status[0];
@@ -452,7 +493,8 @@ this.programService.vaildateProgram(serializedForm).subscribe(res=>
       
       this.rowData.push(resultObj);
       resultObj = new Object();});
-                                
+       this.f.count.setValue(count);
+       debugger;                         
   
         if (this._brnName==='NONE')
         this._brnName='';
@@ -472,7 +514,10 @@ this.programService.vaildateProgram(serializedForm).subscribe(res=>
       dialogRef.disableClose = true;
     
       dialogRef.afterClosed().subscribe(res=>{ 
+        if(res)
              this.revertresult();
+             else
+             return;
               });
         
   
@@ -492,14 +537,19 @@ this.programService.vaildateProgram(serializedForm).subscribe(res=>
     let serializedForm = JSON.stringify(rvform);
   
     this.programService.revertResult(serializedForm).subscribe(res=>{
-    this.programService.log("Result Reverted");
+      console.log(JSON.parse(res));
+      let  data = JSON.parse(res);
+    this.programService.log(data.Details.Exception[0]);
     this.entityCombo.myControl.setValue({"":""});
     this.programCombo.myControl.setValue({"":""});
     this.branchCombo.myControl.setValue({"":""});
     this.spcCombo.myControl.setValue({"":""});
     this.semCombo.myControl.setValue({"":""});
     this.revertform.reset();
-    },error=>{ this.programService.log(error.originalError.message);})
+    },error=>{ 
+      debugger;
+      this.programService.log("Result Not reverted:"+error.originalError.message);})
+      
    
   }
 

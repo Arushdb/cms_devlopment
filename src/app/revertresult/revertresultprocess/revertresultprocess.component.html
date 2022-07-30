@@ -14,7 +14,14 @@
             #userForm="ngForm">
 
                 <div class="p-2 bd-highlight">
-                   
+                    <app-custom-combobox  
+                    (OptSelected)="Onmodeselected($event)"
+                    #modeCombo 
+                    [combowidth] ="30"
+                    [Options] ='modedata' 
+                    [labeltext]='modecombolabel' 
+                    ></app-custom-combobox>
+
                     <app-custom-combobox  
                         (OptSelected)="Onsessionselected($event)"
                         #sessionCombo 
@@ -68,9 +75,9 @@
                     
                 </div>
 
-                <div class="p-2 bd-highlight">
-                    <label>Enter Any One Roll No of class to be reverted (Not Repeater)</label>
-                    <input type="text"  formControlName="rollno" class="form-control"  />
+                <div class="p-2 bd-highlight"  >
+                    <label  [ngStyle]="{'color':mycolor}" >{{rollnolabel}}</label>
+                    <input  type="text"  formControlName="rollno" class="form-control"  />
                     
                   
                 </div>
@@ -82,7 +89,7 @@
                          </div>
                         </div>
                        
-                        <button (click)="userForm.reset({entityId:''})" >RESET</button>         
+                                 
             </form>
 
         </div>
