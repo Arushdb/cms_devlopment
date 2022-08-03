@@ -13,15 +13,17 @@ export class ProgramService {
     private messagesrv:MessageService) { 
       this.url=environment.url;
     }
-    getAuthorizeProgramsformenu_62(obj){
+    getAuthorizeProgramsformenu(entity,route){
       
       var myurl =this.url+"/revertResultProcess/getAuthPrograms.htm";
       let headers: HttpHeaders= new HttpHeaders();
       headers=headers.set('format', 'format');// format the response data from xml to json
       let param:HttpParams= new HttpParams();
-      console.log("Arush Entity",obj);
+      
       param=param
-                 .set('entityId',obj) ;
+                 .set('entityId',entity) 
+                 .set('route',route);
+
            console.log("Arush Param",param);
       return  this.httpclient.get(myurl,{headers,params:param,responseType: 'text'});
 

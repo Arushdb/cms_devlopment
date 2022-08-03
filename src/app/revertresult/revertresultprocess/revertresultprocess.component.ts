@@ -52,6 +52,7 @@ export class RevertresultprocessComponent implements OnInit ,OnDestroy{
   entitycombolabel: string;
   modecombolabel: string;
   rollnolabel="Enter Any One Roll No of class to be reverted (Not Repeater)";
+  route:string;
 
   subs = new SubscriptionContainer();
   public rowData=[];
@@ -160,6 +161,10 @@ hashValueGetter = function (params) {
   }
  
   ngOnInit(): void {
+    
+    let idx=String(this.router.url).lastIndexOf("/");
+     this.route = String(this.router.url).slice(idx+1);
+        
     this._createForm();
     this.getsession(); 
     this.getEntities();
@@ -280,8 +285,9 @@ hashValueGetter = function (params) {
   
 
   onCancel(){
-  
+
     this.router.navigate(['dashboard']);
+    
 
   }  
 
@@ -317,13 +323,14 @@ debugger;
 
 getAuthPrograms(){
    
-      this.programService.getAuthorizeProgramsformenu_62(this._entity).subscribe(res=>{
+      this.programService.getAuthorizeProgramsformenu(this._entity,this.route).subscribe(res=>{
 
        
         this.programdata =[];       
       let  data = JSON.parse(res);
       if(isUndefined(data.Details.Detail)){
         this.programService.log("You are not Authorized");
+        this.revertform.reset();
         return;
       }
       
