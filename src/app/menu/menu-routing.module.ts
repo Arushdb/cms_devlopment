@@ -10,6 +10,8 @@ import { NewregistrationComponent } from '../login/newregistration/newregistrati
 import { StudentmarksComponent } from '../student/studentmarks/studentmarks.component';
 
 import { StartactivityComponent } from '../resultprocessing/startactivity/startactivity.component';
+import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
+import { SignonformComponent } from '../login/signonform/signonform.component';
 
 
 
@@ -48,7 +50,10 @@ const routes:Routes=[
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
  
  {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
-
+ {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
+ 
+ {path:'login',component:SignonformComponent},
+ 
 ],         
  
 
