@@ -11,6 +11,7 @@ import { SignonformComponent } from 'src/app/login/signonform/signonform.compone
 import { StudentregistrationreportComponent } from './login/studentregistrationreport/studentregistrationreport.component';
 
 import { LoginformComponent } from './login/loginform/loginform.component';
+import { StudentaverageComponent } from './login/studentaverage/studentaverage.component';
 
 //import { AwardBlankSheetComponent } from './award-blank-sheet/award-blank-sheet.component';
 
@@ -21,6 +22,7 @@ const routes:Routes=[
  
   {path:'login',component:SignonformComponent},
   {path:'downloadreport',component:StudentregistrationreportComponent},
+  {path:'studentaverage',component:StudentaverageComponent},
  
  
 
