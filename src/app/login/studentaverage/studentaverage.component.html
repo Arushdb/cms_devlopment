@@ -1,0 +1,97 @@
+<app-spinner [spinnerstatus]="spinnerstatus"></app-spinner>
+
+<div class="container border solid">
+    <app-message></app-message>
+    <div class="card">
+        <div class="card-body  border border-primary">
+            <h3 class="card-header bold">Student Yearly Marks Average </h3>
+            <form [formGroup]="averageForm" (ngSubmit)="getaverage()">
+                <!--
+                <div class="d-inline-flex flex-row align-items-start p-2 bd-highlight flex-wrap">
+-->
+
+                <div class="row">
+                                        
+                    <div class="col-md-4 col-sm-4 col-lg-2 p-2 bd-highlight">
+                        <label>Roll Number</label>
+                        <input type="text" class="form-control" formControlName="rollnumber"
+                            placeholder="Student Roll Number" [ngClass]="{ 'is-invalid': submitted && f.rollnumber.errors }" />
+                          
+                            <div *ngIf="submitted && f.rollnumber.errors" class="invalid-feedback">
+                                <div *ngIf="f.rollnumber.errors.required">Roll No  is required</div>
+                            <!--
+                            <div *ngIf="f.rollnumber.errors.minlength.requiredLength>f.rollnumber.errors.minlength.actualLength">
+                                Please enter at least {{f.rollnumber.errors.minlength.requiredLength}} digits roll number
+                            </div>
+                            -->
+                        </div>                                             
+                        
+                    </div>
+
+
+                    <div class="col-md-2 col-sm-2 col-lg-3 p-2 bd-highlight">
+                        <label>Select your last year (passed)</label>
+                        <select class="form-select form-control" formControlName="yeargroup"
+                         [ngClass]="{ 'is-invalid': submitted &&  f.yeargroup.errors}">
+                            <option value="Y1" selected>1</option>
+                            <option value="Y2">2</option>
+                            <option value="Y3">3</option>
+                            <option value="Y4">4</option>
+
+                        </select>
+                        <div *ngIf="submitted && f.yeargroup.errors" class="invalid-feedback">
+                            <div *ngIf="f.yeargroup.errors.required">Year  is required</div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="form-row">
+                        <div class="container border">
+                            <button type="submit" class="btn btn-success mr-2  btn-sm" >Check
+                                Average</button>
+                            <button type="button" (click)="onclose()" class="btn btn-success mr-2  btn-sm">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+                        <div class="row" *ngIf="status1=='good'">
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight">
+                    <label>Program</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="program1">
+                </div>
+                
+
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight">
+                    <label>Semester wise average</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="semaverage1">
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight">
+                    <label>Yearly Average</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="average1">
+                </div>
+            </div>
+           
+            <div class="row" *ngIf="status2=='good'">
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight">
+                    <label>Program</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="program2">
+                </div>
+
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight" >
+                    <label>Semester wise average</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="semaverage2">
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-4 p-2 bd-highlight">
+                    <label>Student Average</label>
+                    <input readonly  type="text" class="form-control" [(ngModel)]="average2">
+                </div>
+           
+            </div>
+                            
+
+        </div>
+    </div>
+</div>
