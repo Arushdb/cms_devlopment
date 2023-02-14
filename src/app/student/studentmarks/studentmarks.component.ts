@@ -20,6 +20,7 @@ import {alertComponent} from  'src/app/shared/alert/alert.component'
 import { CustomComboboxComponent } from 'src/app/shared/custom-combobox/custom-combobox.component';
 //import { GridReadyEvent } from 'ag-grid-community';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
+import { FlleserviceService } from 'src/app/services/flleservice.service';
 
 
 
@@ -70,6 +71,7 @@ mydefaultColDef: {
 
 constructor(private router:Router,
   private userservice:UserService,
+  private fileservice:FlleserviceService,
   private route:ActivatedRoute,
   private elementRef:ElementRef,
   
@@ -90,7 +92,6 @@ constructor(private router:Router,
 ngOnDestroy(): void {
   this.subs.dispose();
   this.elementRef.nativeElement.remove();
- 
 }
 
 
@@ -163,7 +164,9 @@ semDetail:any;
  specializationId:string;
   entityId:string;
  semester:string;
-
+ rollNo:string; //added by Jyoti on 11 Feb 2023
+ regfilename:string; //added by Jyoti on 11 Feb 2023
+ myurl: any = "";  //added by Jyoti on 11 Feb 2023
  semesterStartDate:string;
  semesterEndDate:string
  pck:string;
@@ -290,6 +293,7 @@ getRollNumber(){
   //  myparam["rollNumber"] =this.itemselected.id;
 
    this.myparam=this.myparam.set("rollNumber",this.itemselected.id);
+   this.rollNo = this.itemselected.id;  //added by Jyoti on 11 Feb 2023
   //  myparam["programCourseKey"]=programCourseKey;
   //  params["time"] = new Date();
 console.log(this.myparam);
@@ -327,7 +331,7 @@ getSemesterSuccess(res){
   }
   
      this.combolabel = "Enter Semester" ;
-     this.combowidth = "100%";
+     this.combowidth =  "100%";
      console.log("In Module",this.semesterdata); 
     
       return;
@@ -354,6 +358,7 @@ OnSemesterselected(obj){
   this.displaymkgrid=false;
   if(obj.id==="-1"){
    this.displayCourses =false;
+   this.myurl = "";
   }else{
    this.displayCourses =true;
    this.itemselected=obj; 
@@ -368,15 +373,15 @@ OnSemesterselected(obj){
   // this.myparam=this.myparam.set("rollNumber",this.itemselected.label);
   this.myparam=this.myparam.set("semesterStartDate",newarr[1]);
   this.myparam=this.myparam.set("semesterEndDate",newarr[2]);
-  this.myparam=this.myparam.set("semesterCode",newarr[0]);
+  this.myparam=this.myparam.set("semesterCode",newarr[0]); 
   this.myparam=this.myparam.set("programId",newarr[3]);
   this.myparam=this.myparam.set("branchId",newarr[4]);
   this.myparam=this.myparam.set("specializationId",newarr[5]);
   this.myparam=this.myparam.set("programCourseKey",newarr[6]);
   this.myparam=this.myparam.set("entityId",newarr[7]);
   this.myparam=this.myparam.set("universityId","0001");
-
-
+  this.semesterStartDate = newarr[1]; //added by Jyoti on 11 Feb 2023
+  this.myurl = ""; //added by Jyoti on 11 Feb 2023
   console.log("on Semester selected parameters",this.myparam);
   let objGetCourses = {xmltojs:'Y',
     method:'/marksInfo/getRegisteredCourseList.htm' };   
@@ -988,8 +993,34 @@ getGroupChildren(group):any[]
   return children;
 }
 
+onDownloadSubmit(){  //added by Jyoti on 11-Feb-2023
+ console.log(this.rollNo, this.semesterStartDate);
+ this.myurl='';
+ let params:HttpParams= new HttpParams();
+ params=params.set("registrationNumber",this.rollNo)
+              .set("semStartDate", this.semesterStartDate)
+             ;
+ let  myparam:any={};
+ myparam.xmltojs="Y";          
+ this.subs.add=this.fileservice.getFileName(params,myparam).subscribe(res=>{
+ let resobj = JSON.parse(res);
 
+ if(!(isUndefined(resobj.info.result))){
+  let str =resobj.info.result[0].message[0];
+  let strary = String(str).split('/');
+  this.regfilename =strary[strary.length-1];
+  if (this.regfilename==="NRF.pdf"){
+    this.userservice.log("No record found with the given details");
+    return;
+  }
+  this.myurl=str;    
+ }
+},error=>{  this.userservice.log(error.originalError.statusText);});
+}
 
+onCancel(){ //added by Jyoti on 14 Feb 2023
+  this.router.navigate(['dashboard']);
+}
 
 }
 
