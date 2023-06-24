@@ -1,0 +1,54 @@
+<!--Inputs course code and session
+button ok
+validate whether logged in user can assign/unassign entered course code
+if valid then 
+ag grid to show list of instuctors assigned on this course.
+else "You are not authorized!" -->
+<div class="card m-3" #instructorCourse>
+    <h3 class="card-header bold"><b>Assign Course to Instructor</b></h3>
+    <form [formGroup]="instructorCourseform" >
+        <div class="d-inline-flex flex-row align-items-baseline p-2 bd-highlight flex-wrap">
+            <div class="p-2 bd-highlight">
+                <label>Course Code</label>
+                <input type="text" formControlName="course_code" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.course_code.errors }" />
+                <div *ngIf="submitted && f.course_code.errors" class="invalid-feedback">
+                    <div *ngIf="f.course_code.errors.required">Course Code is required</div>
+                </div>
+            </div>
+            <div class="p-2 bd-highlight">
+                <label>Session</label>
+                 <app-custom-combobox   
+                    *ngIf="showSessionCB"      
+                    #sessionYear
+                    (OptSelected)="sessionChangeHandler($event)"  
+                    [Options] ='sessionCombo' 
+                    [combowidth] ="combowidth">
+                </app-custom-combobox>
+            </div>
+            <div class="p-2 bd-highlight ">
+                <button   type="submit" class="btn btn-primary mr-1 " (click)="validateCourse()">Next</button>
+            </div>
+            <div class="p-2 bd-highlight ">
+                <button type="button" class="btn btn-primary mr-1"  (click) ="onBack()" >Cancel</button>
+            </div> 
+        </div>
+        <div  *ngIf="showAssignbtn" class="container border" >
+            <button type="button" id="getButton" class="btn btn-success mr-2  btn-sm" (click) = "onAssign()">Assign Course</button>
+            <label style="color:blue">{{inpobj.courseName}}</label>      
+            <ag-grid-angular *ngIf="showICGrid"
+                style="width: 100%; height: 500px;"
+                [rowData]="instCourseList"
+                [columnDefs]="columnDefs"
+                #agGrid
+                (gridReady) ="OnICGridReady($event)"
+                rowSelection="single"
+                class="ag-theme-alpine"
+                (rowSelected)="onRowSelected($event)"   
+                [defaultColDef]="defaultColDef"
+                [scr]>
+             </ag-grid-angular>
+             <app-spinner *ngIf = 'mask' [spinnerstatus]="mask"></app-spinner>
+        </div>
+    </form>
+</div>
+<app-message></app-message>
