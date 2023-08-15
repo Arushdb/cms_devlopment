@@ -45,6 +45,7 @@ export class NewregistrationComponent implements OnInit {
  
   courseobj: {};
   courseary: any;
+  //enrollment_number: string;
 
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
@@ -390,7 +391,7 @@ goBack(): void {
       const pracCredit = new FormControl('');
       const creditExcludeAudit = new FormControl('');
       const rollNumberGroupCode = new FormControl('');
-
+      
      
 
       this.registrationform.addControl('regCredit',RegCredit);
@@ -398,13 +399,15 @@ goBack(): void {
       this.registrationform.addControl('pracCredit',pracCredit);
       this.registrationform.addControl('creditExcludeAudit',creditExcludeAudit);
       this.registrationform.addControl('rollNumberGroupCode',rollNumberGroupCode);
-     
+      
 
       this.f.regCredit.setValue(this.creditselected);
       this.f.theoryCredit.setValue(this.credittheory);
       this.f.pracCredit.setValue(this.creditpractical);
       this.f.creditExcludeAudit.setValue(this.creditselected);
       this.f.rollNumberGroupCode.setValue("G1");
+      
+      
       
       
       let formobj =this.registrationform.getRawValue();
@@ -519,6 +522,7 @@ onContinue(){
   
     this._studentdata=this.data.studentdata;
      
+    
     
     
      this.program_id=String(this._studentdata.studentdata.student[0].program_id[0]).trim();

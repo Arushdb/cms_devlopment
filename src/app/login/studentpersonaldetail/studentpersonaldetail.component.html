@@ -134,7 +134,7 @@
                
             </div>
 
-            <div class="d-inline-flex flex-row align-items-start p-2 bd-highlight flex-wrap">
+            <div *ngIf="!f.enrollmentNumber.value" class="d-inline-flex flex-row align-items-start p-2 bd-highlight flex-wrap">
                 <div class="p-2 bd-highlight">
                     <label>Student Name in Hindi</label>
                     <input type="text" [readonly]="not_edit_firstname_hindi" formControlName="studentNameinHindi" id="fname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.studentNameinHindi.errors }" />
@@ -184,7 +184,7 @@
                    
 
                 </div>
-
+                <!--
                 <div class="p-2 bd-highlight" *ngIf = "option=='DEI'">
                     <label>Enrollment Number</label>
                     <input type="text" (change)="onchange()" formControlName="enrollmentNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.enrollmentNumber.errors }" />
@@ -203,7 +203,7 @@
                    
                    
                 </div>
-                
+                -->
             </div>
 <!--
             <div class="form-row" *ngIf="option=='Others'">
