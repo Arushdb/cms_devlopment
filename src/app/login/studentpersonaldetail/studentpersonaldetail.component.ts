@@ -129,9 +129,9 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
             enrollmentNumber: [''],
             lastdegree: ['', Validators.required],
 
-            studentNameinHindi: ['', Validators.required],
-            fatherNameinHindi: ['', Validators.required],
-            motherNameinHindi: ['', Validators.required],
+            studentNameinHindi: [''],
+            fatherNameinHindi: [''],
+            motherNameinHindi: [''],
          
             dateOfBirth: ['', [Validators.required, Validators.pattern(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)]],
             primaryEmailId: ['', [Validators.required, Validators.email]],
@@ -184,6 +184,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
         this.registerForm.get('perAddress').setValue(String(this.studentdata.studentdata.student[0].address[0]).trim());
         this.registerForm.get('officePhone').setValue(String(this.studentdata.studentdata.student[0].homePhone[0]).trim());
         this.registerForm.get('aadhaarNumber').setValue(String(this.studentdata.studentdata.student[0].aadhaarNumber[0]).trim());
+        this.registerForm.get('enrollmentNumber').setValue(String(this.studentdata.studentdata.student[0].enrollment_number[0]).trim());
         this.registerForm.get('religion').setValue(String(this.studentdata.studentdata.student[0].religion[0]).trim());
         this.registerForm.get('primaryEmailId').setValue(String(this.studentdata.studentdata.student[0].primary_email_id[0]).trim());
         
@@ -241,6 +242,12 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
    // console.log("Arush",path);
     this.filepath=path;
        
+if (!this.f.enrollmentNumber.value){
+  this.f.studentNameinHindi.setValidators(([Validators.required]));
+  this.f.fatherNameinHindi.setValidators(([Validators.required]));
+  this.f.motherNameinHindi.setValidators(([Validators.required]));
+}
+
     }
 
     // convenience getter for easy access to form fields
@@ -302,9 +309,9 @@ return;
       if (this.option=="DEI"){
           
            
-      this.registerForm.controls["enrollmentNumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
+ //commented by arush on 14th Aug-2023  //this.registerForm.controls["enrollmentNumber"].setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
       //this.registerForm.get("enrollmentNumber").setValidators([onlyDigits,Validators.minLength(6),Validators.required]);
-      this.f.enrollmentNumber.updateValueAndValidity();
+ //commented by arush on 14th Aug-2023     this.f.enrollmentNumber.updateValueAndValidity();
      
       this.submitted=true;
       this.onSubmit();
@@ -342,8 +349,8 @@ return;
   
       }
       else{
-        this.f.enrollmentNumber.clearValidators();
-        this.f.enrollmentNumber.updateValueAndValidity();
+     //commented by arush on 14th Aug-2023   this.f.enrollmentNumber.clearValidators();
+      //commented by arush on 14th Aug-2023  this.f.enrollmentNumber.updateValueAndValidity();
           this.onSubmit();
       }
     }
