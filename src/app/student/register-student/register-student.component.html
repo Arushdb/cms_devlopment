@@ -1,5 +1,8 @@
 
-<div class="container">
+<app-undertaking *ngIf="showundertaking" [rollnumber]="rollno" (agreed)="onAgreed($event)"></app-undertaking>
+
+
+<div class="container" *ngIf="!showundertaking">
     
                 <app-custom-combobox   
                 (OptSelected)="OnOptionselected($event)"
@@ -20,7 +23,7 @@
 
 </div>
 
-<ng-template #gridblock >
+<ng-template #gridblock *ngIf="!showundertaking">
     <div  *ngIf="myrowData.length>0">
 
                 <button class="btn btn-primary btn-primary-spacing  btn-sm " (click) = "goBack()" >Go Back</button>

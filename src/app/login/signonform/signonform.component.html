@@ -1,5 +1,28 @@
+<!--
+<iframe #scrollframe    src="assets/Anti_Ragging_Posters.pdf"
+    frameBorder="0"
+    scrolling="auto"
+    height="100%"
+    width="100%"
+></iframe>
+-->
 
-<div class="container-fluid card">
+
+<iframe  #poster *ngIf="showposter"
+src="assets/Anti_Ragging_Posters.pdf#toolbar=0"
+scrolling="auto"
+height="600px"
+width="100%"
+
+
+></iframe>
+
+
+
+<!--
+<app-poster *ngIf="showposter"></app-poster>
+-->
+<div *ngIf="!showposter && !showundertaking" class="container-fluid card">
   <div class="row"   [ngClass] ="{'backround-dodgerblue':!env}">
     <div class="col-md-2 col-lg-1 col-xs-12 col-sm-12">
       <!--
@@ -18,7 +41,7 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div *ngIf="!showposter && !showundertaking" class="container-fluid">
   <div class="row ">
 
     <nav class="col-md-8 col-lg-8 col-xs-12 col-sm-12">

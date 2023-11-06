@@ -8,6 +8,7 @@ import {RegisterStudentComponent } from    './register-student/register-student.
 import {SharedModule} from   'src/app/shared/shared.module'
 import { AgGridModule } from 'ag-grid-angular';
 import { StudentmarksComponent } from './studentmarks/studentmarks.component';
+import { UndertakingComponent } from '../login/undertaking/undertaking.component';
 //import { alertComponent } from '../shared/components/alert/alert.component';
 //import { CustomComboboxComponent } from '../common/custom-combobox/custom-combobox.component';
 
@@ -15,7 +16,8 @@ import { StudentmarksComponent } from './studentmarks/studentmarks.component';
 @NgModule({
   declarations: [
     RegisterStudentComponent,
-    StudentmarksComponent
+    StudentmarksComponent,
+    UndertakingComponent
   
   ],
   imports: [

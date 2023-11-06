@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import {  Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 
 
@@ -46,12 +46,14 @@ interface User {
 export class SignonformComponent implements OnDestroy  {
 
 	@ViewChild('form') public userFrm: NgForm;
+
 	//@ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
-  
+	//@ViewChildren('item') itemElements: QueryList<any>;
 			public sts:string ="ACT";
 			message: string="";  
 			returnUrl: string;  
-
+            showposter:Boolean;
+			showundertaking:Boolean;
 			
 		
 			token: any;
@@ -67,6 +69,7 @@ export class SignonformComponent implements OnDestroy  {
 			combolabel: string;
 			combowidth: string;
 			optionselected: boolean=false;
+			
 			
 			constructor(private router:Router,
 			private userservice:UserService,
@@ -88,6 +91,7 @@ export class SignonformComponent implements OnDestroy  {
 				
 
 			 }
+	
 			
   
   
@@ -100,6 +104,7 @@ export class SignonformComponent implements OnDestroy  {
 			
 			this.userservice.clear();
 			this.returnUrl = '/dashboard';  
+			this.showposter=false;
 					
 		}  
 	 
@@ -208,7 +213,7 @@ export class SignonformComponent implements OnDestroy  {
 				this.login_params=this.login_params.set("maxLogins",res.loginInfo.loginInfo[0].maxLogins );			
 			this.login_params=this.login_params.set("date",new Date().toString());
 				this.login_params=this.login_params.set("userGroupId",res.loginInfo.loginInfo[0].userGroupId);
-							
+						
 				if (String(roles[0].status).toString()==="ACT"){
 					
 					this.getLoginInfoService();
@@ -352,11 +357,22 @@ export class SignonformComponent implements OnDestroy  {
 					"menus": JSON.stringify(res)
 				}
 			};
-		
-			
+		console.log(this.login_params.get('userGroupId'));
+			if (this.login_params.get('userGroupId')[0]==='STD')
+				this.showposter=true;
+			else
+				this.showposter=false;
+			let mythis =this;
+			//this.router.navigate(['\poster'],navigationExtras);
 			//localStorage.setItem('id', this.login_params.get('userName')); 
+			setTimeout(function(){
+				mythis.showposter=false;
+				//mythis.showundertaking=true;
 
-			this.router.navigate(['\dashboard'],navigationExtras);
+	
+				mythis.router.navigate(['\dashboard'],navigationExtras);
+			   },25000)
+			
 
 		}
 		onClickfirstSem(){
