@@ -364,7 +364,10 @@ export class SignonformComponent implements OnDestroy  {
 				this.showposter=false;
 			let mythis =this;
 			//this.router.navigate(['\poster'],navigationExtras);
-			//localStorage.setItem('id', this.login_params.get('userName')); 
+			//localStorage.setItem('id', this.login_params.get('userName'));
+			if(this.showposter){
+
+			 
 			setTimeout(function(){
 				mythis.showposter=false;
 				//mythis.showundertaking=true;
@@ -372,7 +375,9 @@ export class SignonformComponent implements OnDestroy  {
 	
 				mythis.router.navigate(['\dashboard'],navigationExtras);
 			   },25000)
-			
+			}else{
+				mythis.router.navigate(['\dashboard'],navigationExtras);
+			}
 
 		}
 		onClickfirstSem(){
