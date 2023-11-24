@@ -1,0 +1,110 @@
+<div *ngIf="showundertaking">
+    <div id="htmlData" #htmlData style="margin-left: 45px;" class="main-container">
+
+
+        <h2 style="text-align: center;">
+            UNDERTAKING
+
+        </h2>
+
+        <p>
+            I, Mr./Ms{{name}}, Roll No{{rollno}}, Program:{{program}} Faculty/Dept/Center: {{faculty}}, student of
+            Dayalbagh Educational Institute (Deemed University), Dayalbagh, Agra, permanent resident of {{address}}
+            Phone:{{phone}} (give permanent home address with telephone no.), do hereby undertake on this day {{day}}
+            month {{month}} year {{year}}, the following :
+
+        </p>
+
+        <ol>
+            <li>
+                That, I am aware of the system of punishment in case of ragging other student(s) and that incase I am
+                found to be involved in any case of ragging, in any form whatsoever, I am liable for any punishment,
+                including, but not limited to, the following:
+                <ol type="a">
+                    <li>
+                        Cancellation of admission;
+                    </li>
+                    <li>
+                        Suspension from attending classes;
+                    </li>
+                    <li>
+                        Withholding / Withdrawing Scholarship / Fellowship and/or any other benefits;
+                    </li>
+                    <li>
+                        Debarring from appearing for any test / examination and/or other evaluation process;
+                    </li>
+                    <li>
+                        Withholding results of any test / examination;
+                    </li>
+                    <li>
+                        Debarring from representing the Institute in any campus interview;
+                    </li>
+                    <li>
+                        Debarring from representing the Institute from attending/ participating in any national or
+                        international meet/tournament / youth festival, etc.;
+                    </li>
+                    <li>
+                        Suspension / expulsion from the hostel;
+                    </li>
+
+                    <li>
+                        Rustication from the Institute for such period as may be decided by the concerned authorities;
+                    </li>
+                    <li>
+                        Expulsion from the Institute and consequent debarring from admission to any other educational
+                        institution, for such period as may be decided by the concerned authorities;
+
+                    </li>
+                    <li>
+                        Imposition of fine;
+                    </li>
+                    <li>
+                        Rigorous imprisonment up to 3 (three) years (by a Court of Law), etc.
+                    </li>
+
+
+                </ol>
+            </li>
+            <li>
+
+
+                That, I, hereby, declare that, I am aware of the Supreme Court of India directive, as well as
+                theprevalent laws/rules, etc., on anti-ragging, prescribed by Govt. of India, Govt. of Uttar Pradesh
+                andthe Institute authorities.
+            </li>
+
+            <li>
+
+
+                That, I, further declare that, I fully understand the meaning of ‘Ragging’ and know that ragging in any
+                form is a punishable offence and the same is banned by the Laws of the land.
+            </li>
+            <li>
+                That, I also understand that, in case I am involved in ragging, the case will be reported to the police
+                and the law will take its own course and I will be liable for such punishment as may be deemed fit and
+                proper by the concerned authorities.
+            </li>
+        </ol>
+        <p>
+            Date: {{today}} Signature of Student /
+        </p>
+        <p>Candidate:{{candidate}}</p>
+
+        <h2>DECLARATION BY PARENT/ GUARDIAN</h2>
+        <p>
+            I, Mr./Mrs{{fatherName}}, hereby, fully endorse the undertaking given by my child/ward, hereinabove and I,
+            further declare that in case of violation of any of thedeclarations made in this undertaking by my
+            child/ward will be liable for such punitive action as may be prescribed by the concerned authorities, for
+            which we will be held solely responsible.
+        </p>
+        <p>
+            Date: {{today}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    Signature of Mother / Father/ Guardian
+
+        </p>
+
+    </div>
+
+    <div> <button class="btn btn-sm btn-primary m-4" (click)="savePDF()">Agree</button>
+        <button class="btn btn-sm btn-primary m-4" (click)="onCancel()">Cancel</button>
+    </div>
+</div>

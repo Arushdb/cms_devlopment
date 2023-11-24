@@ -35,7 +35,9 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   public displaybutton: boolean =false;
   //suppressRowDeselection = false;
   check=false;
+  showundertaking=true;
   subs = new SubscriptionContainer();
+  rollno: string;
   
   //  mode: ProgressSpinnerMode = 'indeterminate';
   // color: ThemePalette = 'primary';
@@ -64,7 +66,7 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   ngAfterViewInit(): void {
     
   }
-
+  
   // OnSelectAll(){
   //   this.agGrid.api.selectAll();
   // }
@@ -89,7 +91,19 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   }
 
   ngOnInit(): void {
+    debugger;
+    this.rollno =localStorage.getItem("id");
+
+    this.showundertaking=true;
+   // this.gettencode();
+  }
+
+  onAgreed($event){
+    debugger;
+    this.showundertaking=false;
     this.gettencode();
+   
+
   }
   itemselected:MyItem;
   combolabel:string;
@@ -182,6 +196,7 @@ columnDefs = [
 
 
   gettencode(){
+    debugger;
       let obj = {xmltojs:'Y',
       method:'/registrationforstudent/gettencodes.htm' };   
      this.mask=true;

@@ -37,4 +37,17 @@ downloadFile(url) {
   return this.httpclient.get(url, {responseType: 'blob'});
 }
 
+uploadPdfFile(data) {
+  var myurl ="";
+  myurl = this.url+'/registrationreport/uploadPdfFile.htm';
+
+  //const formdata: FormData = new FormData();
+  //formdata.append('pdfFile', pdfFile); // Should match the parameter name in backend
+  //let param:HttpParams= new HttpParams();
+      
+  //param=param
+    //         .set('pdfFile',pdfFile) 
+ return  this.httpclient.post<any>(myurl, data);
+}
+
 }
