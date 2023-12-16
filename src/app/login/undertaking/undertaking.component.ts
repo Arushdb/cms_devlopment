@@ -87,6 +87,9 @@ this.today = this.day + '/' + this.month + '/' + this.year;
   }
 
   public savePDF(): void {
+    let con =confirm("Student you are required to download this anti-ragging undertaking and submit the hardcopy duly signed by you (student) and parents or gaurdian in the faculty office") ;
+    if (con ===false)
+    return;
     let DATA: any = document.getElementById('htmlData');
     html2canvas(DATA).then((canvas) => {
       let fileWidth = 208;
