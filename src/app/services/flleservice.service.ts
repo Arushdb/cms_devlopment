@@ -39,14 +39,14 @@ downloadFile(url) {
 
 uploadPdfFile(data) {
   var myurl ="";
-  myurl = this.url+'/registrationreport/uploadPdfFile.htm';
-
+  //myurl = this.url+'/registrationreport/uploadPdfFile.htm';
+  myurl = this.url+'/registrationform/uploadPdfFile.htm'; //added by Jyoti on 8 Jan 2024
   //const formdata: FormData = new FormData();
   //formdata.append('pdfFile', pdfFile); // Should match the parameter name in backend
   //let param:HttpParams= new HttpParams();
       
   //param=param
-    //         .set('pdfFile',pdfFile) 
+    //         .set('pdfFile',pdfFile) q
  return  this.httpclient.post<any>(myurl, data);
 }
 
