@@ -49,7 +49,7 @@ export class UndertakingComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    debugger;
+    //debugger;
   let today = new Date();
  this.day = String(today.getDate()).padStart(2, '0');
 this.month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -97,7 +97,7 @@ this.today = this.day + '/' + this.month + '/' + this.year;
       const FILEURI = canvas.toDataURL('image/png');
        this.PDF = new jsPDF('p', 'mm', 'a4');
       
-       debugger;  
+       //debugger;  
       let position = 10;
       this.PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
       
@@ -155,7 +155,7 @@ this.today = this.day + '/' + this.month + '/' + this.year;
   getstudentdetail(){
     let obj = {xmltojs:'Y',
     method:'None' }; 
-    debugger;
+    //debugger;
    
       
   obj.method='/registrationform/getStudentDetailsforundertaking.htm';
@@ -164,7 +164,7 @@ this.today = this.day + '/' + this.month + '/' + this.year;
   this.subs.add=this.userservice.getdata(this.reg_params,obj).subscribe((res:any)=>{
     console.log(res);
     res = JSON.parse(res);
-debugger;
+//debugger;
  
   this.faculty=res.data.student[0].entity_name;
   this.name=res.data.student[0].studentName;
