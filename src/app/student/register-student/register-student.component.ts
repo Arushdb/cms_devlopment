@@ -91,7 +91,7 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   }
 
   ngOnInit(): void {
-    debugger;
+   // debugger;
     this.rollno =localStorage.getItem("id");
 
     this.showundertaking=true;
@@ -99,7 +99,7 @@ export class RegisterStudentComponent implements AfterViewInit,OnDestroy {
   }
 
   onAgreed($event){
-    debugger;
+    //debugger;
     this.showundertaking=false;
     this.gettencode();
    
@@ -196,7 +196,7 @@ columnDefs = [
 
 
   gettencode(){
-    debugger;
+    //debugger;
       let obj = {xmltojs:'Y',
       method:'/registrationforstudent/gettencodes.htm' };   
      this.mask=true;
