@@ -81,7 +81,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
       private userservice:UserService,
       private elementRef:ElementRef,
       private location:Location,
-      private dialogRef: MatDialogRef<StudentpersonaldetailComponent>) {
+      public dialogRef: MatDialogRef<StudentpersonaldetailComponent>) {
 
         
      }

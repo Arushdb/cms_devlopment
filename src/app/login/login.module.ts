@@ -13,11 +13,6 @@ import {StudentregistrationreportComponent} from './studentregistrationreport/st
 import { StudentaverageComponent } from './studentaverage/studentaverage.component'
 
 
-
-
-
-
-
 @NgModule({
   declarations: [SignonformComponent, LoginformComponent,
      StudentpersonaldetailComponent, NewregistrationComponent,
@@ -30,6 +25,7 @@ import { StudentaverageComponent } from './studentaverage/studentaverage.compone
   LoginRoutingModule,
   
  
-  ]
+  ],
+  exports: []
 })
 export class LoginModule { }

@@ -12,6 +12,7 @@ import { StudentmarksComponent } from '../student/studentmarks/studentmarks.comp
 import { StartactivityComponent } from '../resultprocessing/startactivity/startactivity.component';
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
+import { SchoolMainComponent } from '../student/school-main/school-main.component';
 
 
 
@@ -38,6 +39,7 @@ const routes:Routes=[
   {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
   {path:'login/newregistration',component: NewregistrationComponent},
   {path:'resultProcess',component: StartactivityComponent},
+  {path:'schoolmain',component: SchoolMainComponent},
          
   
    { path: 'registration_continue',
