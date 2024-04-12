@@ -16,7 +16,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
-
+import {ReportsModule} from './reports/reports.module';
 //import {StudentModule} from  './student/student.module' ;
 
 @NgModule({
@@ -36,7 +36,8 @@ import  {RevertresultModule} from './revertresult/revertresult.module';
     LoginModule,
     MenuModule,
     ResultprocessingModule,
-    RevertresultModule
+    RevertresultModule,
+    ReportsModule
 
 
     //AgGridModule.withComponents([])

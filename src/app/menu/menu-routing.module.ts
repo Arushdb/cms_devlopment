@@ -12,7 +12,8 @@ import { StudentmarksComponent } from '../student/studentmarks/studentmarks.comp
 import { StartactivityComponent } from '../resultprocessing/startactivity/startactivity.component';
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
-
+import { DistanceCenterComponent } from '../reports/distance-center/distance-center.component';
+import { SpreportsComponent } from '../reports/spreports/spreports.component';
 
 
 
@@ -44,11 +45,8 @@ const routes:Routes=[
   loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
  // {path:'registration_continue',component: RegisterStudentComponent},   
 
- 
- { path: 'distance_center',
-  loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
- // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
- 
+ {path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
+ {path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
  {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
  {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
  
