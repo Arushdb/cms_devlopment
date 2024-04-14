@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class SchoolregistrationService {
+ 
 
   url:string;
   application="CMS";
@@ -60,6 +61,20 @@ export class SchoolregistrationService {
       return  this.httpclient.post(myurl,{},{headers,params:param,responseType: 'text'});
 
     }
+
+    getstudents(student:any){
+      var myurl =this.url+"/schoolregistration/getstudents.htm";
+      let headers: HttpHeaders= new HttpHeaders();
+      headers=headers.set('format', 'None');
+     // headers=headers.set('format', 'format');// format the response data from xml to json
+      let param:HttpParams= new HttpParams();
+      param=param.set("student",student)
+       
+      
+      return  this.httpclient.post(myurl,{},{headers,params:param,responseType: 'text'});
+
+    }
+
 
 
 

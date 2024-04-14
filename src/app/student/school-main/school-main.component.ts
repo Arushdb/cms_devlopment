@@ -3,6 +3,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { MyItem } from 'src/app/interfaces/my-item';
 import { SchoolregistrationService } from 'src/app/services/schoolregistration.service'
+import { SubscriptionContainer } from 'src/app/shared/subscription-container';
+import { student } from '../school-student/studentinterface';
 
 interface programbranch {
   programid: string,
@@ -31,9 +33,11 @@ export class SchoolMainComponent implements OnInit {
   selectedschool: string = "";
   selectedclass: string = "";
   selectedbranch: string = "";
+  studentdata:student[]=[];
  
   programbranchList: programbranch[] = [];
   branchList: programbranch[] = [];
+  subs = new SubscriptionContainer();
 
  
 
@@ -61,7 +65,7 @@ export class SchoolMainComponent implements OnInit {
 
   }
   getschool() {
-    this.schoolservice.getschool().subscribe((res) => {
+    this.subs.add=  this.schoolservice.getschool().subscribe((res) => {
 
       this.schoolList = JSON.parse(res);
 
@@ -73,7 +77,7 @@ export class SchoolMainComponent implements OnInit {
   }
 
   getprogram() {
-    this.schoolservice.getschoolprograms().subscribe((res) => {
+    this.subs.add= this.schoolservice.getschoolprograms().subscribe((res) => {
 
       this.classList = JSON.parse(res);
 
@@ -83,7 +87,7 @@ export class SchoolMainComponent implements OnInit {
   }
 
   getbranches() {
-    this.schoolservice.getschoolbranches().subscribe((res) => {
+    this.subs.add= this.schoolservice.getschoolbranches().subscribe((res) => {
     
       this.branchList = JSON.parse(res);
       
@@ -113,17 +117,18 @@ export class SchoolMainComponent implements OnInit {
   
   onBranchChange(event: MatSelectChange) {
     this.dataentry=false;
-    if (this.selectedbranch!=='')
-         this.dataentry=true;
+    if (this.selectedbranch!==''){
+     this.dataentry=true;
+      
+    } 
+        
         else{
           alert("this.dataentry flag is: "+this.dataentry );
           this.dataentry=false;
         }
   }
-  getstudent(theschool,theclass,thebranch){
+ 
 
-
-  }
 
 
   

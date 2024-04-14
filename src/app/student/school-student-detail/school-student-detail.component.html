@@ -1,14 +1,14 @@
 <app-spinner [spinnerstatus]="spinnerstatus"></app-spinner>
 <div class="card  m-3" #student>
-    <h3 class="card-header bold">Student Personal Detail :Application Number :{{appnumber}} </h3>
+    <h3 class="card-header bold">Student Personal Detail  </h3>
     <!--<div class="card-body"> -->
     <form [formGroup]="registerForm">
 
-        <div class="p-2 bd-highlight" >
+        <div class="p-2 bd-highlight" *ngIf="mode=='add'" >
            <img id="imgid" width="170px" height="160px" class="center"/>
            
         </div>
-        <div class="p-2 bd-highlight">
+        <div class="p-2 bd-highlight" *ngIf="mode=='add'">
             <label>Upload Student Photo in .jpg or .png format (less than 200KB) </label>
             <input type="file" formControlName="filepath" (change)="handleFileInput($event)" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.filepath.errors }" />
@@ -24,7 +24,7 @@
             
             <div class="p-2 bd-highlight">
                 <label>Student Name</label>
-                <input type="text" [readonly]="not_edit_firstname" formControlName="firstName" class="form-control"
+                <input type="text" formControlName="firstName" class="form-control"
                     [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
                 <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                     <div *ngIf="f.firstName.errors.required">Name is required</div>
@@ -34,7 +34,7 @@
 
             <div class="p-2 bd-highlight">
                 <label>Father Name</label>
-                <input type="text" [readonly]="not_edit_fathername" formControlName="fatherFirstName"
+                <input type="text"  formControlName="fatherFirstName"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fatherFirstName.errors }" />
                 <div *ngIf="submitted && f.fatherFirstName.errors" class="invalid-feedback">
                     <div *ngIf="f.fatherFirstName.errors.required">Father name is required</div>
@@ -42,7 +42,7 @@
             </div>
             <div class="p-2 bd-highlight">
                 <label>Mother Name</label>
-                <input type="text" [readonly]="not_edit_mothername" formControlName="motherFirstName"
+                <input type="text"  formControlName="motherFirstName"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && f.motherFirstName.errors }" />
                 <div *ngIf="submitted && f.motherFirstName.errors" class="invalid-feedback">
                     <div *ngIf="f.motherFirstName.errors.required">Mother Name is required</div>
@@ -58,7 +58,7 @@
 
             <div class="p-2 bd-highlight">
                 <label>Date of Birth(YYYY-MM-DD)</label>
-                <input type="text" [readonly]="not_edit_dob" formControlName="dateOfBirth" class="form-control"
+                <input type="text" formControlName="dateOfBirth" class="form-control"
                     [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }" />
                 <div *ngIf="submitted && f.dateOfBirth.errors" class="invalid-feedback">
                     <div *ngIf="f.dateOfBirth.errors.required">Date of Birth is required</div>
@@ -100,7 +100,7 @@
             </div>
             <div class="p-2 bd-highlight">
                 <label>Primary Email</label>
-                <input type="text" [readonly]="not_edit_email" formControlName="primaryEmailId" class="form-control"
+                <input type="text"  formControlName="primaryEmailId" class="form-control"
                     [ngClass]="{ 'is-invalid': submitted && f.primaryEmailId.errors }" />
                 <div *ngIf="submitted && f.primaryEmailId.errors" class="invalid-feedback">
                     <div *ngIf="f.primaryEmailId.errors.required">Email is required</div>
@@ -156,15 +156,15 @@
 
                 <div class="p-2 bd-highlight">
                     <label>Phone Number</label>
-                    <input type="number" [readonly]="not_edit_phone" formControlName="officePhone" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.officePhone.errors }" />
-                    <div *ngIf="submitted && f.officePhone.errors" class="invalid-feedback">
-                        <div *ngIf="f.officePhone.errors.required">Phone Number is required</div>
+                    <input type="number"  formControlName="extraphone" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.extraphone.errors }" />
+                    <div *ngIf="submitted && f.extraphone.errors" class="invalid-feedback">
+                        <div *ngIf="f.extraphone.errors.required">Phone Number is required</div>
                     </div>
                 </div>
                 <div class="p-2 bd-highlight">
                     <label>Aadhar Number</label>
-                    <input type="number" [readonly]="not_edit_adhnum" formControlName="aadhaarNumber"
+                    <input type="number"  formControlName="aadhaarNumber"
                         class="form-control" [ngClass]="{ 'is-invalid': submitted && f.aadhaarNumber.errors }" />
                     <div *ngIf="submitted && f.aadhaarNumber.errors" class="invalid-feedback">
                         <div *ngIf="f.aadhaarNumber.errors.required">Adhar Number is required</div>
@@ -212,11 +212,11 @@
 
         </div>
 
-        <div *ngIf="!f.enrollmentNumber.value"
+        <div 
             class="d-inline-flex flex-row align-items-start p-2 bd-highlight flex-wrap">
             <div class="p-2 bd-highlight">
                 <label>Student Name in Hindi</label>
-                <input type="text" [readonly]="not_edit_firstname_hindi" formControlName="studentNameinHindi" id="fname"
+                <input type="text" formControlName="studentNameinHindi" id="fname"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && f.studentNameinHindi.errors }" />
                 <a href="https://translate.google.com/" class="btn btn-info bi bi-info-square" rel="noopener noreferrer"
                     target="_blank">Info</a>
@@ -228,7 +228,7 @@
 
             <div class="p-2 bd-highlight">
                 <label>Father Name in Hindi</label>
-                <input type="text" [readonly]="not_edit_fathername_hindi" formControlName="fatherNameinHindi"
+                <input type="text"  formControlName="fatherNameinHindi"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fatherNameinHindi.errors }" />
 
                 <a href="https://translate.google.com/" class="btn btn-info bi bi-info-square" rel="noopener noreferrer"
@@ -241,7 +241,7 @@
             </div>
             <div class="p-2 bd-highlight">
                 <label>Mother Name in Hindi</label>
-                <input type="text" [readonly]="not_edit_mothername_hindi" formControlName="motherNameinHindi"
+                <input type="text"  formControlName="motherNameinHindi"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && f.motherNameinHindi.errors }" />
                 <a href="https://translate.google.com/" class="btn btn-info bi bi-info-square" rel="noopener noreferrer"
                     target="_blank">Info</a>

@@ -1,11 +1,17 @@
 
 <div>
+
+  <button  *ngIf="!displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="displayStudent()">Display</button>
+
   <button   type="button" class="btn btn-success mr-2  btn-sm " 
   (click)="addStudent()"  >Add</button>
 
-  <button   type="button" class="btn btn-success mr-2  btn-sm " 
+  
+
+  <button  *ngIf="displaygrid"  type="button" class="btn btn-success mr-2  btn-sm " 
   (click)="updateStudent()"  >Update</button>
-  <button   type="button" class="btn btn-success mr-2  btn-sm " 
+  <button  *ngIf="displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
   (click)="deleteStudent()"  >Delete</button>
 
   <button   type="button" class="btn btn-success mr-2  btn-sm " 
@@ -13,16 +19,7 @@
   
  
 </div>
-<!--
-<schoolstudentdetail *ngIf="displaystudent"
-[studentdata] = "_studentdata"
-[selectedschool]="myparent1.selectedschool"
-[selectedclass]="myparent1.selectedclass"
-[selectedbranch]="myparent1.selectedbranch"
-  
-(changedata)="Onchangedata($event)" 
-></schoolstudentdetail>
--->
+
 
 <ag-grid-angular *ngIf="displaygrid"
 
@@ -36,7 +33,9 @@
     [gridOptions] = "gridOptions"
     (selectionChanged)="onActSelectionChanged($event)" 
     suppressHorizontalScroll = "true"
+    [isRowSelectable]="isRowSelectable"
     (gridReady) ="OngridReady($event)"
+    suppressRowClickSelection="suppressRowClickSelection"
     
     class="ag-theme-alpine"
        

@@ -1,11 +1,11 @@
-import { Component, ElementRef, Host, Inject, Injectable, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AgGridEvent, ColDef, FirstDataRenderedEvent, GridApi, GridOptions, GridReadyEvent, IRowModel, RowNode, ValueGetterParams } from 'ag-grid-community';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Host, Inject, Injectable, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AgGridEvent, ColDef, ColumnApi, FirstDataRenderedEvent, GridApi, GridOptions, GridReadyEvent, IRowModel, IsRowSelectable, RowClickedEvent, RowNode, ValueGetterParams } from 'ag-grid-community';
 import { CustomButtonComponent } from 'src/app/shared/custom-button/custom-button.component';
-import {PersonalData} from './studentinterface' 
+import {student} from './studentinterface' 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import {  MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {  MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
 
@@ -13,6 +13,7 @@ import { FormGroup } from '@angular/forms';
 import { SchoolMainComponent } from '../school-main/school-main.component';
 import { SchoolStudentDetailComponent } from '../school-student-detail/school-student-detail.component';
 import { NewregistrationComponent } from 'src/app/login/newregistration/newregistration.component';
+import { SchoolregistrationService } from 'src/app/services/schoolregistration.service';
 
 
 @Component({
@@ -22,11 +23,11 @@ import { NewregistrationComponent } from 'src/app/login/newregistration/newregis
 })
 
 
-export class SchoolStudentComponent implements OnInit {
+export class SchoolStudentComponent implements OnInit  {
   
 
 
-  private gridApi!: GridApi;
+  isRowSelectable:IsRowSelectable;
   subs = new SubscriptionContainer();
   mask:boolean=false;
   gridOptions: GridOptions;
@@ -34,10 +35,12 @@ export class SchoolStudentComponent implements OnInit {
   displaygrid=false;
   registrationform: FormGroup;
   _studentdata:any;
-  
+  studentdata:student[]=[];
   rowDataselected:any[] =[];
   
- 
+  myobj:student;
+  gridApi: GridApi;
+  gridColumnApi: ColumnApi;
   
   spinnerstatus:boolean=false;
   mybutton:CustomButtonComponent; 
@@ -64,12 +67,14 @@ export class SchoolStudentComponent implements OnInit {
   
   };
   getRowStyle:any; 
+  suppressRowClickSelection: boolean;
   
 
  
   constructor(private router:Router,
    
     private userservice:UserService,
+    private schoolservice:SchoolregistrationService,
 
     private elementRef:ElementRef,
 
@@ -85,7 +90,7 @@ export class SchoolStudentComponent implements OnInit {
 
     ) { 
 
-   
+      
   }
   ngOnDestroy(): void {
     this.subs.dispose();
@@ -98,135 +103,125 @@ export class SchoolStudentComponent implements OnInit {
   }
   ngOnInit(): void {
   
-    this.displaygrid=true;
-    //this.dialog.open(SchoolStudentDetailComponent);
-   // this.mybutton.buttonlabel="update";
-   this.gridOptions = <GridOptions>{
-    // enableSorting: true,
-    // enableFilter: true               
-   } ;
+    this.displaygrid=false;
+    this.gridOptions = <GridOptions>{
+     enableSorting: true,
+     enableFilter: true   } ;
    
-  
-
- 
+     
+                
+   
   }
   Onchange(){
     // console.log(this.check);
     // this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
   }
+ 
 
+  displayStudent(){
+  this.rowDataselected=[];
+     let obj={
+       "entityId":this.myparent1.selectedschool,
+       "programId":this.myparent1.selectedclass,
+       "branchCode":this.myparent1.selectedbranch
+     };
+ 
+    let serializedForm = JSON.stringify(obj);
+  
+   console.log(serializedForm); 
 
+    this.subs.add=this.schoolservice.getstudents(serializedForm).subscribe((res) => {
 
-  getStudents(){
+      this.studentdata = JSON.parse(res);
+      this.rowData=this.studentdata;
+      this.displaygrid=true;
+
+       this.isRowSelectable =(params:RowNode)=>{
+        console.log(params);
+        if (params.data.enrolmentno===""){
+          this.suppressRowClickSelection=true;
+          return true;
+        }
+        else
+      return false;
+
+      };
+    
+      this.getRowStyle = params => {
+         
+        console.log(params.node);
+     
+        if (params.node.data.enrolmentno!=="") {
+          
+            return { background: 'yellow'};
+        }
+    };
+      
+    }, error => {
+      console.log(error);
+    });
     
   }
 
   
 
 cancel(){
-  // this.displaygrid=false;
-  // this.displaystudent=false;
+ 
+  this.registrationform.reset();
+  this.rowDataselected=[];
   this.subs.dispose();
   this.location.back();
-    //this.elementRef.nativeElement.remove();
+
+    
 }
   
-OngridReady(parameters:GridReadyEvent){
+OngridReady(params:GridReadyEvent){
     //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
-    debugger;
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
     this.columnDefs = [
-      // { headerName: " StudentName", checkboxSelection:true,flex:2 },
-      // { headerName: "DOB" ,field: "dob", flex: 0.5 },
-      // { headerName: " FatherName" ,field: "fathername", flex: 1},
-      // { headerName: " MotherName" ,field: "mothername", flex: 1 },
-      // { headerName: " Address" ,field: "Address", flex: 2 },
-      // { headerName: " Address" ,field: "Address", flex: 2 },
-
-      
-      { headerName: 'Select', field: 'select' ,checkboxSelection:true,suppressSizeToFit: false,width:30},
-      { headerName: 'Model', field: 'model' ,suppressSizeToFit: false,flex:1},
-    { headerName: 'Price', field: 'price',suppressSizeToFit: false ,flex:1},
-    { headerName: 'Make', field: 'make' ,suppressSizeToFit: false,flex:1},
-    // {
-    
-    //   headerName: "Update",
-    //   resizable: false,
-     
-    //   width:80,
-     
-    //   cellRendererFramework: CustomButtonComponent,
-    //   cellRendererParams:"Update"
-      
-             
-    // },
-
-    // {
-    //   field: "delete",
-     
-    //   width:80,
-    //   headerName: "Delete",
-    //   cellRendererFramework: CustomButtonComponent,
-    //   cellRendererParams:"Delete",
-    //   onCellClicked: this.deletestudent
-             
-    // },  
-
+           
+    { headerName: 'Select', headerCheckboxSelection:true, field: 'select' ,checkboxSelection:true,suppressSizeToFit: false,width:30},
+    { headerName: 'Name', field: 'firstName' ,suppressSizeToFit: false,flex:1},
+    { headerName: 'Father Name', field: 'fatherFirstName',suppressSizeToFit: false ,flex:1},
+    { headerName: 'Mother Name', field: 'motherFirstName' ,suppressSizeToFit: false,flex:1},
+    { headerName: 'Date of Birth', field: 'dateOfBirth' ,suppressSizeToFit: false,flex:1},
+    { headerName: 'App Number', field: 'appnumber' ,suppressSizeToFit: false,flex:1},
+    { headerName: 'Enrolment Number', field: 'enrolmentno' ,suppressSizeToFit: false,hide:true},
+    { headerName: 'Registration Status', field: 'processedflag' ,suppressSizeToFit: false,flex:1},
+   
       
   ];
-    this.rowData = [
-      { make: "Tesla", model: "Model Y", price: 64950, electric: true,button:"update" },
-      { make: "Ford", model: "F-Series", price: 33850, electric: false ,button:"update"},
-      { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-      { make: 'Mercedes', model: 'EQA', price: 48890, electric: true },
-      { make: 'Fiat', model: '500', price: 15774, electric: false },
-      { make: 'Nissan', model: 'Juke', price: 20675, electric: false },
-    ];
-       // parameters.api.selectAll();
-        //this.gridApi = parameters.api;
-       //this.gridColumnApi = parameters.columnApi;
-        //parameters.api.sizeColumnsToFit();
-        parameters.columnApi.autoSizeAllColumns();
-        this.gridApi = parameters.api;
-       
-        debugger;
-  
-      //  this.check=true;
-        //this.suppressRowDeselection=true;
+          
+        params.columnApi.autoSizeAllColumns();
+         
+      
         this.gridOptions.columnDefs=this.columnDefs;
        
-        this.getRowStyle = params => {
-          
-          console.log(params);
-          if (params.node.rowIndex % 2 === 0) {
-              return { background: 'red' };
-          }
-      };
+    
   }
 
   goBack(): void {
  
     this.displaystudent=false;
+    this.rowDataselected=[];
   }
 
   
  
   Onchangedata(registrationform:FormGroup){
     this.registrationform=registrationform;
-
-    
-   
+      
     if(this.f.status.value==="valid")
     this.displaystudent=false;
       
-    
-
   }
 
   addStudent(){
-  
+  this.displaygrid=false;
     const dialogRef=  this.dialog.open(SchoolStudentDetailComponent,{height: '100%',
     
-    autoFocus: false,disableClose:true,data:{"parent":this.myparent1}});
+    autoFocus: false,disableClose:true,data:{"parent":this.myparent1,"mode":"add"}});
     
     dialogRef.disableClose = true;
     
@@ -244,18 +239,41 @@ OngridReady(parameters:GridReadyEvent){
  
 
   updateStudent(){
+
+    if(this.rowDataselected.length>1){
+     this.userservice.log("Please select only one record");
+     return;
+    }
+    // if((this.rowDataselected[0].data.enrolmentno!=="")){
+    //   return;
+
+    // }
+    console.log("selected row",this.rowDataselected);
+    console.log("selected row",this.rowDataselected[0].data.studentNameinHindi);
+    console.log(decodeURI(this.rowDataselected[0].data.studentNameinHindi));
+    this.rowDataselected[0].data.studentNameinHindi=decodeURI(this.rowDataselected[0].data.studentNameinHindi);
+    this.rowDataselected[0].data.fatherNameinHindi=decodeURI(this.rowDataselected[0].data.fatherNameinHindi);
+    this.rowDataselected[0].data.motherNameinHindi=decodeURI(this.rowDataselected[0].data.motherNameinHindi);
+    const dialogconfig= new MatDialogConfig();
+    dialogconfig.disableClose=true;
+    dialogconfig.autoFocus=false;
+    dialogconfig.height='100%';
+    dialogconfig.data={"parent":this.myparent1,
+    "selectedrow":this.rowDataselected,"mode":"update"};
+
+
+
     if(this.rowDataselected.length>0){
-      const dialogRef=  this.dialog.open(SchoolStudentDetailComponent,{height: '100%',
       
-      autoFocus: false,disableClose:true,});
+      const dialogRef=  this.dialog.open(SchoolStudentDetailComponent,dialogconfig);
       
       dialogRef.disableClose = true;
       
   
        this.subs.add=dialogRef.afterClosed().subscribe(result => {
     if(result)
-   console.log(result);
-     // this.getStudentMarks();
+ 
+     this.displayStudent();
        });
   
       }
@@ -269,11 +287,11 @@ OngridReady(parameters:GridReadyEvent){
       autoFocus: false,disableClose:true,});
       
       dialogRef.disableClose = true;
-      
-  
+       
        this.subs.add=dialogRef.afterClosed().subscribe(result => {
     if(result)
    console.log(result);
+    this.displayStudent();
      // this.getStudentMarks();
        });
   
@@ -282,26 +300,25 @@ OngridReady(parameters:GridReadyEvent){
 
 
   onActSelectionChanged(event:AgGridEvent){
-  
+ 
     this.rowDataselected=[];
-    //console.log(this.gridOptions.api);
-    //console.log(this.gridOptions.api.getSelectedNodes());
+   
      console.log(this.gridOptions.api.getSelectedNodes());
-    //this.rowDataselected2=this.gridOptions.api.getSelectedRows();
+   
     this.rowDataselected=this.gridOptions.api.getSelectedNodes();
-    //console.log("nodes",rowdata);
-    //console.log("rows",this.rowDataselected1);
-   // this.dialog.open(SchoolStudentDetailComponent);
-
-
-  }
-
   
   }
 
   
+  
+}
+
 
  
  
 
+
+function isRowSelectable(): void {
+  throw new Error('Function not implemented.');
+}
 
