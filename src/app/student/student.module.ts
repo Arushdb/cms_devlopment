@@ -11,7 +11,7 @@ import { StudentmarksComponent } from './studentmarks/studentmarks.component';
 import { UndertakingComponent } from '../login/undertaking/undertaking.component';
 import { SchoolStudentComponent } from './school-student/school-student.component';
 import { SchoolMainComponent } from './school-main/school-main.component';
-import { StudentImportComponent } from './student-import/student-import.component';
+
 import { SchoolStudentDetailComponent } from './school-student-detail/school-student-detail.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 
@@ -27,9 +27,10 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     UndertakingComponent,
     SchoolStudentComponent,
     SchoolMainComponent,
-    StudentImportComponent,
+   
     SchoolStudentDetailComponent,
     FileUploadComponent,
+   
     
 
    

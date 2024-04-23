@@ -11,8 +11,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SchoolregistrationService } from 'src/app/services/schoolregistration.service';
 
 import { SchoolMainComponent } from '../school-main/school-main.component';
+import { student } from '../school-student/studentinterface';
 
-interface student {
+interface mystudent {
   appno: string
 
 }
@@ -37,7 +38,7 @@ export class SchoolStudentDetailComponent implements OnInit, OnDestroy, OnChange
   fileToUpload: File = null;
   upload = true;
   img: string = "";
-  appno: student[] = [];
+  appno: mystudent[] = [];
 
   registerForm: FormGroup;
   submitted = false;
@@ -138,16 +139,19 @@ export class SchoolStudentDetailComponent implements OnInit, OnDestroy, OnChange
 
     let ssc = <SchoolMainComponent>this.data.parent;
 
-    let selectedrow: any;
+    let selectedrow:student;
     this.mode= this.data.mode;
     this.f.entityId.setValue(ssc.selectedschool);
     this.f.programId.setValue(ssc.selectedclass);
     this.f.branchCode.setValue(ssc.selectedbranch);
     if (this.data.mode === "add")
       this.f.filepath.setValidators(Validators.required);
+    console.log(this.data);
 
     if (this.data.mode === "update" || this.data.mode === "delete") {
-      selectedrow = this.data.selectedrow[0].data;
+     // selectedrow = this.data.selectedrow[0].data;
+      selectedrow = this.data.selectedrow;
+     
       selectedrow.filepath = "";
       selectedrow.mode = "";
 

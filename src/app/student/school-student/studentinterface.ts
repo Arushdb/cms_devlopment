@@ -28,8 +28,16 @@ export interface student {
    
     entityId:string,
     branchCode:string,
+    branchName:string,
     processedflag:string
     semester_start_date:string
+    passedprogramId:string;
+    passedbranchName:string;
+    passedbranchid:string;
+    passedbranches:string[];
+    records:string;
+    filepath:string;
+    mode:string;
     
     
 }

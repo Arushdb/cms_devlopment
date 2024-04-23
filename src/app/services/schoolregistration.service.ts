@@ -75,6 +75,44 @@ export class SchoolregistrationService {
 
     }
 
+    lastclass(student:any){
+      var myurl =this.url+"/schoolregistration/lastclass.htm";
+      let headers: HttpHeaders= new HttpHeaders();
+      headers=headers.set('format', 'None');
+     // headers=headers.set('format', 'format');// format the response data from xml to json
+      let param:HttpParams= new HttpParams();
+      param=param.set("student",student);
+       
+      
+      return  this.httpclient.post(myurl,{},{headers,params:param,responseType: 'text'});
+
+    }
+
+    importstudents(student:any){
+      var myurl =this.url+"/schoolregistration/importstudents.htm";
+      let headers: HttpHeaders= new HttpHeaders();
+      headers=headers.set('format', 'None');
+     // headers=headers.set('format', 'format');// format the response data from xml to json
+      let param:HttpParams= new HttpParams();
+     // param=param.set("student",student);
+       
+      
+      return  this.httpclient.post(myurl,student,{headers,params:param,responseType: 'text'});
+
+    }
+
+    deletestudent(student:any){
+      var myurl =this.url+"/schoolregistration/deletestudent.htm";
+      let headers: HttpHeaders= new HttpHeaders();
+      headers=headers.set('format', 'None');
+     // headers=headers.set('format', 'format');// format the response data from xml to json
+      let param:HttpParams= new HttpParams();
+      param=param.set("student",student);
+       
+      
+      return  this.httpclient.post(myurl,{},{headers,params:param,responseType: 'text'});
+
+    }
 
 
 

@@ -32,6 +32,8 @@ export class SchoolMainComponent implements OnInit {
   spinnerstatus: string = "";
   selectedschool: string = "";
   selectedclass: string = "";
+  selectedclasslabel:string;
+  selectedbranchlabel:string;
   selectedbranch: string = "";
   studentdata:student[]=[];
  
@@ -43,9 +45,9 @@ export class SchoolMainComponent implements OnInit {
 
 
   
-  schoolList: MyItem[] = [{ id: 'REI', label: "REI Intermediate college" },
-  { id: 'PV', label: "PV girls" }];
-  classList: MyItem[] = [{ id: "9th", label: "ninth Class" }, { id: "10th", label: "Tenth Class" }];
+  schoolList: MyItem[] = []
+  
+  classList: MyItem[] = [];
   dataentry: boolean;
   //branchList: MyItem[] = [{ id: "mth-sci", label: "Math-Science" }, { id: "com", label: 'Commerce' }];
 
@@ -68,9 +70,7 @@ export class SchoolMainComponent implements OnInit {
     this.subs.add=  this.schoolservice.getschool().subscribe((res) => {
 
       this.schoolList = JSON.parse(res);
-
-      // this.classList=res;
-      console.log(this.classList);
+   
     }, error => {
       console.log(error);
     });
@@ -119,6 +119,7 @@ export class SchoolMainComponent implements OnInit {
     this.dataentry=false;
     if (this.selectedbranch!==''){
      this.dataentry=true;
+    
       
     } 
         
@@ -126,6 +127,23 @@ export class SchoolMainComponent implements OnInit {
           alert("this.dataentry flag is: "+this.dataentry );
           this.dataentry=false;
         }
+        this.selectedclasslabel="";
+
+     
+        this.classList.forEach(res=>{
+         if(res.id===this.selectedclass){
+          this.selectedclasslabel= res.label;
+       
+         } });
+          
+         this.branchList.forEach(res1=>{
+          if(res1.branchid===this.selectedbranch){
+           this.selectedbranchlabel= res1.branchname;
+           return;
+          } });
+       
+
+        console.log( this.selectedclasslabel);
   }
  
 
