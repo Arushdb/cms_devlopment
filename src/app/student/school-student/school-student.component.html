@@ -1,4 +1,38 @@
+<table hidden id="excel-table">
+  <tr>
+    <th>Name</th>
+    <th>Father Name</th>
+    <th>Mother Name</th>
+    <th>Date of Birth</th>
+    <th>App Number</th>
+    <th>Name in Hindi</th>
+    <th>Father Name in Hindi</th>
+    <th>Mother Name in Hindi</th>
+     <th>Phone</th>
+     <th>Email</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>State</th>
 
+  </tr>
+  <tr *ngFor="let item of studentregdata">
+    <td>{{item.firstName}}</td>
+    <td>{{item.fatherFirstName}}</td>
+    <td>{{item.motherFirstName}}</td>
+    <td>{{item.dateOfBirth}}</td>
+    <td>{{item.appnumber}}</td>
+    
+    <td>{{decodeuri(item.studentNameinHindi)}}</td>
+    <td>{{decodeuri(item.fatherNameinHindi)}}</td>
+    <td>{{decodeuri(item.motherNameinHindi)}}</td>
+    <td>{{item.extraphone}}</td>
+    <td>{{item.primaryEmailId}}</td>
+    
+    <td>{{item.perAddress}}</td> 
+    <td>{{item.perCity}}</td> 
+    <td>{{item.perState}}</td> 
+  </tr>
+</table>
 <div>
 
   <button  *ngIf="!displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
@@ -13,6 +47,9 @@
   (click)="updateStudent()"  >Update</button>
   <button  *ngIf="displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
   (click)="deleteStudent()"  >Delete</button>
+
+  <button  *ngIf="displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="exportStudent()"  >Export to Excel</button>
  
 
   <button   type="button" class="btn btn-success mr-2  btn-sm " 

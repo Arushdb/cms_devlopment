@@ -15,7 +15,7 @@ import { SchoolStudentDetailComponent } from '../school-student-detail/school-st
 import { NewregistrationComponent } from 'src/app/login/newregistration/newregistration.component';
 import { SchoolregistrationService } from 'src/app/services/schoolregistration.service';
 import { alertComponent } from 'src/app/shared/alert/alert.component';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-school-student',
@@ -56,6 +56,8 @@ export class SchoolStudentComponent implements OnInit {
   mybutton: CustomButtonComponent;
   public columnDefs: ColDef[];
   public columnDefsimport: ColDef[];
+
+  fileName= 'ExcelSheet.xlsx';
   //public rowData: any[] | null;
   //public rowDataimport: any[] | null;
   //public selectedrecords: any[] | null;
@@ -334,6 +336,11 @@ export class SchoolStudentComponent implements OnInit {
 
 
   }
+  decodeuri(name:string):string{
+   let  str:string= decodeURI(name);
+  return str; 
+  }
+
   deleteStudent() {
     let serializedobj;
 
@@ -520,7 +527,18 @@ export class SchoolStudentComponent implements OnInit {
     );
 
   }
-
+  exportStudent(){
+    /* pass here the table id */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+ 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ 
+    /* save to file */  
+    XLSX.writeFile(wb, this.fileName);
+  }
 
   importStudent() {
    
