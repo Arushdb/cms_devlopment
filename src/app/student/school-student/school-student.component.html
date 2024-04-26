@@ -1,0 +1,117 @@
+<table hidden id="excel-table">
+  <tr>
+    <th>Name</th>
+    <th>Father Name</th>
+    <th>Mother Name</th>
+    <th>Date of Birth</th>
+    <th>App Number</th>
+    <th>Name in Hindi</th>
+    <th>Father Name in Hindi</th>
+    <th>Mother Name in Hindi</th>
+     <th>Phone</th>
+     <th>Email</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>State</th>
+
+  </tr>
+  <tr *ngFor="let item of studentregdata">
+    <td>{{item.firstName}}</td>
+    <td>{{item.fatherFirstName}}</td>
+    <td>{{item.motherFirstName}}</td>
+    <td>{{item.dateOfBirth}}</td>
+    <td>{{item.appnumber}}</td>
+    
+    <td>{{decodeuri(item.studentNameinHindi)}}</td>
+    <td>{{decodeuri(item.fatherNameinHindi)}}</td>
+    <td>{{decodeuri(item.motherNameinHindi)}}</td>
+    <td>{{item.extraphone}}</td>
+    <td>{{item.primaryEmailId}}</td>
+    
+    <td>{{item.perAddress}}</td> 
+    <td>{{item.perCity}}</td> 
+    <td>{{item.perState}}</td> 
+  </tr>
+</table>
+<div>
+
+  <button  *ngIf="!displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="displayStudent()">Display</button>
+
+  <button   type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="addStudent()"  >Add</button>
+
+  
+
+  <button  *ngIf="displaygrid"  type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="updateStudent()"  >Update</button>
+  <button  *ngIf="displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="deleteStudent()"  >Delete</button>
+
+  <button  *ngIf="displaygrid" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="exportStudent()"  >Export to Excel</button>
+ 
+
+  <button   type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="ngOnDestroy()"  >Cancel</button>
+  
+ 
+</div>
+<!--
+<div class="d-inline-flex flex-row align-items-start p-2 bd-highlight flex-wrap">
+  <div class="p-2 bd-highlight">
+  -->
+  <div>
+    Registration class:<b>{{regclass}} branch:{{regbranch}}</b>
+<ag-grid-angular *ngIf="displaygrid"
+
+    #agGrid
+    style="height:300px; width:100%;" 
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [getRowStyle]="getRowStyle"
+    [rowData]="studentregdata"
+    rowSelection="single"
+    [gridOptions] = "gridOptions"
+    (selectionChanged)="onSelectionregChanged($event)" 
+    suppressHorizontalScroll = "true"
+    [isRowSelectable]="isRowSelectable"
+    (gridReady) ="OngridReady($event)"
+    suppressRowClickSelection="suppressRowClickSelection"
+    
+    class="ag-theme-alpine"
+       
+  ></ag-grid-angular>`
+</div>
+
+<div>
+  
+  
+  <button  *ngIf="showimport" type="button" class="btn btn-success mr-2  btn-sm " 
+  (click)="importStudent()"  >Import</button>
+</div>
+<div class="p-2 bd-highlight">
+ <b> Last class: {{lastclass}}</b>
+ 
+  <ag-grid-angular *ngIf="displaygrid"
+
+    #agGrid1
+    style="height:300px; width: 100%;" 
+    [columnDefs]="columnDefsimport"
+    [defaultColDef]="defaultColDef"
+  
+    [rowData]="studentimpdata"
+    rowSelection="multiple"
+    [gridOptions] = "gridOptionsimport"
+    (selectionChanged)="onSelectionimpChanged($event)" 
+    suppressHorizontalScroll = "true"
+    
+    (gridReady) ="OngridReadyimport($event)"
+    suppressRowClickSelection="suppressRowClickSelection"
+    
+    class="ag-theme-alpine"
+       
+  ></ag-grid-angular>`
+ 
+</div>
+  <app-spinner *ngIf = 'mask' [spinnerstatus]="mask">{{mask}}</app-spinner>

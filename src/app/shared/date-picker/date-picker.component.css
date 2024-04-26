@@ -1,0 +1,19 @@
+.example-custom-date-class {
+    background: yellow;
+    border-radius: 100%;
+    
+  }
+
+  .mat-icon-button {
+    padding: 0;
+    min-width: 0;
+    width: 100%;
+    height: 10pt;
+    flex-shrink: 0;
+    line-height: 12px;
+    border-radius: 50%;
+}
+
+
+
+  

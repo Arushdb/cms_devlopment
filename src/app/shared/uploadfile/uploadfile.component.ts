@@ -27,7 +27,8 @@ export class UploadfileComponent implements OnInit {
   fileuploaded: boolean=false;;
 
   constructor(private userservice:UserService,private formBuilder: FormBuilder,
-     @Host() public myparent1:StudentpersonaldetailComponent ) { }
+     @Host() public myparent1:StudentpersonaldetailComponent ) 
+     { }
 
   ngOnInit(): void {
    

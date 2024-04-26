@@ -16,6 +16,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
+import { StudentModule } from './student/student.module';
+
 
 //import {StudentModule} from  './student/student.module' ;
 
@@ -34,6 +36,7 @@ import  {RevertresultModule} from './revertresult/revertresult.module';
     SharedModule,
     AwardSheetModule,
     LoginModule,
+    StudentModule,
     MenuModule,
     ResultprocessingModule,
     RevertresultModule
@@ -53,8 +56,8 @@ import  {RevertresultModule} from './revertresult/revertresult.module';
    
     [
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
-      {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true}
-      
+      {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
+ 
      
     ]
   ],
