@@ -1,0 +1,42 @@
+<!-- <p>course-grade-limit works!</p> -->
+<app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+<div style='height: 100%; display: flex; flex-direction: column;'>
+      <div [ngStyle]="styleCourse">
+        <button mat-icon-button (click)="backClicked()" class="close-button">
+          <mat-icon>close</mat-icon>
+          </button>         
+     <ag-grid-angular  
+    #agGrid style="width:100%;"
+    domLayout="autoHeight"
+    class="ag-theme-alpine"
+    rowSelection="single"
+    [rowData]="rowData"
+    [defaultColDef]="defaultColDef" 
+    [columnDefs]="columnDefs"
+    (selectionChanged)="onSelectionChanged($event)"
+    
+    
+    >
+    </ag-grid-angular>  
+
+    <div *ngIf="displaySecondaryGrid">
+      <br>
+      <h1>Grade Limit</h1>
+        <ag-grid-angular
+          style="width: 100%;"
+          domLayout="autoHeight"
+          class="ag-theme-alpine"
+          [rowData]="gradeLimitData"
+          [defaultColDef]="defaultColDef"
+          [columnDefs]="secondaryColumnDefs"
+          [gridOptions]="secondaryGridOptions"
+        ></ag-grid-angular>
+        <button (click)="openPopup()" color="primary" *ngIf="setGradeLimit===true">Grade Limit</button>
+        <button   type="button" class="btn btn-primary mr-2  btn-sm"
+          (click)="openPopup()" 
+          *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0 && displayType== 'I' && courseType=='Reg' "
+           >GradeLimit</button>
+      </div>
+     
+</div>
+</div>

@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Grade Limit</h1>
+<button mat-icon-button (click)="closeDialog()" class="close-button">
+<mat-icon>close</mat-icon>
+</button>
+<button mat-button (click)="Save()" color="primary" *ngIf="Validate">Save</button>
+<button mat-button (click)="onConfirm()" class="btn  btn-success  btn-sm " *ngIf="onSave">Confirm</button>
+<div mat-dialog-content>
+  <!-- Ag-Grid component -->
+  <div mat-dialog-actions>
+  </div>
+  <ag-grid-angular 
+    #agGrid
+    style="width: 100%; height: 400px;"
+    class="ag-theme-alpine"
+    [defaultColDef]="defaultColDef"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    >
+  </ag-grid-angular>
+</div>

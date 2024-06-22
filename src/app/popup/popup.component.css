@@ -1,0 +1,46 @@
+/* Styles for the dialog container */
+::ng-deep .mat-dialog-container {
+ height: 350px;
+    width: 1200px;
+    position: relative; 
+  }
+  
+  /* Styles for the dialog title */
+  .mat-dialog-title {
+    font-size: 24px;
+  }
+  /* Size of Warning box */
+  ::ng-deep .Confirm-dialog-container {
+    width: 300px; 
+    height: 200px; 
+  }
+  /* Styles for the dialog content */
+  .mat-dialog-content {
+    overflow-y: auto; /* Enable vertical scrollbar if content overflows */
+  }
+  
+  /* Styles for the dialog actions */
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+  
+  /* Styles for the dialog button */
+  .mat-dialog-actions button {
+    margin-left: 8px;
+  }
+  .close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+  .save-button{
+    background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  }
+  

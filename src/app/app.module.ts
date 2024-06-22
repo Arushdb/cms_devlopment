@@ -17,13 +17,20 @@ import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
 import { StudentModule } from './student/student.module';
+import { CourseGradeLimitComponent } from './course-grade-limit/course-grade-limit.component';
+import { PopupComponent } from './popup/popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DataServiceService } from './data-service.service';
 
 
 //import {StudentModule} from  './student/student.module' ;
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CourseGradeLimitComponent,
+    PopupComponent,
+    
    
      
    
@@ -39,7 +46,8 @@ import { StudentModule } from './student/student.module';
     StudentModule,
     MenuModule,
     ResultprocessingModule,
-    RevertresultModule
+    RevertresultModule,
+    MatDialogModule
 
 
     //AgGridModule.withComponents([])
@@ -57,6 +65,7 @@ import { StudentModule } from './student/student.module';
     [
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
       {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
+      DataServiceService
  
      
     ]

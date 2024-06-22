@@ -13,6 +13,7 @@ import { StartactivityComponent } from '../resultprocessing/startactivity/starta
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
 import { SchoolMainComponent } from '../student/school-main/school-main.component';
+import { CourseGradeLimitComponent } from '../course-grade-limit/course-grade-limit.component';
 
 
 
@@ -40,6 +41,8 @@ const routes:Routes=[
   {path:'login/newregistration',component: NewregistrationComponent},
   {path:'resultProcess',component: StartactivityComponent},
   {path:'schoolmain',component: SchoolMainComponent},
+  {path:'course_grade_limit',component:CourseGradeLimitComponent,data:{displayType:"I",courseType:"Reg"},runGuardsAndResolvers: "always"},
+
          
   
    { path: 'registration_continue',
