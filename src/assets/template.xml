@@ -1,0 +1,1004 @@
+<template>
+<t1 name="Theory Course" countable="Two Best among CT1,CT2 and DHA Part1">
+<total>150</total>
+<components>
+<component group="CT" compName="CT1" fullName="Class Test1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>CT1</compName>
+<fullName>Class Test1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component> 
+<component group="CT" compName="CT2" fullName="Class Test2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>CT2</compName>
+<fullName>Class Test2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component componentType="DHAO" group="CT" compName="DH1" fullName="DHA Part1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>DH1</compName>
+<fullName>DHA Part1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+<componentType>DHAO</componentType>
+</component>
+<component componentType="DHAS" group="DHA" compName="DHA" fullName="DHA Part2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT1">
+<group>DHA</group>
+<compName>DHA</compName>
+<fullName>DHA Part2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>DHAS</componentType>
+</component>
+<component group="AA" compName="AA" fullName="AA" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>AA</group>
+<compName>AA</compName>
+<fullName>AA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+
+
+<t1 name="Practical Course">
+<total>150</total>
+<components>
+<component group="RC" compName="RC1" fullName="Record1" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2" >
+<group>RC</group>
+<compName>RC1</compName>
+<fullName>Record1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="RC" compName="RC2" fullName="Record2" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>RC</group>
+<compName>RC2</compName>
+<fullName>Record2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="RC" compName="RC3" fullName="Record3" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>RC</group>
+<compName>RC3</compName>
+<fullName>Record3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT1" fullName="Practical Test1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT1</compName>
+<fullName>Practical Test1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT2" fullName="Practical Test2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT2</compName>
+<fullName>Practical Test2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT3" fullName="Practical Test3" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT3</compName>
+<fullName>Practical Test3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+
+
+
+<t1 name="SGD Course:0.5 to 1 Credit" >
+<total>200</total>
+<components>
+<component group="SD" compName="SD1" fullName="S and GD1" numberOfComponents="1" maxMarks="160" weightage="100" rule="BT1">
+<group>SD</group>
+<compName>SD1</compName>
+<fullName>S and GD1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>160</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="SD" compName="SD2" fullName="S and GD2" numberOfComponents="1" maxMarks="160" weightage="100" rule="BT1">
+<group>SD</group>
+<compName>SD2</compName>
+<fullName>S and GD2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>160</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="PDS" compName="PDS" fullName="Participation in Discussion" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>PDS</group>
+<compName>PDS</compName>
+<fullName>Participation in Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
+
+
+
+
+<t1 name="SGD Course: 2 Credits">
+<total>150</total>
+<components>
+<component group="SD" compName="SD1" fullName="S and GD1" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>SD</group>
+<compName>SD1</compName>
+<fullName>S and GD1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="SD" compName="SD2" fullName="S and GD2" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>SD</group>
+<compName>SD2</compName>
+<fullName>S and GD2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="SD" compName="SD3" fullName="S and GD3" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>SD</group>
+<compName>SD3</compName>
+<fullName>S and GD3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PDS" compName="PDS" fullName="Participation in Discussion" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>PDS</group>
+<compName>PDS</compName>
+<fullName>Participation in Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+
+
+<t1 name="SGD Course: 3 or More Credits" >
+<total>150</total>
+<components>
+<component group="SD" compName="SD1" fullName="S and GD1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>SD</group>
+<compName>SD1</compName>
+<fullName>S and GD1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="SD" compName="SD2" fullName="S and GD2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>SD</group>
+<compName>SD2</compName>
+<fullName>S and GD2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="SD" compName="SD3" fullName="S and GD3" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>SD</group>
+<compName>SD3</compName>
+<fullName>S and GD3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="SD" compName="SD4" fullName="S and GD4" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>SD</group>
+<compName>SD4</compName>
+<fullName>S and GD4</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="PDS" compName="PDS" fullName="Participation in Discussion" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>PDS</group>
+<compName>PDS</compName>
+<fullName>Participation in Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+
+
+<t1 name="Dissertation/Project/Self-Study Courses" >
+<total>150</total>
+<components>
+<component group="PV" compName="PV1" fullName="presentation and Viva Voce1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>PV</group>
+<compName>PV1</compName>
+<fullName>presentation and Viva Voce1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="PV" compName="PV2" fullName="presentation and Viva Voce2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>PV</group>
+<compName>PV2</compName>
+<fullName>presentation and Viva Voce2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="PV" compName="PV3" fullName="presentation and Viva Voce3" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>PV</group>
+<compName>PV3</compName>
+<fullName>presentation and Viva Voce3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule></component>
+<component group="PV" compName="PV4" fullName="presentation and Viva Voce4" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT3">
+<group>PV</group>
+<compName>PV4</compName>
+<fullName>presentation and Viva Voce4</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT3</rule>
+</component>
+<component group="PDS" compName="PDS" fullName="Participation in Discussion" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>PDS</group>
+<compName>PDS</compName>
+<fullName>Participation in Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+<t1 name="CEC/CRC/ESC(2 Credits Course)" >
+<total>200</total>
+<components>
+<component group="CT" compName="CT1" fullName="Class Test1" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>CT1</compName>
+<fullName>Class Test1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule></component>
+<component group="CT" compName="CT2" fullName="Class Test2" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>CT2</compName>
+<fullName>Class Test2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule></component>
+<component componentType="DHAO" group="CT" compName="DH1" fullName="DHA Part1" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2">
+<group>CT</group>
+<compName>DH1</compName>
+<fullName>DHA Part1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+<componentType>DHAO</componentType>
+</component>
+<component componentType="DHAS" group="DHA" compName="DHA" fullName="DHA Part2" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT1">
+<group>DHA</group>
+<compName>DHA</compName>
+<fullName>DHA Part2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>DHAS</componentType>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
+
+
+
+<t1 name="GKC" >
+<total>200</total>
+<components>
+<component componentType="DHAS" group="DHA" compName="DHA" fullName="DHA and CAs" numberOfComponents="1" maxMarks="180" weightage="100" rule="BT1">
+<group>DHA</group>
+<compName>DHA</compName>
+<fullName>DHA and CAs</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>180</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>DHAS</componentType>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
+
+
+
+<t1 name="Rural Development/Agricultural Operations" >
+<total>200</total>
+<components>
+<component group="CT" compName="CT1" fullName="Class Test" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT1">
+<group>CT</group>
+<compName>CT1</compName>
+<fullName>Class Test</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component componentType="DHAS" group="CT" compName="DH1" fullName="DHA and CA" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT1">
+<group>CT</group>
+<compName>DH1</compName>
+<fullName>DHA and CA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>DHAS</componentType>
+</component>
+<component group="PCA" compName="PCA" fullName="Practical-Cum-Attendance" numberOfComponents="1" maxMarks="140" weightage="100" rule="BT1">
+<group>PCA</group>
+<compName>PCA</compName>
+<fullName>Practical-Cum-Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>140</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
+
+
+
+<t1 name="Social Service" >
+<total>200</total>
+<components>
+<component group="CT" compName="CT1" fullName="Class Test" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT1">
+<group>CT</group>
+<compName>CT1</compName>
+<fullName>Class Test</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component componentType="DHAS" group="CT" compName="DH1" fullName="DHA and CA" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT1">
+<group>CT</group>
+<compName>DH1</compName>
+<fullName>DHA and CA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>DHAS</componentType>
+</component>
+<component group="PCA" compName="PCA" fullName="Practical-Cum-Attendance" numberOfComponents="1" maxMarks="100" weightage="100" rule="BT1">
+<group>PCA</group>
+<compName>PCA</compName>
+<fullName>Practical-Cum-Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>100</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="CAM" compName="CMP" fullName="CAMP" numberOfComponents="1" maxMarks="70" weightage="100" rule="BT1">
+<group>CAM</group>
+<compName>CMP</compName>
+<fullName>CAMP</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>70</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<t1 name="SGD Course: 1 Credit" >
+<total>150</total>
+<components>
+<component group="SD" compName="SD1" fullName="S and GD1" numberOfComponents="1" maxMarks="120" weightage="100" rule="BT1">
+<group>SD</group>
+<compName>SD1</compName>
+<fullName>S and GD1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>120</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="SD" compName="SD2" fullName="S and GD2" numberOfComponents="1" maxMarks="120" weightage="100" rule="BT1">
+<group>SD</group>
+<compName>SD2</compName>
+<fullName>S and GD2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>120</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="PDS" compName="PDS" fullName="Participation in Discussion" numberOfComponents="1" maxMarks="10" weightage="100" rule="BT1">
+<group>PDS</group>
+<compName>PDS</compName>
+<fullName>Participation in Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>10</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
+
+
+<t1 name="Work-Experience Courses">
+<total>200</total>
+<components>
+<component group="RC" compName="RC1" fullName="Record1" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2" >
+<group>RC</group>
+<compName>RC1</compName>
+<fullName>Record1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="RC" compName="RC2" fullName="Record2" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>RC</group>
+<compName>RC2</compName>
+<fullName>Record2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="RC" compName="RC3" fullName="Record3" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>RC</group>
+<compName>RC3</compName>
+<fullName>Record3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT1" fullName="Practical Test1" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT1</compName>
+<fullName>Practical Test1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT2" fullName="Practical Test2" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT2</compName>
+<fullName>Practical Test2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PT" compName="PT3" fullName="Practical Test3" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT2">
+<group>PT</group>
+<compName>PT3</compName>
+<fullName>Practical Test3</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="COM" compName="COM" fullName="Comprehensive Evaluation" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1">
+<group>COM</group>
+<compName>COM</compName>
+<fullName>Comprehensive Evaluation</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<t1 name="CAC Core Course">
+<total>600</total>
+<components>
+<component group="GS" compName="GMS" fullName="Games And Sports" numberOfComponents="1" maxMarks="200" weightage="100" rule="BT1" >
+<group>GS</group>
+<compName>GMS</compName>
+<fullName>Games And Sports</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>200</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="CC" compName="CCA" fullName="Co-Curricular Activities" numberOfComponents="1" maxMarks="200" weightage="100" rule="BT1" >
+<group>CC</group>
+<compName>CCA</compName>
+<fullName>Co-Curricular Activities</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>200</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="DP" compName="DPL" fullName="Discipline" numberOfComponents="1" maxMarks="200" weightage="100" rule="BT1">
+<group>DP</group>
+<compName>DPL</compName>
+<fullName>Discipline</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>200</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<!--Distance Courses Templates-->
+<t1 name="Distance Core Courses : Module 1 and 2">
+<total>200</total>
+<components>
+<component group="G1" compName="DC1" fullName="7DHA-CA" numberOfComponents="1" maxMarks="90" weightage="100" rule="BT1" >
+<group>G1</group>
+<compName>DC1</compName>
+<fullName>7DHA-CA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>90</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G2" compName="DC2" fullName="A.O/G.Sp." numberOfComponents="1" maxMarks="45" weightage="100" rule="BT1">
+<group>G2</group>
+<compName>DC2</compName>
+<fullName>A.O/G.Sp.</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>45</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="DC3" fullName="Practical" numberOfComponents="1" maxMarks="45" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>DC3</compName>
+<fullName>Practical</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>45</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G4" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G4</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+<t1 name="Distance Core Courses : Module 3">
+<total>200</total>
+<components>
+<component group="G1" compName="DC1" fullName="Environmental Studies" numberOfComponents="1" maxMarks="90" weightage="100" rule="BT1" >
+<group>G1</group>
+<compName>DC1</compName>
+<fullName>Environmental Studies</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>90</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G2" compName="DC2" fullName="General Knowledge" numberOfComponents="1" maxMarks="90" weightage="100" rule="BT1">
+<group>G2</group>
+<compName>DC2</compName>
+<fullName>General Knowledge</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>90</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+<!--Distance Courses Templates-->
+<t1 name="Distance Core Courses : Module 4">
+<total>200</total>
+<components>
+<component group="G1" compName="CT1" fullName="CT1" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2" >
+<group>G1</group>
+<compName>CT1</compName>
+<fullName>CT1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="G1" compName="CT2" fullName="CT2" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2" >
+<group>G1</group>
+<compName>CT2</compName>
+<fullName>CT2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="G1" compName="DH1" fullName="Part1-DHA" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT2" >
+<group>G1</group>
+<compName>DH1</compName>
+<fullName>Part1-DHA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="G2" compName="DH2" fullName="Part2-DHA" numberOfComponents="1" maxMarks="60" weightage="100" rule="BT1" >
+<group>G2</group>
+<compName>DH2</compName>
+<fullName>Part2-DHA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>60</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<t1 name="Practical Training Course">
+<total>150</total>
+<components>
+<component group="RP" compName="RPT" fullName="Report" numberOfComponents="1" maxMarks="70" weightage="100" rule="BT1" >
+<group>RP</group>
+<compName>RPT</compName>
+<fullName>Report</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>70</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="PR" compName="PST" fullName="Presentstion" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1" >
+<group>PR</group>
+<compName>PST</compName>
+<fullName>Presentstion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="DS" compName="DSC" fullName="Discussion" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT1">
+<group>DS</group>
+<compName>DSC</compName>
+<fullName>Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<t1 name="Theory and Practical Courses">
+<total>150</total>
+<components>
+<component group="DH" compName="DHA" fullName="DHA" numberOfComponents="1" maxMarks="35" weightage="100" rule="BT1" >
+<group>DH</group>
+<compName>DHA</compName>
+<fullName>DHA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>35</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="DC" compName="DCA" fullName="DHA" numberOfComponents="1" maxMarks="35" weightage="100" rule="BT1" >
+<group>DC</group>
+<compName>DCA</compName>
+<fullName>DCA</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>35</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="SG" compName="SGD" fullName="Seminar and Group Discussion" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>SG</group>
+<compName>SGD</compName>
+<fullName>Seminar and Group Discussion</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="PA" compName="PA1" fullName="Practical Assignment" numberOfComponents="1" maxMarks="40" weightage="100" rule="BT1">
+<group>PA</group>
+<compName>PA1</compName>
+<fullName>Practical Assignment</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>40</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+<t1 name="Art Design HS">
+<total>150</total>
+<components>
+<component group="SF" compName="SF1" fullName="Sketching File 1" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2" >
+<group>SF</group>
+<compName>SF1</compName>
+<fullName>Sketching File 1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="SF" compName="SF2" fullName="Sketching File 2" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2" >
+<group>SF</group>
+<compName>SF2</compName>
+<fullName>Sketching File 2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="CF" compName="CF1" fullName="Composition File 1" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT2">
+<group>CF</group>
+<compName>CF1</compName>
+<fullName>Composition File 1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="CF" compName="CF2" fullName="Composition File 2" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT2">
+<group>CF</group>
+<compName>CF2</compName>
+<fullName>Composition File 2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PW" compName="PJW" fullName="Project Work" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>PW</group>
+<compName>PJW</compName>
+<fullName>Project Work</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+<t1 name="Art Design Inter">
+<total>150</total>
+<components>
+<component group="SF" compName="SF1" fullName="Sketching File 1" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT2" >
+<group>SF</group>
+<compName>SF1</compName>
+<fullName>Sketching File 1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="SF" compName="SF2" fullName="Sketching File 2" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT2" >
+<group>SF</group>
+<compName>SF2</compName>
+<fullName>Sketching File 2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="CF" compName="CF1" fullName="Composition File 1" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>CF</group>
+<compName>CF1</compName>
+<fullName>Composition File 1</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="CF" compName="CF2" fullName="Composition File 2" numberOfComponents="1" maxMarks="25" weightage="100" rule="BT2">
+<group>CF</group>
+<compName>CF2</compName>
+<fullName>Composition File 2</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>25</maxMarks>
+<weightage>100</weightage>
+<rule>BT2</rule>
+</component>
+<component group="PW" compName="PJW" fullName="Project Work" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>PW</group>
+<compName>PJW</compName>
+<fullName>Project Work</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G2" compName="QUZ" fullName="Quiz" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G2</group>
+<compName>QUZ</compName>
+<fullName>Quiz</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+</components>
+</t1>
+
+
+</template>
+
+	

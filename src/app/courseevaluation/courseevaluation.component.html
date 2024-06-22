@@ -1,0 +1,54 @@
+<!-- Author :Piyush Singh
+ Date Created: 14 jun 2024
+  Function : Html file for course evaluation Component -->
+
+  
+  <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
+  <div class="container" 
+style=
+"background-color:rgba(255,68,132,.5);
+height: 650px;width:100%;
+ box-sizing:border-box; 
+ border:1%;
+ position:relative;">
+ <button class="closeBtn" mat-button (click)="closePage()" matTooltip="Click To Remove This Component">
+  <mat-icon>close</mat-icon>
+ </button>
+  <b>Course Evaluation Component</b>
+  <div class="box" style=" height:600px ;width:100% ;background-color: white;margin-top:1.5%;">
+    <!-- <div class="program" style="background-color:rgba(255,68,132,.5);height:240px;width:100%;"> -->
+      <b>Entity Program Details</b>
+      <button *ngIf="selectedCourse" mat-button (click)="openDialog()" style="color:blue;
+        height:25px ;
+        width:200px; 
+        margin-left:250px;" 
+        matTooltip="Click to view and assign different template to the selected course">Select Template</button>
+
+      <p *ngIf=" !selectedCourse" style="color: red;">Please select the course to see it's template.</p>
+      <ag-grid-angular #mkGrid 
+      style="width:100%; height: 200px; overflow-x:visible " 
+      class="ag-theme-alpine"
+        [defaultColDef]="defaultColDef" 
+        [rowData]="programCourseRowData" 
+        [columnDefs]="programCourseColumnDefs"
+        [rowSelection]="'single'"
+        (gridReady)="onGridReady($event)"
+        (rowSelected)="onRowSelected($event)">
+      </ag-grid-angular>
+
+      <div class="evaluation_details" *ngIf="showDetails" style="height: 240px;width:100%; margin-top:10px; margin-bottom:10px">
+        <b>Evaluation Component details</b>
+       <h4> <p style="text-align:center; margin:auto;">Course : {{selectedCourse}}</p></h4>
+
+
+          <ag-grid-angular #agGrid
+          style="width: 100%;" 
+          domLayout="autoHeight"
+          class="ag-theme-alpine"
+          [rowData]="templateRowData"
+           [columnDefs]="templateColumnDefs">
+            </ag-grid-angular>
+          <button (click)="hideList()" matTooltip="click to remove(will not delete the assigned template) ">Cancel</button>
+      </div>
+    </div>
+  </div>

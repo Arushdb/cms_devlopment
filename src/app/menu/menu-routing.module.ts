@@ -13,7 +13,7 @@ import { StartactivityComponent } from '../resultprocessing/startactivity/starta
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
 import { SchoolMainComponent } from '../student/school-main/school-main.component';
-
+import { CourseevaluationComponent} from '../courseevaluation/courseevaluation.component';
 
 
 
@@ -37,16 +37,20 @@ const routes:Routes=[
   {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
+  
+  
+  
   {path:'login/newregistration',component: NewregistrationComponent},
   {path:'resultProcess',component: StartactivityComponent},
   {path:'schoolmain',component: SchoolMainComponent},
-         
-  
-   { path: 'registration_continue',
-  loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
- // {path:'registration_continue',component: RegisterStudentComponent},   
+  { path: 'registration_continue',
+    loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
+    // {path:'registration_continue',component: RegisterStudentComponent},   
+    
 
- 
+    // component made by :-Piyush singh
+    {path:"evaluation_component", component :CourseevaluationComponent,},   
+    
  { path: 'distance_center',
   loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 

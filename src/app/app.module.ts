@@ -17,13 +17,16 @@ import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
 import { StudentModule } from './student/student.module';
-
-
+import { CourseevaluationComponent } from './courseevaluation/courseevaluation.component';
+import { TemplateComponent } from './courseevaluation/template/template.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 //import {StudentModule} from  './student/student.module' ;
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CourseevaluationComponent,
+    TemplateComponent,
    
      
    
@@ -39,7 +42,8 @@ import { StudentModule } from './student/student.module';
     StudentModule,
     MenuModule,
     ResultprocessingModule,
-    RevertresultModule
+    RevertresultModule,
+    MatTooltipModule,
 
 
     //AgGridModule.withComponents([])
@@ -55,6 +59,7 @@ import { StudentModule } from './student/student.module';
   providers: [
    
     [
+
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
       {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
  
