@@ -3,13 +3,12 @@
 //   Function : Ts file for course evaluation Component (Dialog open on select template button)
 
 import { UserService } from 'src/app/services/user.service';
-import { Component, Inject, OnInit , TemplateRef, ViewChild} from '@angular/core';
+import { Component, Inject, OnInit , OnDestroy, ElementRef} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA,MatDialog ,MatDialogConfig} from '@angular/material/dialog';
 import { GridApi } from 'ag-grid-community';
 import { CourseevaluationService } from 'src/app/services/courseevaluation.service';
 import { alertComponent } from 'src/app/shared/alert/alert.component';
-
-import { Location } from '@angular/common';
+import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import { MessageService } from 'src/app/services/message.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { MessageService } from 'src/app/services/message.service';
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.css'],
 })
-export class TemplateComponent implements OnInit {
+export class TemplateComponent implements OnInit ,OnDestroy{
   [x: string]: any;
   
   gridApi: GridApi;
@@ -32,7 +31,7 @@ export class TemplateComponent implements OnInit {
   semestercode: any;
   templateMaxMarks:number;
   courseMaxMarks: number;
-
+  subs = new SubscriptionContainer();
   spinnerStatus: boolean=false;
   errorMessage: string ;
 // dataForReload:any[]=[];
@@ -42,9 +41,10 @@ export class TemplateComponent implements OnInit {
     private dialog:MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private courseevaluationService: CourseevaluationService,
-    private location: Location,
     private messagesrv:MessageService,
-    private userservice: UserService,)
+    private userservice: UserService,
+    private elementRef:ElementRef,)
+    
      {if (data && data.selectedRowData) {                            //for importing coursecode,programid,semestercode
       const selectedRowData = data.selectedRowData;
       this.coursecode = selectedRowData.coursecode;
@@ -56,7 +56,7 @@ export class TemplateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.courseevaluationService.getTemplateNames().subscribe(res => {
+    this.subs.add =this.courseevaluationService.getTemplateNames().subscribe(res => {
       if(res.length===0){
         console.log("error found")
         this.errorMessage= "Error in Template.xml File.";
@@ -72,12 +72,10 @@ export class TemplateComponent implements OnInit {
     ];
     this.checkMaxMarks() ;           //getting maximum marks for coursecode
   }
-goback(){
-  this.location.back()
-}
+
   // Update the rowData for ag-Grid based on the selected template
   onItemSelected(value: string) {
-    this.courseevaluationService.getCourseTemplate(value).subscribe(res => {
+    this.subs.add =this.courseevaluationService.getCourseTemplate(value).subscribe(res => {
       this.selectedItem = res;                           // For displaying the selectin template data in rowdata
       this.assignRowData = res.components;               
       this.templateMaxMarks = parseInt(res.total);           //storing xml total marks in array from xml
@@ -91,7 +89,7 @@ goback(){
     let param={
       coursecode:this.coursecode,
     }
-    this.courseevaluationService.getMaxMarks(param).subscribe((res:any) =>{
+    this.subs.add =this.courseevaluationService.getMaxMarks(param).subscribe((res:any) =>{
       res=JSON.parse(res);
         let array = res.ceclist.rec;
         this.courseMaxMarks = parseInt(array[0].maximummark[0]);
@@ -147,7 +145,7 @@ let param = {
   componentType: this.assignRowData.map(component => component.componentType !== null ? component.componentType.toString():'null').join('|'),
 };
 
-this.courseevaluationService.getTemplateUpdate(param).subscribe(( (isSuccess: boolean) => {
+this.subs.add =this.courseevaluationService.getTemplateUpdate(param).subscribe(( (isSuccess: boolean) => {
   if (isSuccess) {
     const result = { success: true, data: param };
     this.dialogRef.close(result);
@@ -173,7 +171,10 @@ this.courseevaluationService.getTemplateUpdate(param).subscribe(( (isSuccess: bo
 }
 }
 
-
+ngOnDestroy(): void {
+  this.subs.dispose();
+  this.elementRef.nativeElement.remove();
+}
 
   closeDialog(result?: any): void {
     this.dialogRef.close(result);

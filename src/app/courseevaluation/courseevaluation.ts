@@ -6,6 +6,7 @@
 
 //interface for assigned courses
 export interface Courseevaluation {
+coursecode:string;
 semestercode:string;
 componentdescription:string;
 programname:string;
@@ -22,6 +23,9 @@ programid:number;
 
 //interface for assigned courses template
 export interface Template{
+coursecode:string;
+semestercode:string;
+programid:number;
     evaluationIdName:number;
     examdate:string;
     evaluationid:number;

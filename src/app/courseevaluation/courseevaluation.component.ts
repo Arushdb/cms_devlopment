@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
 import { NavigationEnd, Router } from '@angular/router';
 import { SubscriptionContainer } from '../shared/subscription-container';
+import { GridApi } from 'ag-grid-community';
 
 @Component({
   selector: 'app-courseevaluation',
@@ -27,7 +28,7 @@ export class CourseevaluationComponent implements OnInit ,OnDestroy{
   programCourseRowData: Courseevaluation[] = []; // interface courseevaluation --courseevaluation
   templateColumnDefs: any[];
   templateRowData: Template[] = []; // interface template --courseevaluation
-  gridApi: any;
+  gridApi: GridApi;
   userId: string;
   universityId: string;
   showDetails = false;
@@ -87,7 +88,7 @@ export class CourseevaluationComponent implements OnInit ,OnDestroy{
   // Get all courses assigned to teacher from server using api(service)
   getCourses() {
     this.spinnerstatus = true;
-    this.courseevaluationService.getProgramCourses().subscribe(
+    this.subs.add = this.courseevaluationService.getProgramCourses().subscribe(
         (res) => {
                 res = JSON.parse(res);
             
@@ -109,14 +110,14 @@ goBack():void{
   onRowSelected(event: any): void {
     this.selectedRowData = event.api.getSelectedRows()[0];
     const selectedData = event.data;
-    if (selectedData) {
+    const selectedRows = this.gridApi.getSelectedRows();
+    if (selectedData && selectedRows && selectedRows.length > 0 ) {
       this.coursecode = selectedData.coursecode;
       this.programid = selectedData.programid;
       this.semestercode = selectedData.semestercode;
       // console.log('Selected Data:', selectedData);     
-      }
-      const selectedRows = this.gridApi.getSelectedRows();
-      if (selectedRows && selectedRows.length > 0) {
+      
+    
         this.showDetails=true;                             // show grid data
         this.selectedCourse = selectedRows[0].coursecode; //for enabling select template button
     this.cecListForTemplate();
@@ -137,7 +138,7 @@ goBack():void{
       semestercode: this.semestercode,
     };
 
-    this.courseevaluationService.getCecListForTemplate(params).subscribe(
+    this.subs.add =  this.courseevaluationService.getCecListForTemplate(params).subscribe(
       (res: any) => {
         res = JSON.parse(res);
           this.spinnerstatus=false;
@@ -169,7 +170,7 @@ goBack():void{
       width:'60%',
       data: { selectedRowData: this.selectedRowData }, // to pass the selected coursecode,programid,semestercode for assigning template,,
       })
-      dialogRef.afterClosed().subscribe(result => {
+      this.subs.add =  dialogRef.afterClosed().subscribe(result => {
         // console.log('Dialog closed with result:', JSON.stringify(result));
        this.recheckNode();                   
       });
@@ -191,6 +192,6 @@ goBack():void{
 
     // button function for removing the component menu
   closePage() {
-    this.location.back()
+    this.router.navigate(['dashboard']);
   }
   }
