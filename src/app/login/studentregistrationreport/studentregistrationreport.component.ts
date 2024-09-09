@@ -5,7 +5,7 @@ import { debounce } from 'rxjs/operators';
 
 import {Location} from '@angular/common';
 import { SubscriptionContainer } from '../../shared/subscription-container';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {FlleserviceService} from '../../services/flleservice.service'
 import { HttpParams } from '@angular/common/http';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
@@ -38,12 +38,14 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
   myurl: any;
   myfilename: string;
   id1:any;
-
+  generateAdmitCard:string = "N"; //added by Jyoti on 7 Sep 2024
+  headerName:string = "Download Registration Report"; //added by Jyoti on 7 Sep 2024
 
   constructor(
     private formBuilder: FormBuilder,
     private elementRef:ElementRef,
     private location:Location,
+    private route: ActivatedRoute,
     private router: Router,
     private fileservice:FlleserviceService,
     private userservice:UserService
@@ -62,7 +64,18 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
     }
 
   ngOnInit(): void {
-
+    this.generateAdmitCard = "";
+    this.route.params.subscribe(params => { this.generateAdmitCard = params['id']} ) ;
+    console.log("generateAdmitCard-", this.generateAdmitCard, "-");
+    if (this.generateAdmitCard == 'Y')
+    {
+        this.headerName = "Download Admit Card";
+        this.selectedRadio='dob';
+    }
+    else if (this.generateAdmitCard == 'N')
+    {
+        this.headerName = "Download Registration Report";
+    }
     this.registerationReportForm = this.formBuilder.group({
       registrationNumber:["",Validators.compose([Validators.required,Validators.minLength(6)])],
       
@@ -76,7 +89,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
 
     });
     this.myurl='';
-  
+
   }
 
   public get f() {
@@ -94,7 +107,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
       this.submitted=true;
       this.myurl='';
 
-     console.log("contactnumber", this.f.contactNumber.value);
+     //console.log("contactnumber", this.f.contactNumber.value);
      if (this.selectedRadio=="aadhar"){
        
        this.f.dateOfBirth.setErrors(null);
@@ -104,14 +117,15 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
      if (this.selectedRadio=="dob"){
        
        this.f.aadhaarNumber.setErrors(null);
-      
+       if (this.generateAdmitCard == 'Y'){ //added by Jyoti on 7 Sep 2024
+        this.f.contactNumber.setErrors(null);
+       }
      }
-    //console.log(this.registerationReportForm);
 
-      if (this.registerationReportForm.invalid) {
-       // console.log(this.f.registrationNumber.errors);
+    if (this.registerationReportForm.invalid && this.f.registrationNumber.errors != null) {
+        console.log("form invalid");
      //console.log(this.f.registrationNumber.errors.minlength.requiredLength);
-        return;
+        return; 
     }
    // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerationReportForm.value, null, 4));
     let params:HttpParams= new HttpParams();
@@ -119,6 +133,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
                   .set("registrationNumber",this.f.registrationNumber.value)
                   .set("contactNumber",this.f.contactNumber.value)
                   .set("dob",this.f.dateOfBirth.value)
+                  .set("generateAdmitCard", this.generateAdmitCard)
                  ;
                let  myparam:any={};
                     myparam.xmltojs="Y"  ;          
@@ -140,6 +155,22 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
         return;
 
       }
+      else if (this.myfilename == "NOREG.pdf") {
+        this.userservice.log("Student not registered with the given details");
+        this.f.pdf.reset();
+        return;
+      }
+      else if (this.myfilename == "NOFEE.pdf") {
+        this.userservice.log("No Fee record found with the given details");
+        this.f.pdf.reset();
+        return;
+      }
+      else if (this.myfilename == "NOSCH.pdf") {
+        this.userservice.log("Schedule Not available or Admit Card can be generated before 15 days of Exam schedule");
+        this.f.pdf.reset();
+        return;
+      }
+
       this.userservice.log("File has been generated successfully.Please click on above link to download file");    
       this.myurl=str;     
       this.f.pdf.reset();
