@@ -17,7 +17,7 @@
                   
                 </div>
             </div>
-            <div class="form-check-inline" *ngIf="generateAdmitCard=='N'">
+            <div class="form-check-inline" *ngIf="generateAdmitCard=='REG'">
                 <label class="form-check-label">
                   <input type="radio" class="form-check-input"    (change)="onChange()"
                   formControlName="pdf" [(ngModel)]="selectedRadio" [value]="'aadhar'" 
@@ -27,7 +27,7 @@
                 </div>
                 </label>
             </div>
-              <div class="form-check-inline" *ngIf="generateAdmitCard=='N'">
+              <div class="form-check-inline" *ngIf="generateAdmitCard=='REG'">
                 <label class="form-check-label">
                   <input type="radio" class="form-check-input"  (change)="onChange()" formControlName="pdf" [(ngModel)]="selectedRadio"
                    [value]="'dob'"   
@@ -60,7 +60,7 @@
                     
             <div class="form-row" *ngIf ="selectedRadio=='dob'">
                 
-                    <div  class="form-group" *ngIf="generateAdmitCard=='N'">
+                    <div  class="form-group" *ngIf="generateAdmitCard=='REG'">
                     <label>Phone Number</label>
                     <input (keypress)="phoneNumkeyPress($event)" required type="text"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
                     <div *ngIf="submitted && f.contactNumber.errors" class="invalid-feedback">

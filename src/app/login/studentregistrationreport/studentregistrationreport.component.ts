@@ -38,7 +38,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
   myurl: any;
   myfilename: string;
   id1:any;
-  generateAdmitCard:string = "N"; //added by Jyoti on 7 Sep 2024
+  generateAdmitCard:string = "REG"; //added by Jyoti on 7 Sep 2024
   headerName:string = "Download Registration Report"; //added by Jyoti on 7 Sep 2024
 
   constructor(
@@ -67,12 +67,12 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
     this.generateAdmitCard = "";
     this.route.params.subscribe(params => { this.generateAdmitCard = params['id']} ) ;
     console.log("generateAdmitCard-", this.generateAdmitCard, "-");
-    if (this.generateAdmitCard == 'Y')
+    if (this.generateAdmitCard == 'ADM')
     {
         this.headerName = "Download Admit Card";
         this.selectedRadio='dob';
     }
-    else if (this.generateAdmitCard == 'N')
+    else if (this.generateAdmitCard == 'REG')
     {
         this.headerName = "Download Registration Report";
     }
@@ -117,7 +117,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
      if (this.selectedRadio=="dob"){
        
        this.f.aadhaarNumber.setErrors(null);
-       if (this.generateAdmitCard == 'Y'){ //added by Jyoti on 7 Sep 2024
+       if (this.generateAdmitCard == 'ADM'){ //added by Jyoti on 7 Sep 2024
         this.f.contactNumber.setErrors(null);
        }
      }
@@ -149,7 +149,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
        let strary = String(str).split('/');
       
        this.myfilename =strary[strary.length-1];
-      if (this.myfilename==="NRF.pdf"){
+      if (this.myfilename==="NRF.pdf" || this.myfilename==="NRECORD.pdf"){
         this.userservice.log("No record found with the given details");
         this.f.pdf.reset();
         return;
@@ -166,7 +166,7 @@ export class StudentregistrationreportComponent implements OnInit,OnDestroy {
         return;
       }
       else if (this.myfilename == "NOSCH.pdf") {
-        this.userservice.log("Schedule Not available or Admit Card can be generated before 15 days of Exam schedule");
+        this.userservice.log("Admit Card not available");
         this.f.pdf.reset();
         return;
       }

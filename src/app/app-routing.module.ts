@@ -23,7 +23,6 @@ const routes:Routes=[
   {path:'login',component:SignonformComponent},
   // {path:'downloadreport',component:StudentregistrationreportComponent}, //commented by Jyoti on 7 Sep 2024
   {path:'downloadreport/:id',component:StudentregistrationreportComponent}, //added by Jyoti on 7 Sep 2024
-  {path:'downloadreport/:id',component:StudentregistrationreportComponent},  //added by Jyoti on 7 Sep 2024
   {path:'studentaverage',component:StudentaverageComponent},
  
  
