@@ -1,6 +1,7 @@
 <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
 <div class="card m-3" #student>
-    <h3 class="card-header bold">Download  registration report </h3>
+    <!--<h3 class="card-header bold" >Download  registration report </h3> -->
+    <h3 class="card-header bold">{{headerName}}</h3>
     <div class="card-body">
         <form [formGroup]="registerationReportForm" >
             <div class="form-row">
@@ -16,7 +17,7 @@
                   
                 </div>
             </div>
-            <div class="form-check-inline">
+            <div class="form-check-inline" *ngIf="generateAdmitCard=='REG'">
                 <label class="form-check-label">
                   <input type="radio" class="form-check-input"    (change)="onChange()"
                   formControlName="pdf" [(ngModel)]="selectedRadio" [value]="'aadhar'" 
@@ -24,9 +25,9 @@
                   <div *ngIf="submitted && f.pdf.errors" class="invalid-feedback">
                     <div *ngIf="f.pdf.errors.required">Please select one value.</div>
                 </div>
-            </label>
-                </div>
-              <div class="form-check-inline">
+                </label>
+            </div>
+              <div class="form-check-inline" *ngIf="generateAdmitCard=='REG'">
                 <label class="form-check-label">
                   <input type="radio" class="form-check-input"  (change)="onChange()" formControlName="pdf" [(ngModel)]="selectedRadio"
                    [value]="'dob'"   
@@ -40,7 +41,7 @@
               </div>
                       
 
-                <div class="form-row" *ngIf ="selectedRadio=='aadhar'">
+                <div class="form-row" *ngIf ="selectedRadio=='aadhar'" >
                     <div  class="form-group">
                                       
                         <label>Aadhar Number</label>
@@ -59,7 +60,7 @@
                     
             <div class="form-row" *ngIf ="selectedRadio=='dob'">
                 
-                     <div  class="form-group">
+                    <div  class="form-group" *ngIf="generateAdmitCard=='REG'">
                     <label>Phone Number</label>
                     <input (keypress)="phoneNumkeyPress($event)" required type="text"  formControlName="contactNumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" />
                     <div *ngIf="submitted && f.contactNumber.errors" class="invalid-feedback">
