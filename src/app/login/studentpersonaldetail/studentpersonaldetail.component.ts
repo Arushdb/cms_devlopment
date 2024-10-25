@@ -73,7 +73,7 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
   filests: any;
   filename: string;
   filepath: string;
-
+  nameinhindi: string; //added by Jyoti on 22-10-2024
  
 
     constructor(private formBuilder: FormBuilder, 
@@ -210,8 +210,26 @@ export class StudentpersonaldetailComponent implements OnInit,OnDestroy ,OnChang
         this.registerForm.get('attempt').setValue(String(this.studentdata.studentdata.student[0].attempt[0]).trim());
         this.registerForm.get('rollNumberGroupCode').setValue(String(this.studentdata.studentdata.student[0].rollNumberGroupCode[0]).trim());
         this.registerForm.get('longField').setValue(String(this.studentdata.studentdata.student[0].longField[0]).trim());
-        
-     
+        //hindi names added by Jyoti on 22 oct 2024
+        this.nameinhindi = decodeURI(String(this.studentdata.studentdata.student[0].student_name_in_hindi[0]).trim());
+        if (this.nameinhindi.includes('%')) //student name 
+        {
+          this.nameinhindi = decodeURI(this.nameinhindi);
+        }
+        this.registerForm.get('studentNameinHindi').setValue(this.nameinhindi);
+        this.nameinhindi = decodeURI(String(this.studentdata.studentdata.student[0].mother_name_in_hindi[0]).trim());
+        if (this.nameinhindi.includes('%')) //mother name
+        {
+          this.nameinhindi = decodeURI(this.nameinhindi);
+        }
+        this.registerForm.get('motherNameinHindi').setValue(this.nameinhindi);
+        this.nameinhindi = decodeURI(String(this.studentdata.studentdata.student[0].father_name_in_hindi[0]).trim());
+        if (this.nameinhindi.includes('%')) // father name
+        {
+          this.nameinhindi = decodeURI(this.nameinhindi);
+        }
+        this.registerForm.get('fatherNameinHindi').setValue(this.nameinhindi);
+     //added till here by Jyoti on 22-10-2024
         
 
       if (this.f.admissionMode.value=="NEW"){
