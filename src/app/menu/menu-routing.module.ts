@@ -13,7 +13,8 @@ import { StartactivityComponent } from '../resultprocessing/startactivity/starta
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
 import { SchoolMainComponent } from '../student/school-main/school-main.component';
-
+import { DistanceCenterComponent } from '../reports/distance-center/distance-center.component';
+import { SpreportsComponent } from '../reports/spreports/spreports.component';
 
 
 
@@ -41,9 +42,9 @@ const routes:Routes=[
   {path:'resultProcess',component: StartactivityComponent},
   {path:'schoolmain',component: SchoolMainComponent},
          
-  
-   { path: 'registration_continue',
-  loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
+  //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
+  { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
+  { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
  // {path:'registration_continue',component: RegisterStudentComponent},   
 
  

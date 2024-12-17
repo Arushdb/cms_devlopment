@@ -17,9 +17,7 @@ import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
 import { StudentModule } from './student/student.module';
-
-
-//import {StudentModule} from  './student/student.module' ;
+import {ReportsModule} from './reports/reports.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +37,8 @@ import { StudentModule } from './student/student.module';
     StudentModule,
     MenuModule,
     ResultprocessingModule,
-    RevertresultModule
+    RevertresultModule,
+    ReportsModule
 
 
     //AgGridModule.withComponents([])
