@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
-import { ReportsRoutingModule } from './reports-routing.module';
 import { DistanceCenterComponent } from './distance-center/distance-center.component';
-import { SharedModule} from '../shared/shared.module'; //  'src/app/shared/shared.module'
+import { SharedModule} from '../shared/shared.module';
+import { SpreportsComponent } from './spreports/spreports.component';
+import { SpinputsComponent } from './spinputs/spinputs.component'; //  'src/app/shared/shared.module'
 
 
-@NgModule({
-  declarations: [DistanceCenterComponent],
-  imports: [
-    ReportsRoutingModule,
-    SharedModule
-  ]
+@NgModule ({
+  declarations: [DistanceCenterComponent, SpreportsComponent, SpinputsComponent],
+  imports: [SharedModule ]
 })
+
 export class ReportsModule { }
