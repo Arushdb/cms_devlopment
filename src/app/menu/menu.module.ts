@@ -7,11 +7,12 @@ import {SharedModule} from '../shared/shared.module';
 import {HeaderComponent} from './header/header.component'
 import {  RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
+import { SetpasswordComponent } from './setpassword/setpassword.component';
 
 
 
 @NgModule({
-  declarations: [MenusComponent,MenuItemComponent,DashboardComponent,HeaderComponent],
+  declarations: [MenusComponent,MenuItemComponent,DashboardComponent,HeaderComponent, SetpasswordComponent],
   imports: [
     SharedModule,
    

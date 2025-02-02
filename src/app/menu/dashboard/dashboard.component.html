@@ -1,26 +1,35 @@
-
-    <div class = "container" style="text-align:justify-all;">
-        <app-header></app-header>
-        <!--
+<div class="container" style="text-align: justify-all">
+  <app-header></app-header>
+  <!--
     <h1 style ="text-align:center; font-family:verdana ;font-size:35px ;background-color: burlywood;" >
         {{title}}
     </h1>
     -->
-    </div>
-    <div class="container">
-    <div class="col-md-6 col-md-offset-3 loginBox"> 
-        Welcome,  {{id}}    
-      <a href="javascript:void(0);" (click)="logout()">Logout</a>    
-    </div>   
-    <div > 
-  
-   <app-menus [myarr]='menus'></app-menus>
+</div>
+<div class="container">
+  <div class="col-md-12 col-md-offset-3 loginBox">
+    Welcome, {{ id }}
+    <a
+      href="javascript:void(0);"
+      style="float: right"
+      class="mr-3"
+      (click)="logout()"
+      >Logout</a
+    >
+    <a
+      href="#"
+      style="float: right"
+      class="mr-3"
+      (click)="$event.preventDefault(); setpassword()"
+      >Change password</a
+    >
+  </div>
 
-    </div>
-    <hr>
-    <app-message ></app-message>
-   
-    <router-outlet></router-outlet>
-   
-  
+  <div>
+    <app-menus [myarr]="menus"></app-menus>
+  </div>
+  <hr />
+  <app-message></app-message>
+
+  <router-outlet></router-outlet>
 </div>
