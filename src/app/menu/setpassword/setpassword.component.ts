@@ -28,6 +28,10 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   isPasswordVisible: boolean = false;
   isOldPasswordVisible: boolean = false;
   isDisabled: boolean = true;
+  receivedMessage: string = '';
+  spinnerstatus: boolean;
+  isLoading: boolean;
+  showotp: boolean = false;
   constructor(
     private dialogRef: MatDialogRef<SetpasswordComponent>,
     //@Inject(MAT_DIALOG_DATA) public data: {title: string,content:string,ok:boolean,cancel:boolean,color:string}) { }
@@ -58,33 +62,27 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.submitted = false;
+    this.spinnerstatus = false;
     //this.email = this.data.email;
     this.email = localStorage.getItem('primaryemail');
     console.log('ARush email is', this.email);
     this.showconfirm = false;
-    this.showmsg = true;
+    this.showmsg = false;
 
-    this.form = this.formBuilder.group(
-      {
-        //title: ['', Validators.required],
+    this.form = this.formBuilder.group({
+      //title: ['', Validators.required],
 
-        fcotp: ['', Validators.required],
-        fcoldpwd: ['', Validators.required],
+      fcotp: [''],
+      fcoldpwd: ['', Validators.required],
 
-        fcnewpwd: ['', [Validators.required, passwordValidator]],
-        fccfmnewpwd: ['', [Validators.required]],
-      },
-
-      {
-        validators: matchPasswordValidator(
-          'fcoldpwd',
-          'fcnewpwd',
-          'fccfmnewpwd'
-        ),
-      }
-
-      //validators: matchPasswordValidator('fcnewpwd', 'fccfmnewpwd'),
-    );
+      pwd: this.formBuilder.group(
+        {
+          fcnewpwd: ['', [Validators.required, passwordValidator]],
+          fccfmnewpwd: ['', [Validators.required]],
+        },
+        { validators: matchPasswordValidator() }
+      ),
+    });
   }
 
   get passwordMismatch() {
@@ -105,6 +103,7 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
     if (!this.form.valid || this.f.fcotp.value !== this.otp) {
       return;
     }
+    this.spinnerstatus = true;
 
     this.pwd_params = new HttpParams();
 
@@ -134,13 +133,21 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
         if (status === 'true')
           this.userservice.log('Password changed Successfully');
         else this.userservice.log('Some error occured.Please try again');
-
+        this.spinnerstatus = false;
+        this.submitted = false;
         this.onclose();
+        // this.authService.logout();
+        // this.router.navigate(['/login']);
+        // this.dialogRef.close();
       });
+  }
 
-    // this.authService.logout();
-    // this.router.navigate(['/login']);
-    // this.dialogRef.close();
+  get pwdControls() {
+    return (this.form.get('pwd') as FormGroup).controls;
+  }
+
+  get pwdGroup() {
+    return this.form.get('pwd');
   }
 
   onclose() {
@@ -149,10 +156,27 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   }
 
   onclickok() {
-    this.pwd_params = new HttpParams();
-    this.pwd_params.set('user', 'user');
-    this.pwd_params.set('email', this.email);
+    this.submitted = true;
+    console.log(this.pwdControls);
+    // console.log(this.pwdControls.fcnewpwd.errors.passwordStrength);
 
+    console.log(this.f.fcoldpwd.value, this.pwdControls.fcnewpwd);
+
+    debugger;
+    if (!this.form.valid) {
+      return;
+    }
+    if (this.f.fcoldpwd.value === this.pwdControls.fcnewpwd.value) {
+      this.userservice.log('Old and new password can not be same ');
+      return;
+    }
+
+    this.spinnerstatus = true;
+
+    this.pwd_params = new HttpParams();
+    this.pwd_params = this.pwd_params.set('user', 'user');
+    this.pwd_params = this.pwd_params.set('email', this.email);
+    debugger;
     let myparam = {
       method: '/login/sendOTP.htm',
       xmltojs: 'Y',
@@ -164,10 +188,18 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
         data = JSON.parse(res);
         this.otp = data.loginInfo.loginInfo[0].otp[0];
         //console.log(data.loginInfo.loginInfo[0].otp[0]);
-        this.showconfirm = true;
-        this.showmsg = false;
+
+        this.showotp = true;
+        this.submitted = false;
+
+        this.spinnerstatus = false;
       });
 
     //this.dialogRef.close();
+  }
+
+  receiveMessage(message: string) {
+    this.receivedMessage = message;
+    this.onclose();
   }
 }

@@ -70,9 +70,9 @@ export class DashboardComponent implements OnInit {
   setpassword() {
     debugger;
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '100%';
-    dialogConfig.height = '50%';
+    //const dialogConfig = new MatDialogConfig();
+    //dialogConfig.width = '100%';
+    //dialogConfig.height = '70%';
     // this.gridOptions.api.stopEditing();
 
     const dialogRef = this.dialog.open(SetpasswordComponent, {
@@ -85,8 +85,8 @@ export class DashboardComponent implements OnInit {
       },
       closeOnNavigation: false,
       disableClose: true,
-      width: '30%',
-      height: '80%',
+      width: '50%',
+      height: '90%',
     });
 
     dialogRef.afterClosed().subscribe((res) => {

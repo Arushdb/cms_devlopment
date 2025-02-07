@@ -22,22 +22,19 @@ export function passwordValidator(
   return null; // Return null if validation passes
 }
 
-export function matchPasswordValidator(
-  oldpassword: string,
-  password: string,
-  confirmPassword: string
-): ValidatorFn {
+export function matchPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const passwordValue = control.get(password)?.value;
-    const confirmPasswordValue = control.get(confirmPassword)?.value;
-    const oldPasswordValue = control.get(oldpassword)?.value;
+    const passwordValue = control.get('fcnewpwd')?.value;
+    const confirmPasswordValue = control.get('fccfmnewpwd')?.value;
+    //const oldPasswordValue = control.get('fcoldpwd')?.value;
     debugger;
+
     if (passwordValue !== confirmPasswordValue) {
       return { passwordsMismatch: true }; // Error key
     }
-    if (passwordValue === oldPasswordValue) {
-      return { passwordsSame: true }; // Error key
-    }
+    // if (passwordValue === oldPasswordValue) {
+    //   return { passwordsSame: true }; // Error key
+    // }
     return null;
   };
 }
