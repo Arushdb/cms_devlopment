@@ -32,6 +32,9 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   spinnerstatus: boolean;
   isLoading: boolean;
   showotp: boolean = false;
+  maxAttempts: number = 5;
+  attempts: number = 0;
+  isLocked: boolean = false;
   constructor(
     private dialogRef: MatDialogRef<SetpasswordComponent>,
     //@Inject(MAT_DIALOG_DATA) public data: {title: string,content:string,ok:boolean,cancel:boolean,color:string}) { }
@@ -66,7 +69,7 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
     //this.email = this.data.email;
     this.email = localStorage.getItem('primaryemail');
     console.log('ARush email is', this.email);
-    this.showconfirm = false;
+    this.showconfirm = true;
     this.showmsg = false;
 
     this.form = this.formBuilder.group({
@@ -100,7 +103,19 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   onconfirm() {
     this.submitted = true;
 
-    if (!this.form.valid || this.f.fcotp.value !== this.otp) {
+    if (this.f.fcotp.value !== this.otp) {
+      this.attempts++;
+      if (this.attempts > 5) {
+        this.spinnerstatus = false;
+        this.submitted = false;
+        this.onclose();
+      }
+
+      return;
+    }
+    debugger;
+
+    if (!this.form.valid) {
       return;
     }
     this.spinnerstatus = true;
@@ -135,7 +150,8 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
         else this.userservice.log('Some error occured.Please try again');
         this.spinnerstatus = false;
         this.submitted = false;
-        this.onclose();
+        this.showconfirm = false;
+        //this.onclose();
         // this.authService.logout();
         // this.router.navigate(['/login']);
         // this.dialogRef.close();
@@ -151,7 +167,8 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   }
 
   onclose() {
-    this.showconfirm = false;
+    //this.showconfirm = false;
+    this.router.navigate(['/login']);
     this.dialogRef.close();
   }
 
