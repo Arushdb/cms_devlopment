@@ -103,6 +103,9 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
   onconfirm() {
     this.submitted = true;
 
+    //console.log(this.pwdControls.fcnewpwd.value);
+    
+
     if (this.f.fcotp.value !== this.otp) {
       this.attempts++;
       if (this.attempts > 5) {
@@ -123,10 +126,10 @@ export class SetpasswordComponent implements OnInit, OnDestroy {
     this.pwd_params = new HttpParams();
 
     //this.pwd_params.set('user', userid);
-    this.pwd_params = this.pwd_params.set('password', this.form.value.fcoldpwd);
+    this.pwd_params = this.pwd_params.set('password', this.f.fcoldpwd.value);
     this.pwd_params = this.pwd_params.set(
       'newPassword',
-      this.form.value.fcnewpwd
+      this.pwdControls.fcnewpwd.value
     );
     this.pwd_params = this.pwd_params.set('application', 'ANGULAR');
     //this.pwd_params.set('otp', 'otp');
