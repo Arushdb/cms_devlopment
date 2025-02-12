@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
 import { SetpasswordComponent } from './setpassword/setpassword.component';
 
+
 @NgModule({
   declarations: [
     MenusComponent,
