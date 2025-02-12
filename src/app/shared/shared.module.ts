@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomComboboxComponent } from './custom-combobox/custom-combobox.component';
-import { MessageComponent } from 'src/app/shared/message/message.component';
+import { MessageComponent } from './message/message.component';
 import { GriddialogComponent } from './griddialog/griddialog.component';
 import { NumeriCellRendererComponent } from './numeri-cell-renderer/numeri-cell-renderer.component';
 import { AgGridModule } from 'ag-grid-angular';
