@@ -8,7 +8,6 @@ import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
 import { SetpasswordComponent } from './setpassword/setpassword.component';
-import { TimerComponent } from '../shared/timer/timer.component';
 
 @NgModule({
   declarations: [
