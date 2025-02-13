@@ -15,63 +15,98 @@ import { SignonformComponent } from '../login/signonform/signonform.component';
 import { SchoolMainComponent } from '../student/school-main/school-main.component';
 import { DistanceCenterComponent } from '../reports/distance-center/distance-center.component';
 import { SpreportsComponent } from '../reports/spreports/spreports.component';
+import { RegisterStudentComponent } from '../student/register-student/register-student.component';
 
+const routes: Routes = [
+  {
+    path: 'dashboard',
+    canActivate: [AuthGuard],
+    component: DashboardComponent,
+    children: [
+      { path: 'main', component: MenusComponent },
+      //{path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}, runGuardsAndResolvers: "always"},
 
+      {
+        path: 'Course_grade_limit',
+        loadChildren: () =>
+          import('../gradelimit/gradelimit.module').then(
+            (m) => m.GradelimitModule
+          ),
+      },
 
+      //  { path:"Internal_award_sheet",
+      //  loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} ,
 
+      {
+        path: 'Internal_award_sheet',
+        component: AwardBlankSheetComponent,
+        data: { displayType: 'I', courseType: 'Reg' },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'External_award_sheet',
+        component: AwardBlankSheetComponent,
+        data: { displayType: 'E', courseType: 'Reg' },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'Remedial_award_sheet',
+        component: AwardBlankSheetComponent,
+        data: { displayType: 'R', courseType: 'Reg' },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'Corecourse_award_sheet',
+        component: AwardBlankSheetComponent,
+        data: { displayType: 'I', courseType: 'Cor' },
+        runGuardsAndResolvers: 'always',
+      },
+      { path: 'login/newregistration', component: NewregistrationComponent },
+      { path: 'resultProcess', component: StartactivityComponent },
+      { path: 'schoolmain', component: SchoolMainComponent },
 
+      //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
+      {
+        path: 'distance_center',
+        component: DistanceCenterComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'report_usingSP',
+        component: SpreportsComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      { path: 'registration_continue', component: RegisterStudentComponent },
 
-const routes:Routes=[
-  {path: 'dashboard',canActivate:[AuthGuard],
-    component: DashboardComponent ,  
-  children : [
-  { path: 'main', component: MenusComponent },
-  //{path:'Internal_award_sheet',component: AwardBlankSheetComponent,data:{displayType:"I"}, runGuardsAndResolvers: "always"},
-  
-  { path:"Course_grade_limit",
-  loadChildren: () => import('../gradelimit/gradelimit.module').then(m => m.GradelimitModule)} , 
+      {
+        path: 'distance_center',
+        loadChildren: () =>
+          import('../reports/reports.module').then((m) => m.ReportsModule),
+      },
+      // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)}
 
-  //  { path:"Internal_award_sheet",
-  //  loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} , 
-  
-  {path:'Internal_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Reg"},runGuardsAndResolvers: "always"},
-  {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E",courseType:"Reg"},runGuardsAndResolvers: "always"},
-  {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
-  {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
-  {path:'login/newregistration',component: NewregistrationComponent},
-  {path:'resultProcess',component: StartactivityComponent},
-  {path:'schoolmain',component: SchoolMainComponent},
-         
-  //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
-  { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
-  { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
- // {path:'registration_continue',component: RegisterStudentComponent},   
+      {
+        path: 'student_marks',
+        component: StudentmarksComponent,
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'revert_result',
+        component: RevertresultprocessComponent,
+        runGuardsAndResolvers: 'always',
+      },
 
- 
- { path: 'distance_center',
-  loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
- // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
- 
- {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
- {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
- 
- {path:'login',component:SignonformComponent},
- 
-],         
- 
-
+      { path: 'login', component: SignonformComponent },
+    ],
   },
 
-  {path:'**',redirectTo:'login',pathMatch:'full'},
-
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
-
 
 @NgModule({
   declarations: [],
   //imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: "reload"})],
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
- 
+  exports: [RouterModule],
 })
-export class MenuRoutingModule { }
+export class MenuRoutingModule {}
