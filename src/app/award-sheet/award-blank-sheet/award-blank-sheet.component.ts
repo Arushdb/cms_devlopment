@@ -698,6 +698,7 @@ onRowSelected(event){
         this.editgrid=false;
         this.saveButton=false;
         this.spinnerstatus=false;
+        this.someoneElseHasAuthority=false; //added by Jyoti on 7 Feb 2025
       }
 
       getStudentMarks(){
