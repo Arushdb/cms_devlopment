@@ -73,9 +73,7 @@
     <input
       (change)="onFileChange($event)"
       accept=".xls,.xlsx"
-      *ngIf="
-        saveButton && displaymkgrid && displayType == 'I' && courseType == 'Reg'
-      "
+      *ngIf="saveButton && displaymkgrid && courseType == 'Reg'"
       type="file"
       id="fileInput"
       style="display: none"
