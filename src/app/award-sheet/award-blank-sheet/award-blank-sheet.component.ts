@@ -1876,8 +1876,9 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
   }
   // import Data from excel Arush on -06-03-2025
   onFileChange(event: any) {
+    
     const file = event.target.files[0];
-    debugger;
+    
 
     if (file) {
       this.spinnerstatus = true;
@@ -1996,11 +1997,14 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       delete node.data.totalMarks;
       //node.data.E02 = node.data.E02[0];
       //node.data.E03 = node.data.E02[0];
+      let displayType = this.awardsheet_params.get('displayType');
       this.componentAC.forEach((column: any) => {
-        evid = column.evaluationId[0];
-        evidname = column.evaluationIdName[0];
-        node.data[evidname] = node.data[evid][0];
-        delete node.data[evid];
+        if (displayType == 'I') {
+          evid = column.evaluationId[0];
+          evidname = column.evaluationIdName[0];
+          node.data[evidname] = node.data[evid][0];
+          delete node.data[evid];
+        }
       });
 
       rowData.push(node.data);
