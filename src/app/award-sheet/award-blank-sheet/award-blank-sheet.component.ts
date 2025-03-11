@@ -1942,13 +1942,13 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
             console.log(result);
             let evid = '';
             let evidname = '';
+            let displayType = this.awardsheet_params.get('displayType');
             this.componentAC.forEach((column: any) => {
               // debugger;
 
               evid = column.evaluationId[0];
               evidname = column.evaluationIdName[0];
-              console.log(result[evidname]);
-              console.log(node.data[evid]);
+
               if (!isUndefined(result[evidname]))
                 node.setDataValue(evid, result[evidname]);
             });
@@ -1996,11 +1996,15 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       delete node.data.totalMarks;
       //node.data.E02 = node.data.E02[0];
       //node.data.E03 = node.data.E02[0];
+      let displayType = this.awardsheet_params.get('displayType');
+
       this.componentAC.forEach((column: any) => {
-        evid = column.evaluationId[0];
-        evidname = column.evaluationIdName[0];
-        node.data[evidname] = node.data[evid][0];
-        delete node.data[evid];
+        if (displayType == 'I') {
+          evid = column.evaluationId[0];
+          evidname = column.evaluationIdName[0];
+          node.data[evidname] = node.data[evid][0];
+          delete node.data[evid];
+        }
       });
 
       rowData.push(node.data);
