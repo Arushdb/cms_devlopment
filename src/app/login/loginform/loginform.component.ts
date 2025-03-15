@@ -33,6 +33,7 @@ export class LoginformComponent implements OnInit {
   sts: string = 'ACT';
   message: any;
   dialogRefreg: MatDialogRef<NewregistrationComponent, any>;
+  feepending: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,9 +41,8 @@ export class LoginformComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private userservice: UserService,
-    private dialogRef: MatDialogRef<LoginformComponent> // private accountService: AccountService,
-  ) //private alertService: AlertService
-  {
+    private dialogRef: MatDialogRef<LoginformComponent> // private accountService: AccountService, //private alertService: AlertService
+  ) {
     // redirect to home if already logged in
     // if (this.accountService.userValue) {
     //     this.router.navigate(['/']);
@@ -54,7 +54,7 @@ export class LoginformComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
-    
+
     localStorage.clear();
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -85,8 +85,8 @@ export class LoginformComponent implements OnInit {
     this.reg_params = this.reg_params.set('user_name', this.f.username.value);
     this.reg_params = this.reg_params.set('roll_number', this.f.username.value);
     this.reg_params = this.reg_params.set('password', this.f.password.value);
-
-    this.studentlogin();
+    this.getfeestatus();
+    //this.studentlogin();
 
     //this.accountService.login(this.f.username.value, this.f.password.value)
     //  .pipe(first())
@@ -161,6 +161,37 @@ export class LoginformComponent implements OnInit {
         this.spinnerstatus = false;
         this.loading = false;
         this.getRegistrationDeadlines(res);
+      });
+  }
+
+  getfeestatus() {
+    this.feepending = '';
+    let obj = { xmltojs: 'Y', method: 'None' };
+    this.reg_params = this.reg_params.set('appno', this.f.username.value);
+    obj.method = '/registrationform/getfeestatus.htm';
+    this.spinnerstatus = true;
+
+    this.subs.add = this.userservice
+      .getdata(this.reg_params, obj)
+      .subscribe((res:any) => {
+        debugger;
+        //this.userservice.log(" in switch detail selected");
+
+        res = JSON.parse(res);
+        
+        let str: any = res.root.exception[0].exceptionstring[0];
+        //console.log(res.root.exception[0].exceptionstring[0]);
+        this.spinnerstatus = false;
+        this.loading = false;
+        if (str === 'FeePaid') {
+          console.log('fee is paid');
+          this.feepending = 'N';
+          this.studentlogin();
+        } else {
+          this.feepending = 'Y';
+          this.userservice.log('Fee not paid');
+          return;
+        }
       });
   }
 
