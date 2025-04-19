@@ -1897,10 +1897,14 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       let semesterstartdt = this.awardsheet_params.get('semesterstartdt');
       let displayType = this.awardsheet_params.get('displayType');
       let entityName = this.awardsheet_params.get('entityName');
+      let branchName = this.awardsheet_params.get('branchName');
+      let spclName = this.awardsheet_params.get('spclName');
       let fentityName = fname[0];
       let fcoursecode = fname[1];
-      let fsemesterstartdt = fname[2];
-      let fdisplayType = fname[3];
+      let fbranchName = fname[2];
+      let fspclName = fname[3];
+      let fsemesterstartdt = fname[4];
+      let fdisplayType = fname[5];
       let filematched = false;
 
       debugger;
@@ -1908,6 +1912,8 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       if (
         String(fentityName).trim() == String(entityName).trim() &&
         String(coursecode).trim() == String(fcoursecode).trim() &&
+        String(branchName).trim() == String(fbranchName).trim() &&
+        String(spclName).trim() == String(fspclName).trim() &&
         String(semesterstartdt).trim() == String(fsemesterstartdt).trim() &&
         String(displayType).trim() + '.xlsx' == String(fdisplayType).trim()
       ) {
@@ -2032,11 +2038,17 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
     let semesterstartdt = this.awardsheet_params.get('semesterstartdt');
     let displayType = this.awardsheet_params.get('displayType');
     let entityName = this.awardsheet_params.get('entityName');
+    let branchName = this.awardsheet_params.get('branchName');
+    let spclName = this.awardsheet_params.get('spclName');
     const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
     let filename =
       entityName +
       '_' +
       coursecode +
+      '_' +
+      branchName +
+      '_' +
+      spclName +
       '_' +
       semesterstartdt +
       '_' +
