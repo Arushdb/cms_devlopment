@@ -19,6 +19,7 @@ import { formatCurrency } from '@angular/common';
 import { NgForm } from '@angular/forms';
 import { LoginformComponent } from '../loginform/loginform.component';
 import { SetpasswordComponent } from '../../menu/setpassword/setpassword.component';
+import { forgotpasswordComponent } from 'src/app/menu/forgotpassword/forgotpassword.component';
 
 interface User {
   [index: string]: {
@@ -121,7 +122,6 @@ export class SignonformComponent implements OnDestroy {
         (res) => {
           data = JSON.parse(res);
           //this.getRolefromuser(data);
-          
 
           this.LoginRoleServiceResult(data);
         },
@@ -262,9 +262,8 @@ export class SignonformComponent implements OnDestroy {
       console.log(info.primaryemail);
 
       let status = info.status[0];
-      
+
       if (status === 'EXP') {
-        
         this.setpassword();
         return;
       }
@@ -330,9 +329,6 @@ export class SignonformComponent implements OnDestroy {
   }
 
   setpassword() {
-    
-
-    
     const dialogRef = this.dialog.open(SetpasswordComponent, {
       data: {
         title: 'Warning',
@@ -350,6 +346,40 @@ export class SignonformComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const dialogRef = this.dialog.open(SetpasswordComponent, {
+          data: {
+            title: 'Warning',
+            email: 'Email',
+            ok: true,
+            cancel: true,
+            color: 'warn',
+          },
+          closeOnNavigation: false,
+          disableClose: true,
+          width: '50%',
+          height: '30%',
+        });
+      } else console.log('Canceled is clicked');
+    });
+  }
+
+  forgotpassword() {
+    const dialogRef = this.dialog.open(forgotpasswordComponent, {
+      data: {
+        title: 'Warning',
+        content: 'An OTP will be sent to your primary email. Please confirm ',
+        ok: true,
+        cancel: true,
+        color: 'warn',
+      },
+      closeOnNavigation: false,
+      disableClose: true,
+      width: '50%',
+      height: '90%',
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      if (res) {
+        const dialogRef = this.dialog.open(forgotpasswordComponent, {
           data: {
             title: 'Warning',
             email: 'Email',
