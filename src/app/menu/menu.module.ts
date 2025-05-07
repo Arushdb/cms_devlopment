@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
 import { SetpasswordComponent } from './setpassword/setpassword.component';
-
+import { forgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +17,7 @@ import { SetpasswordComponent } from './setpassword/setpassword.component';
     DashboardComponent,
     HeaderComponent,
     SetpasswordComponent,
+    forgotpasswordComponent,
   ],
   imports: [SharedModule, MenuRoutingModule],
 })
