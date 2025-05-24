@@ -43,10 +43,10 @@ import { InstructorModule } from './instructor/instructor.module';
     ResultprocessingModule,
     RevertresultModule,
     ReportsModule,
-    InstructorModule,
-    MatDialogModule,
+    InstructorModule
+   // MatDialogModule,
 
-    AgGridModule.withComponents([])
+  //  AgGridModule.withComponents([])
     
   
    

@@ -7,6 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { SharedModule } from '../shared/shared.module'; 
 
 import { AssignCoursesComponent } from './assigncourses/assigncourses.component';
 
@@ -16,12 +17,13 @@ import { AssignCoursesComponent } from './assigncourses/assigncourses.component'
     CommonModule,
     BrowserModule,
   
-    FormsModule,
-    HttpClientModule,
-    AgGridModule.withComponents([]),
-    MatDialogModule,
-    MatButtonModule,
-    BrowserAnimationsModule,
+   // FormsModule,
+   // HttpClientModule,
+   // AgGridModule.withComponents([]),
+   // MatDialogModule,
+  //  MatButtonModule,
+  //  BrowserAnimationsModule,
+  SharedModule
     
   ],
   
