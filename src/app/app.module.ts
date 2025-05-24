@@ -13,11 +13,15 @@ import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { AgGridModule } from 'ag-grid-angular';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
 import { StudentModule } from './student/student.module';
 import {ReportsModule} from './reports/reports.module';
+import { InstructorModule } from './instructor/instructor.module';
+
 
 @NgModule({
   declarations: [
@@ -38,10 +42,11 @@ import {ReportsModule} from './reports/reports.module';
     MenuModule,
     ResultprocessingModule,
     RevertresultModule,
-    ReportsModule
+    ReportsModule,
+    InstructorModule
+   // MatDialogModule,
 
-
-    //AgGridModule.withComponents([])
+  //  AgGridModule.withComponents([])
     
   
    
