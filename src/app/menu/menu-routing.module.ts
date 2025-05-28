@@ -16,6 +16,7 @@ import { SchoolMainComponent } from '../student/school-main/school-main.componen
 import { DistanceCenterComponent } from '../reports/distance-center/distance-center.component';
 import { SpreportsComponent } from '../reports/spreports/spreports.component';
 import { AssignCoursesComponent } from '../instructor/assigncourses/assigncourses.component';
+import { RegisterStudentComponent } from '../student/register-student/register-student.component';
 
 
 
@@ -46,7 +47,7 @@ const routes:Routes=[
   //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
   { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
   { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
- // {path:'registration_continue',component: RegisterStudentComponent},   
+  {path:'registration_continue',component: RegisterStudentComponent},   
 
  
  { path: 'distance_center',
@@ -74,7 +75,7 @@ const routes:Routes=[
   declarations: [],
   //imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: "reload"})],
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
  
 })
-export class MenuRoutingModule { }
+export class MenuRoutingModule {}
