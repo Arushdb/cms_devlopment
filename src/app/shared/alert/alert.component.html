@@ -1,5 +1,6 @@
 <h1 [ngClass]="{'success':data.success==true,'error':data.error==true}"  mat-dialog-title>{{data.title}}</h1>
-<div  mat-dialog-content >{{data.content}}</div>
+<!--<div  mat-dialog-content>{{data.content>}}</div> -->
+<div  mat-dialog-content [innerHTML]=data.content></div>
 <div mat-dialog-actions>
   <button class ="mr-2" *ngIf ="data.ok==true" mat-raised-button [color]="data.color" (click)="okbuttonclick()" [mat-dialog-close]="true" >OK</button>
   
