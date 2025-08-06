@@ -17,6 +17,7 @@ import { DistanceCenterComponent } from '../reports/distance-center/distance-cen
 import { SpreportsComponent } from '../reports/spreports/spreports.component';
 import { AssignCoursesComponent } from '../instructor/assigncourses/assigncourses.component';
 import { RegisterStudentComponent } from '../student/register-student/register-student.component';
+import { ProvisionalCertificateComponent } from '../reports/provisional-certificate/provisional-certificate.component';
 
 
 
@@ -48,7 +49,7 @@ const routes:Routes=[
   { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
   { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
   {path:'registration_continue',component: RegisterStudentComponent},   
-
+  {path: 'provisional_certificate', component: ProvisionalCertificateComponent}, //added by Jyoti on 1 aug 2025
  
  { path: 'distance_center',
   loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,

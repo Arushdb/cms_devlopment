@@ -50,4 +50,17 @@ uploadPdfFile(data) {
  return  this.httpclient.post<any>(myurl, data);
 }
 
+
+getProviCertiFileName(params:HttpParams,myparam){
+    var myurl ="";
+    let headers: HttpHeaders= new HttpHeaders();
+    if(myparam.xmltojs=="Y"){
+      headers=headers.set('format', 'format');// format the response data from xml to json
+    }else{
+      headers=headers.set('format', 'None');// format the response data from xml to json
+    } 
+    myurl = this.url+'/provisionalcertificate/generateProvisional.htm' ;
+   return  this.httpclient.get(myurl,{headers,responseType: 'text',params});
+}
+
 }
