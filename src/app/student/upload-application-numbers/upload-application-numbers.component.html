@@ -1,0 +1,102 @@
+<div class="container"> 
+<div class="row card m-3" >
+    <div >
+        <button type="button" class="close" (click) = "onCancel()" aria-label="Close" >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          
+        <div class="card-body border border-primary">
+            <h3 class="card-header ">Upload Students by Application Numbers</h3>
+          
+            <form [formGroup]="upldform"  (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
+                <div class="p-2 bd-highlight" >
+                    <app-custom-combobox  
+                        (OptSelected)="OnentitySelected($event)"
+                        #entityCombo                          
+                        [Options] ='entitydata' 
+                        [labeltext]='entitycombolabel' 
+                        [combowidth] ="combowidth">
+                    </app-custom-combobox>
+                    <app-custom-combobox  
+                        (OptSelected)="Onpgmselected($event)"
+                        #programCombo     
+                        [Options] ='programdata' 
+                        [labeltext]='programcombolabel' 
+                        [combowidth] ="combowidth">
+                    </app-custom-combobox>
+                    <app-custom-combobox  
+                        *ngIf="semdata && semdata.length > 0"
+                        (OptSelected)="OnSemselected($event)"
+                        #semCombo 
+                        [Options] ='semdata' 
+                        [labeltext]='semcombolabel' 
+                        [combowidth] ="combowidth">
+                    </app-custom-combobox>       
+                    <app-custom-combobox  
+                        *ngIf="branchdata && branchdata.length > 0"
+                        (OptSelected)="Onbrnselected($event)"
+                        #branchCombo     
+                        [Options] ='branchdata' 
+                        [labeltext]='branchcombolabel' 
+                        [combowidth] ="combowidth">
+                    </app-custom-combobox>
+                    <app-custom-combobox  
+                        *ngIf="spcdata && spcdata.length > 0"
+                        (OptSelected)="Onspcselected($event)"
+                        #spcCombo 
+                        [Options] ='spcdata' 
+                        [labeltext]='spccombolabel' 
+                        [combowidth] ="combowidth">
+                    </app-custom-combobox> 
+                    <div  *ngIf="entityId?.length > 0 && prgId?.length > 0 && brnId?.length >0 && spcId?.length >0">      
+                        <!--<button type="button" class="btn btn-success mr-2 btn-sm"
+                            (click)="showStagingGrid()" >Already Uploaded</button> -->
+                        <button type="button" class="btn btn-success mr-2 btn-sm" 
+                                (click)="downloadBlankTemplate()" >Download Template</button>
+                        <input (change)="onFileChange($event)" accept=".xls,.xlsx"
+                        type="file" id="fileInput" style="display: none"/>
+                        <label for="fileInput" class="btn btn-success mt-2 mr-2 btn-sm">Upload File</label>                                                          
+                        <a  *ngIf = "notupldedfilepath?.length > 0 " [href]="notupldedfilepath"  [download]="notupldedfilepath" target="_blank" rel="noopener noreferrer" class="btn btn-link">
+                            Click here to View Not Uploaded Students
+                        </a> &nbsp;
+                        <button *ngIf="showDownloadPwd" type="button" class="btn btn-success mr-2 btn-sm" 
+                            (click)="getPasswordFile()">Download Passwords</button>
+                        <button *ngIf="notregisteredCount > 0" type="button" class="btn btn-success mr-2 btn-sm" 
+                            (click)="deleteSelected()">Delete Selected</button>
+                    </div>
+                    <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                </div>
+                <div *ngIf="displaygrid">
+                Registration Class: <b>{{entityName}}</b> Program: <b>{{prgName}}</b> Branch: <b>{{brnName}}</b> Specialization: <b>{{spcName}}</b> Semester: <b>{{semCode}}</b>
+                <br>Total Uploaded :<b>{{totaluploaded}}</b>&nbsp; Total Registered:<b>{{registeredCount}}</b>&nbsp; Not Registered :<b>{{notregisteredCount}}</b>
+                <ag-grid-angular *ngIf="displaygrid && totaluploaded>0"
+                    #agGrid
+                    style="height:300px; width:100%;" 
+                    [columnDefs]="columnDefs"
+                    [defaultColDef]="defaultColDef"
+                    [getRowStyle]="getRowStyle"
+                    [rowData]="studentregdata"
+                    rowSelection="multiple"
+                    [gridOptions] = "gridOptions"
+                    [isRowSelectable]="isRowSelectable"
+                    (rowSelected)="onRowSelected($event)"
+                    suppressHorizontalScroll = "false"
+                    (gridReady) ="OngridReady($event)"
+                    suppressRowClickSelection="suppressRowClickSelection"
+                    class="ag-theme-alpine"
+                ></ag-grid-angular>
+                </div>
+                <app-spinner *ngIf = 'mask' [spinnerstatus]="mask">{{mask}}</app-spinner>
+                <!--<div class="form-row" >
+                    <div class="text-center form-group col"  >
+                        <button *ngIf="showDownloadPwd" type="submit" class="btn btn-primary mr-1"  >Download Passwords</button>
+                        <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                    </div>
+                </div> -->
+                                     
+            </form>
+        </div>
+    </div>
+   
+    </div>
+</div>

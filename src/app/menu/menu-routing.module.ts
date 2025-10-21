@@ -18,6 +18,7 @@ import { SpreportsComponent } from '../reports/spreports/spreports.component';
 import { AssignCoursesComponent } from '../instructor/assigncourses/assigncourses.component';
 import { RegisterStudentComponent } from '../student/register-student/register-student.component';
 import { ProvisionalCertificateComponent } from '../reports/provisional-certificate/provisional-certificate.component';
+import { UploadApplicationNumbersComponent } from '../student/upload-application-numbers/upload-application-numbers.component';
 
 
 
@@ -44,13 +45,13 @@ const routes:Routes=[
   {path:'login/newregistration',component: NewregistrationComponent},
   {path:'resultProcess',component: StartactivityComponent},
   {path:'schoolmain',component: SchoolMainComponent},
-         
+  
   //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
   { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
   { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
   {path:'registration_continue',component: RegisterStudentComponent},   
   {path: 'provisional_certificate', component: ProvisionalCertificateComponent}, //added by Jyoti on 1 aug 2025
- 
+  {path:'uploadAppNos', component: UploadApplicationNumbersComponent}, //added by Jyoti on 12 Aug 2025
  { path: 'distance_center',
   loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
