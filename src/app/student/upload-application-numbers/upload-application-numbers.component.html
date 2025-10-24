@@ -56,7 +56,7 @@
                         <input (change)="onFileChange($event)" accept=".xls,.xlsx"
                         type="file" id="fileInput" style="display: none"/>
                         <label for="fileInput" class="btn btn-success mt-2 mr-2 btn-sm">Upload File</label>                                                          
-                        <a  *ngIf = "notupldedfilepath?.length > 0 " [href]="notupldedfilepath"  [download]="notupldedfilepath" target="_blank" rel="noopener noreferrer" class="btn btn-link">
+                        <a  *ngIf = "notupldedfilepath?.length > 0 " [href]="notupldedfilepath"  [download]="notupldedfilename" target="_blank" rel="noopener noreferrer" class="btn btn-link">
                             Click here to View Not Uploaded Students
                         </a> &nbsp;
                         <button *ngIf="showDownloadPwd" type="button" class="btn btn-success mr-2 btn-sm" 

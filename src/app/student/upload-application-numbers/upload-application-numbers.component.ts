@@ -45,6 +45,7 @@ export class UploadApplicationNumbersComponent implements OnInit ,OnDestroy{
   spccombolabel: string;
   semcombolabel: string;
   notupldedfilepath:String="";
+  notupldedfilename:String="";
   pdfTimestamp = Date.now();
   showDownloadPwd:boolean = false;
   downloadPwdfilepath:string="";
@@ -505,6 +506,7 @@ setStagingData(filename: string)
 
 getNotUploadedRecords()
 {
+    this.notupldedfilename = "";
     let params:HttpParams= new HttpParams();
       params=params.set("entityId", this.entityId);
       params=params.set("entityName", this.entityName);
@@ -531,9 +533,11 @@ getNotUploadedRecords()
                 if(str=="success")
                 {
                   let url1:String = robj.info.result[0].pathWithFileName;
-		              let aa:any[] = url1.toString().split('\\');
-			            url1 = aa.join('\/');
+		              //let aa:any[] = url1.toString().split('\\');
+			            //url1 = aa.join('\/');
                   if (url1.length > 0) {
+                        let strary = String(url1).split('/');
+                        this.notupldedfilename =strary[strary.length-1];
                         this.notupldedfilepath = url1 + "?v=" + this.pdfTimestamp;
                         console.log("pdf file path" , this.notupldedfilepath);
                   }  
