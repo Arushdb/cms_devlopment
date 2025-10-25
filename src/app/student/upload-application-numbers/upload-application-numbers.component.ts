@@ -164,6 +164,8 @@ export class UploadApplicationNumbersComponent implements OnInit ,OnDestroy{
     this.displaygrid = false;
     this.notupldedfilepath = "";
     this.showDownloadPwd = false;
+    this.userservice.clear();
+    this.programService.clear();
     this.getAuthPrograms();
   }
 
@@ -176,6 +178,8 @@ export class UploadApplicationNumbersComponent implements OnInit ,OnDestroy{
     this.displaygrid = false;
     this.notupldedfilepath = "";
     this.showDownloadPwd = false;
+    this.userservice.clear();
+    this.programService.clear();
     this.getBranches();
   }
 
@@ -188,6 +192,8 @@ export class UploadApplicationNumbersComponent implements OnInit ,OnDestroy{
     this.displaygrid = false;
     this.notupldedfilepath = "";
     this.showDownloadPwd = false;
+    this.userservice.clear();
+    this.programService.clear();
     this.getSpc();
   }
 
@@ -198,6 +204,8 @@ export class UploadApplicationNumbersComponent implements OnInit ,OnDestroy{
     this.displaygrid = false;
     this.notupldedfilepath = "";
     this.showDownloadPwd = false;
+    this.userservice.clear();
+    this.programService.clear();
     this.showStagingGrid();
   }
 
@@ -250,7 +258,7 @@ getAuthPrograms(){
       this.programService.getAuthorizeProgramsformenu(this.entityId,this.route).subscribe(res=>{
       this.programdata =[];       
       let  data = JSON.parse(res);
-      console.log("route",  this.route, "prgs", data.Details.Detail);
+      //console.log("route",  this.route, "prgs", data.Details.Detail);
       if(isNullOrUndefined(data.Details.Detail)){
         this.programService.log("You are not Authorized for program");
         this.upldform.reset();
@@ -273,6 +281,7 @@ getSem(){
   obj.method = '/uploadStudents/getSemforReg.htm';
   this.subs.add = this.userservice.postdata(params, obj).subscribe((res) => {
   let  data = JSON.parse(res);
+  //console.log("getSem", data);
     if(isNullOrUndefined(data.commonObjectList.object)){
       this.semCode='SM1'; //default registration would be enabled in SM1
       this.getBranches();
@@ -302,6 +311,7 @@ getBranches(){
       obj.method = '/uploadStudents/getSemBranches.htm';
       this.subs.add = this.userservice.postdata(params, obj).subscribe((res) => {
           let  resd = JSON.parse(res);
+          //console.log("getBranches", resd);
           if(isNullOrUndefined(resd.commonObjectList.object)){
               this.brnId='XX'; //default branch None.
               this.brnName = 'None';
@@ -319,7 +329,7 @@ getBranches(){
                 this.brnName = 'None';
                 this.getSpc();
             }
-            else if (branches.length > 1) {
+            else if (branches.length > 0) {
               this.branchdata = branches;
             }
           }
@@ -344,7 +354,7 @@ getSpc(){
       obj.method = '/uploadStudents/getSemSpcl.htm';
       this.subs.add = this.userservice.postdata(params, obj).subscribe((res) => {
           let  data = JSON.parse(res);
-          //console.log("spc", data.commonObjectList.object);
+          //console.log("getSpc", data.commonObjectList.object);
           if(isNullOrUndefined(data.commonObjectList.object)){
               this.spcId = '00'; //default spc Id
               this.spcName = 'None';
@@ -363,7 +373,7 @@ getSpc(){
                 this.showStagingGrid();
                 //console.log("default spc", this.spcId);
             }
-            else if (spc.length > 1) {
+            else if (spc.length > 0) {
               this.spcdata = spc;
             }
           }
@@ -415,6 +425,8 @@ downloadBlankTemplate()
 }
 
 onFileChange(event: any) {
+    this.userservice.clear();
+    this.programService.clear();
     const file = event.target.files[0];
     this.notupldedfilepath="";
     if (file && (file.name.endsWith('.xls') || file.name.endsWith('.xlsx'))) {
@@ -606,7 +618,7 @@ showStagingGrid():void
   this.registeredCount =0;
   this.notregisteredCount =0;
   this.notupldedfilepath="";
-
+  console.log(this.entityId, this.prgId, this.brnId, this.spcId, this.semCode);
   if (this.entityId?.length > 0 && this.prgId?.length > 0 && 
       this.brnId?.length >0 && this.spcId?.length >0 &&  this.semCode?.length > 0)
   {	
