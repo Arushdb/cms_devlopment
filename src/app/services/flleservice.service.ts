@@ -63,4 +63,10 @@ getProviCertiFileName(params:HttpParams,myparam){
    return  this.httpclient.get(myurl,{headers,responseType: 'text',params});
 }
 
+uploadxlsFile(data, filenm) { //added by Jyoti on 13 Aug 2025
+  var myurl ="";
+  myurl = this.url + '/fileUpload/uploadexcel.jsp?fileName=' +filenm+ "&folder=PrestagingDataDocuments/"+"NEW/";  
+  return  this.httpclient.post<any>(myurl, data);
+}
+
 }

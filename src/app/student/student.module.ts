@@ -14,6 +14,7 @@ import { SchoolMainComponent } from './school-main/school-main.component';
 
 import { SchoolStudentDetailComponent } from './school-student-detail/school-student-detail.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { UploadApplicationNumbersComponent } from './upload-application-numbers/upload-application-numbers.component';
 
 
 //import { alertComponent } from '../shared/components/alert/alert.component';
@@ -30,6 +31,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
    
     SchoolStudentDetailComponent,
     FileUploadComponent,
+    UploadApplicationNumbersComponent,
    
     
 
