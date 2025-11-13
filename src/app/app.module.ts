@@ -13,19 +13,20 @@ import {HttpinterceptorService} from './services/httpinterceptor.service';
 import {FormatInterceptorService} from './services/format-interceptor.service';
 import { SharedModule } from './shared/shared.module';
 import { AgGridModule } from 'ag-grid-angular';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { AwardSheetModule } from './award-sheet/award-sheet.module';
 import {ResultprocessingModule} from './resultprocessing/resultprocessing.module';
 import  {RevertresultModule} from './revertresult/revertresult.module';
 import { StudentModule } from './student/student.module';
-import {ReportsModule} from './reports/reports.module';
-import { InstructorModule } from './instructor/instructor.module';
-
+import { CourseevaluationComponent } from './courseevaluation/courseevaluation.component';
+import { TemplateComponent } from './courseevaluation/template/template.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+//import {StudentModule} from  './student/student.module' ;
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CourseevaluationComponent,
+    TemplateComponent,
    
      
    
@@ -42,11 +43,10 @@ import { InstructorModule } from './instructor/instructor.module';
     MenuModule,
     ResultprocessingModule,
     RevertresultModule,
-    ReportsModule,
-    InstructorModule
-   // MatDialogModule,
+    MatTooltipModule,
 
-  //  AgGridModule.withComponents([])
+
+    //AgGridModule.withComponents([])
     
   
    
@@ -59,6 +59,7 @@ import { InstructorModule } from './instructor/instructor.module';
   providers: [
    
     [
+
       {provide :HTTP_INTERCEPTORS,useClass:HttpinterceptorService,multi:true},
       {provide :HTTP_INTERCEPTORS,useClass:FormatInterceptorService,multi:true},
  

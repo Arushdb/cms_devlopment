@@ -1,0 +1,72 @@
+<!-- Author :Piyush Singh
+ Date Created:14 jun 2024
+  Function : Html file for course evaluation Component (Dialog open on select template button)-->
+
+
+ <app-spinner [spinnerstatus] = "spinnerStatus"></app-spinner>
+
+<div   class="evaluationTemplate">
+ 
+ <div class="box"
+  style="position: relative; 
+  height: 600px; 
+  width:100% ;
+  display: inline-block">
+  
+  <b mat-dialog-title>Evaluation Component Details Only Internal Component </b>
+  <p style="color:red">Maximum marks of course and selected template must be equal.</p>
+  
+  <mat-dialog-actions>
+    <button class="closeBtn"
+    mat-button (click)="closeDialog()"
+    matTooltip="Press To Go Back On The Previous Page" >
+    <mat-icon>home</mat-icon>
+    </button>
+    </mat-dialog-actions>
+    <div *ngIf="errorMessage"><h3 style="color: red"><u>Error found: {{ errorMessage }}</u></h3></div>
+    <span *ngIf="!errorMessage">
+    <span>Select Template : </span>
+    <select style="width: 50%;" 
+    (change)="onItemSelected($event.target.value)">
+    <option value="" disabled selected>Click here to select course template</option>
+        <option *ngFor="let name of templateNames" [value]="name">{{ name }}</option>
+        </select>
+
+        <button *ngIf="selectedItem"
+        (click)="assignTemplate()" 
+        mat-button 
+        style="color: blue"
+        matTooltip="Click to assign a different template to the selected course">
+  Assign Template
+</button>
+
+       <p *ngIf=" !selectedItem" style="color: red;">Please select a template for assigning template to the selected course. </p>
+       <h4>Changing template for Course: {{ coursecode }} </h4>
+      <span *ngIf="selectedItem">
+      <h4>Maximum Marks for Course : {{courseMaxMarks}}</h4>
+      <h4>Template Maximum Marks : {{templateMaxMarks}}</h4>
+      <span *ngIf="courseMaxMarks!==templateMaxMarks">
+      <h4 style="color: red;"> Note : Course max marks not equal to Template max marks</h4>
+    </span>
+    </span>
+    </span>
+    <div *ngIf="selectedItem">
+      
+      <div class="templateContainer">
+        <ag-grid-angular
+        #mkGrid 
+        style="width: 90%;" 
+        domLayout="autoHeight"
+        class="ag-theme-alpine" 
+        [rowData]="assignRowData"
+        [columnDefs]="assignColumnDefs" 
+        [rowSelection]="single" 
+        (gridReady)="onGridReady($event)"
+        >
+        </ag-grid-angular>
+        </div>
+        </div>
+        </div>
+        </div>
+      
+       
