@@ -13,7 +13,12 @@ import { StartactivityComponent } from '../resultprocessing/startactivity/starta
 import { RevertresultprocessComponent } from '../revertresult/revertresultprocess/revertresultprocess.component';
 import { SignonformComponent } from '../login/signonform/signonform.component';
 import { SchoolMainComponent } from '../student/school-main/school-main.component';
-import { CourseevaluationComponent} from '../courseevaluation/courseevaluation.component';
+import { DistanceCenterComponent } from '../reports/distance-center/distance-center.component';
+import { SpreportsComponent } from '../reports/spreports/spreports.component';
+import { AssignCoursesComponent } from '../instructor/assigncourses/assigncourses.component';
+import { RegisterStudentComponent } from '../student/register-student/register-student.component';
+import { ProvisionalCertificateComponent } from '../reports/provisional-certificate/provisional-certificate.component';
+import { UploadApplicationNumbersComponent } from '../student/upload-application-numbers/upload-application-numbers.component';
 
 
 
@@ -37,26 +42,24 @@ const routes:Routes=[
   {path:'External_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"E",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Remedial_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"R",courseType:"Reg"},runGuardsAndResolvers: "always"},
   {path:'Corecourse_award_sheet',  component: AwardBlankSheetComponent,data:{displayType:"I",courseType:"Cor"},runGuardsAndResolvers: "always"},
-  
-  
-  
   {path:'login/newregistration',component: NewregistrationComponent},
   {path:'resultProcess',component: StartactivityComponent},
   {path:'schoolmain',component: SchoolMainComponent},
-  { path: 'registration_continue',
-    loadChildren: () => import('../student/student.module').then(m => m.StudentModule)} , 
-    // {path:'registration_continue',component: RegisterStudentComponent},   
-    
-
-    // component made by :-Piyush singh
-    {path:"evaluation_component", component :CourseevaluationComponent,},   
-    
+  
+  //loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
+  { path: 'distance_center', component : DistanceCenterComponent,runGuardsAndResolvers: "always"},
+  { path: 'report_usingSP', component : SpreportsComponent,runGuardsAndResolvers: "always"},
+  {path:'registration_continue',component: RegisterStudentComponent},   
+  {path: 'provisional_certificate', component: ProvisionalCertificateComponent}, //added by Jyoti on 1 aug 2025
+  {path:'uploadAppNos', component: UploadApplicationNumbersComponent}, //added by Jyoti on 12 Aug 2025
  { path: 'distance_center',
   loadChildren: () => import('../reports/reports.module').then(m => m.ReportsModule)} ,
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
  
  {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
  {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
+ {path:'course_assignment',component: AssignCoursesComponent,runGuardsAndResolvers: "always"},
+
  
  {path:'login',component:SignonformComponent},
  
@@ -74,7 +77,7 @@ const routes:Routes=[
   declarations: [],
   //imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: "reload"})],
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
  
 })
-export class MenuRoutingModule { }
+export class MenuRoutingModule {}
