@@ -109,4 +109,15 @@ export class ProgramService {
     public clear() {
       this.messagesrv.clear();
       }
+
+    getStudentExitProgram(inprollno, inpOption, inpexityr){
+      var myurl =this.url+"/provisionalcertificate/getStudentExitProgram.htm";
+      let headers: HttpHeaders= new HttpHeaders();
+      headers=headers.set('format', 'format');// format the response data from xml to json
+      let param:HttpParams= new HttpParams();
+      param=param.set('rollNumber',inprollno) ;
+      param=param.set('prgOption',inpOption) ;
+      param=param.set('exitYear',inpexityr) ;
+      return  this.httpclient.get(myurl,{headers,params:param,responseType: 'text'});
+    }
 }

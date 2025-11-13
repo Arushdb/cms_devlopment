@@ -1,74 +1,118 @@
 <!--
 <div class="d-flex p-2 bd-highlight border"  [ngStyle]="styleCourse" >
     -->
-    <app-spinner [spinnerstatus] = "spinnerstatus"></app-spinner>
-    <div style='height: 100%; display: flex; flex-direction: column;' *ngIf="courseListGrid.length>0">
-          <div [ngStyle]="styleCourse">         
-         <ag-grid-angular  
-        #agGrid style="width:100%; height: 200px;"
-        class="ag-theme-alpine"
-        [gridOptions] = "gridOptions"
-        (rowSelected)="onRowSelected($event)"
-        [defaultColDef]="defaultColDef"
-      
-        rowSelection="multiple"
-   
-        (gridReady) ="OnCoursegridReady($event)"
-        
-        >
-        </ag-grid-angular>    
-         
-    </div>
+<app-spinner [spinnerstatus]="spinnerstatus"></app-spinner>
+<div
+  style="height: 100%; display: flex; flex-direction: column"
+  *ngIf="courseListGrid.length > 0"
+>
+  <div [ngStyle]="styleCourse">
+    <ag-grid-angular
+      #agGrid
+      style="width: 100%; height: 200px"
+      class="ag-theme-alpine"
+      [gridOptions]="gridOptions"
+      (rowSelected)="onRowSelected($event)"
+      [defaultColDef]="defaultColDef"
+      rowSelection="multiple"
+      (gridReady)="OnCoursegridReady($event)"
+    >
+    </ag-grid-angular>
+  </div>
 
-     <div>
-        <button   type="button" class="btn btn-success mr-2  btn-sm " 
-        (click)="calculateClasstotal('getmarks')" *ngIf="saveButton && displaymkgrid && columnDefsmk.length>0"  >Save</button>
-        <button   type="button" class="btn btn-primary mr-2  btn-sm && columnDefsmk.length>0"
-         (click)="onclickgradelimitbutton()" 
-         *ngIf="gradelimitButton && displaymkgrid && columnDefsmk.length>0 && displayType== 'I' && courseType=='Reg' "
-          >GradeLimit</button>
-        <button   type="button" class="btn btn-success mr-2  btn-sm " (click)="submitConfirm()" *ngIf="submitForApprovalButton && displaymkgrid">Submit</button>
-   
-        <button   type="button" class="btn btn-success mr-2  btn-sm " 
-        (click)="generatepdf()"  *ngIf= "displaymkgrid && displayType=='I' " >Award-Blank-Report</button>
-        
-        <button   type="button" class="btn btn-success mr-2  btn-sm " 
-        (click)="generateMergeReport()"  *ngIf= "displaymkgrid && displayType=='I'  && courseType=='Reg' " >Merge-Report</button>
+  <div>
+    <button
+      type="button"
+      class="btn btn-success mr-2 btn-sm"
+      (click)="calculateClasstotal('getmarks')"
+      *ngIf="saveButton && displaymkgrid && columnDefsmk.length > 0"
+    >
+      Save
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary mr-2 btn-sm && columnDefsmk.length>0"
+      (click)="onclickgradelimitbutton()"
+      *ngIf="
+        gradelimitButton &&
+        displaymkgrid &&
+        columnDefsmk.length > 0 &&
+        displayType == 'I' &&
+        courseType == 'Reg'
+      "
+    >
+      GradeLimit
+    </button>
+    <button
+      type="button"
+      class="btn btn-success mr-2 btn-sm"
+      (click)="submitConfirm()"
+      *ngIf="submitForApprovalButton && displaymkgrid"
+    >
+      Submit
+    </button>
 
-    </div>
+    <button
+      type="button"
+      class="btn btn-success mr-2 btn-sm"
+      (click)="generatepdf()"
+      *ngIf="displaymkgrid && displayType == 'I'"
+    >
+      Award-Blank-Report
+    </button>
 
-    <div style='height: 700px; width: 100% ;display: flex; flex-direction: column;'  *ngIf="columnDefsmk.length>0 && displaymkgrid"  >
-       
-      
-        <ag-grid-angular 
-        #mkGrid 
-        style="height:700px; width:100%" 
-      
-        class="ag-theme-alpine"
-        [gridOptions] = "gridOptionsmk"
-        (gridReady) ="OngridReady($event)"
-        [singleClickEdit]="true"
-      
-     
-       
-        [enterMovesDownAfterEdit]="true"
-        [defaultColDef]="mydefaultColDef"   
-       
-      
-        rowSelection="single"
-        (cellValueChanged)="oncellValueChanged($event)"
-     
-        (cellFocused)="oncellFocused($event)"
-        
-        (cellEditingStopped)="oncellEditingStopped($event)"
-            
-       
-         
-        >
-        </ag-grid-angular>        
-      
+    <button
+      type="button"
+      class="btn btn-success mr-2 btn-sm"
+      (click)="generateMergeReport()"
+      *ngIf="displaymkgrid && displayType == 'I' && courseType == 'Reg'"
+    >
+      Merge-Report
+    </button>
+
+    <input
+      (change)="onFileChange($event)"
+      accept=".xls,.xlsx"
+      *ngIf="saveButton && displaymkgrid && courseType == 'Reg'"
+      type="file"
+      id="fileInput"
+      style="display: none"
+    />
+    <label
+      *ngIf="saveButton && displaymkgrid && courseType == 'Reg'"
+      for="fileInput"
+      class="btn btn-success mt-2 mr-2 btn-sm"
+      >Import File</label
+    >
+
+    <button
+      type="button"
+      class="btn btn-success mr-2 btn-sm"
+      (click)="exportToExcel()"
+      *ngIf="displaymkgrid && courseType == 'Reg'"
+    >
+      export
+    </button>
+  </div>
+
+  <div
+    style="height: 700px; width: 100%; display: flex; flex-direction: column"
+    *ngIf="columnDefsmk.length > 0 && displaymkgrid"
+  >
+    <ag-grid-angular
+      #mkGrid
+      style="height: 700px; width: 100%"
+      class="ag-theme-alpine"
+      [gridOptions]="gridOptionsmk"
+      (gridReady)="OngridReady($event)"
+      [singleClickEdit]="true"
+      [enterMovesDownAfterEdit]="true"
+      [defaultColDef]="mydefaultColDef"
+      rowSelection="single"
+      (cellValueChanged)="oncellValueChanged($event)"
+      (cellFocused)="oncellFocused($event)"
+      (cellEditingStopped)="oncellEditingStopped($event)"
+    >
+    </ag-grid-angular>
+  </div>
 </div>
-
-
-
-

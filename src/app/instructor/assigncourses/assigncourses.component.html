@@ -1,0 +1,151 @@
+
+
+
+<div *ngIf="showInputControls">
+<div class="form-group">
+<label>Session :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select [(ngModel)]="selectedSession" (change)="validateFields()">
+  <option value="">Select Session</option>
+  <option *ngFor="let session of sessions" [value]="session">
+    {{ formatSession(session) }}
+  </option>
+</select>
+</div>
+
+
+
+
+<div class="form-group">
+  <label>Course Code :</label>&nbsp;
+  <input type="text" [(ngModel)]="courseCode" (input)="validateFields()" />
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+  <mat-spinner></mat-spinner>
+  <p>Loading data, please wait...</p>
+</div>
+
+
+
+
+<!-- Show error messages dynamically -->
+<div *ngIf="errorMessage" class="error-message">
+  <p>{{ errorMessage }}</p>
+</div>
+
+<div *ngIf="!isOkButtonEnabled && !errorMessage && (!selectedSession || !courseCode)" class="error-message">
+  <p>Please select both session and course code.</p>
+</div>
+
+<div class="button-group">
+  <button (click)="onOk()" [disabled]="!isOkButtonEnabled" class="primary-button">OK</button>
+</div>
+</div>
+
+<!--  🅐 Global quick filter  
+<input
+  type="text"
+  placeholder="Search in grid…"
+  (input)="onQuickFilter($event)"
+  class="quick-filter"
+/>-->
+
+<div *ngIf="isGridVisible">
+  <div style="width: 100%; height: 300px; overflow: auto;">
+    <ag-grid-angular
+      style="width: 100%; height: 100%;"
+      class="ag-theme-alpine"
+      [rowData]="gridData"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      rowSelection="multiple"
+      (rowSelected)="onRowSelected($event)"
+      >
+    </ag-grid-angular>
+  </div>
+
+  <div class="button-group">
+    <button (click)="openEmployeeDialog()" [disabled]="!isAssignButtonEnabled" class="assign-button">Assign</button>&nbsp;
+    <button (click)="onUnAssign()" [disabled]="!isUnassignButtonEnabled" class="unassign-button">Unassign</button>
+  </div>
+</div>
+
+
+  
+  <!-- Employee Selection Dialog -->
+  <ng-template #employeeDialog>
+    <h2>Select Employee</h2>
+   <!-- <p>Total Selected Records: {{ selectedRecordsCount }}</p>-->
+    <ag-grid-angular
+      class="ag-theme-alpine"
+      [rowData]="employeeData"
+      [columnDefs]="employeeColumnDefs"
+      [defaultColDef]="defaultColDef"   
+      rowSelection="single"
+      (selectionChanged)="onEmployeeSelected($event)"
+      style="width: 100%; height: 200px;">
+    </ag-grid-angular>
+
+    <div class="button-group">
+      <button mat-button (click)="closeEmployeeDialog()" class="close-button">Close</button>&nbsp;
+      <button mat-button (click)="onEmployeeOk()" class="ok-button">OK</button>
+    </div>
+  </ng-template>
+
+  <!-- Confirmation Dialog for Assign/Unassign 
+ <ng-template #confirmationDialog let-dialogRef="dialogRef" let-data="data">
+    <h2 mat-dialog-title>
+      {{ data?.type === 'assign' ? 'Confirm Assignment' : 'Confirm Unassignment' }}
+    </h2>
+    
+    <mat-dialog-content>
+      <p *ngIf="data?.type === 'assign'">
+        Are you sure you want to assign <strong>{{ data?.employeeName }}</strong> to the selected course(s)?
+      </p>
+      <p *ngIf="data?.type === 'unassign'">
+        Are you sure you want to unassign the selected course(s)?
+      </p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+      <button mat-button color="warn" (click)="dialogRef.close(true)">
+        {{ data?.type === 'assign' ? 'Assign' : 'Unassign' }}
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+</div> -->
+
+
+<ng-template #confirmationDialog let-data let-dialogRef="dialogRef">
+  <h2 mat-dialog-title>
+    {{ data?.type === 'assign' ? 'Confirm Assignment' : 'Confirm Unassignment' }}
+  </h2>
+  
+  <mat-dialog-content>
+    <!-- For assignment confirmation -->
+    <p *ngIf="data?.type === 'assign'">
+      Are you sure you want to assign <strong>{{ data?.employeeName }}</strong> to the selected course(s)?
+    </p>
+
+    <!-- For unassignment confirmation -->
+    <p *ngIf="data?.type === 'unassign'">
+      {{ data?.message }}
+    </p>
+
+    <!-- List of employees to unassign -->
+    <ul *ngIf="data?.type === 'unassign' && data?.assignedEmployees?.length > 0">
+      <li *ngFor="let assigned of data.assignedEmployees">
+        {{ assigned || 'No Employee Assigned' }}
+      </li>
+    </ul>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+    <button mat-button color="warn" (click)="dialogRef.close(true)">
+      {{ data?.type === 'assign' ? 'Assign' : 'Unassign' }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+

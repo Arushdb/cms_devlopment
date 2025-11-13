@@ -172,16 +172,17 @@ hashValueGetter = function (params) {
 };
 
 columnDefs = [
-  {
+  { field: 'coursetypedesc', headerName : 'CourseType' },
+  { field: 'coursetype', hide:true },
+  /*{
     headerName: 'Seq No',
     maxWidth: 100,
     valueGetter: this.hashValueGetter,
-  },
+  }, */
   { field: 'courseCode',checkboxSelection: true  },
   { field: 'coursename' },
   { field: 'credits' }
 ];
-
 
    params = new HttpParams()
   .set('application','CMS');
@@ -541,7 +542,7 @@ goBack(): void {
   console.log("Selected Nodes",selectedNodes);
   const subjectselected = selectedNodes.map(node => node.data );
   console.log("Subject selected ",subjectselected);
-
+  
 
   
 
@@ -572,6 +573,7 @@ goBack(): void {
     
     var semestermaxcredit:number=0;
     var semestermincredit:number=0;
+    var selectedCourseTypeCredits:any = [];
 
        console.log(subjectselected.length);
     if (subjectselected.length==0){
@@ -618,11 +620,16 @@ goBack(): void {
             	}else{
             		this.creditpractical += parseFloat(gridItem.credits);
             	}
-        	  	           	  	
-            
      }
      
      }
+     //added by Jyoti on 3 Jul 2025
+     if (!this.validateCourseTypeCredits())
+     {
+        console.log("not validated in if");
+         return;	
+     } //added till here by Jyoti on 3 Jul 2025
+     console.log("after validation");
      //Alert.show("creditselected"+creditselected);
      this.crselected="Credits Selected:"+this.creditselected;
 //      Alert.show("creditselected:"+creditselected+
@@ -630,7 +637,7 @@ goBack(): void {
 //      
 //      "semestercredit"+semestercredit+"creditavailable:"+creditavailable +"creditrequired:"+creditrequired);
       
-      console.log("credit selected",this.creditselected);
+         console.log("credit selected",this.creditselected);
       
           if(
           (this.creditselected>=semestermincredit)&&(this.creditselected<=semestermaxcredit)
@@ -687,6 +694,41 @@ goBack(): void {
            
            
   }
+    //validateCourseTypeCredits added by Jyoti on 3 Jul 2025
+   validateCourseTypeCredits()
+    {
+      //console.log("selCourseData", this.selecteddata, "forpck", this.pck);
+      var proceed:boolean = true;
+      let myparam = {xmltojs:'Y', method:'None' };  
+      myparam.method='/registrationforstudent/checkCourseTypeCredits.htm';
+      this.params= this.params.set("selecteddata",this.selecteddata);
+      this.params=this.params.set('pck', this.pck);
+      this.mask=true;
+      this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
+         let data = JSON.parse(res);
+         let alertmsg = "";
+         for (var obj of  data.registerDetails.Detail)
+         {
+              proceed = false;
+              if(obj.available=='N'){
+                  //console.log("after validation",obj.message);
+                  proceed = true;
+                  break;
+              }else{
+                alertmsg = alertmsg  + "You selected total:<b>" + obj.credits +"</b> credits for " + "<b>" + obj.coursetypedesc + "</b>" +
+                       " Please select at least :<b>" + obj.mincredit + "</b><br/>";
+              }
+          }
+          if (alertmsg.length > 0) {
+              const dialogRef=  this.dialog.open(alertComponent,
+                    {data:{title:"Warning",content: alertmsg ,ok:true,cancel:false,color:"warn"}
+                    });
+                dialogRef.disableClose = true;
+          }
+      });
+      this.mask = false;
+      return proceed;
+    }
 
     onOK(){
     

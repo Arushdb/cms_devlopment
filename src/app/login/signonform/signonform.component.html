@@ -7,138 +7,206 @@
 ></iframe>
 -->
 
-
-<iframe  #poster *ngIf="showposter"
-src="assets/Anti_Ragging_Posters.pdf#toolbar=0"
-scrolling="auto"
-height="600px"
-width="100%"
-
-
+<iframe
+  #poster
+  *ngIf="showposter"
+  src="assets/Anti_Ragging_Posters.pdf#toolbar=0"
+  scrolling="auto"
+  height="600px"
+  width="100%"
 ></iframe>
-
-
 
 <!--
 <app-poster *ngIf="showposter"></app-poster>
 -->
 <div *ngIf="!showposter && !showundertaking" class="container-fluid card">
-  <div class="row"   [ngClass] ="{'backround-dodgerblue':!env}">
+  <div class="row" [ngClass]="{ 'backround-dodgerblue': !env }">
     <div class="col-md-2 col-lg-1 col-xs-12 col-sm-12">
       <!--
       <img class="headerLogo text-center" src="../assets/deiLogo.jpg" alt="DEI-Logo">
       -->
-      <img class="headerLogo text-center" src="assets/deiLogo.jpg" alt="DEI-Logo">
+      <img
+        class="headerLogo text-center"
+        src="assets/deiLogo.jpg"
+        alt="DEI-Logo"
+      />
     </div>
     <div class="col-md-10 col-lg-11 col-xs-12 col-sm-12">
       <!--
       <h1 class="text-center color-darkBlue fs-IB"   [ngClass] ="{}">Course Management System</h1>
       -->
-      <h1 class="text-center  fs-IB"   [ngClass] ="{'color-darkorchid':!env,'color-darkBlue':env}">Course Management System</h1>
-      <h2 class="text-center "  [ngClass] ="{'color-darkorchid':!env,'color-lightBlue':env}">An Open Source Initiative of the Ministry of Human Resource Development</h2>
-      <h3 class="text-center">(Developed under the National Mission on Education through Information and Communication Technology)</h3>
+      <h1
+        class="text-center fs-IB"
+        [ngClass]="{ 'color-darkorchid': !env, 'color-darkBlue': env }"
+      >
+        Course Management System
+      </h1>
+      <h2
+        class="text-center"
+        [ngClass]="{ 'color-darkorchid': !env, 'color-lightBlue': env }"
+      >
+        An Open Source Initiative of the Ministry of Human Resource Development
+      </h2>
+      <h3 class="text-center">
+        (Developed under the National Mission on Education through Information
+        and Communication Technology)
+      </h3>
     </div>
   </div>
 </div>
 
 <div *ngIf="!showposter && !showundertaking" class="container-fluid">
-  <div class="row ">
-
+  <div class="row">
     <nav class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
-      
-        <button mat-stroked-button  color ="accent" class="mt-5 " (click) ="onClickfirstSem()">Click here for First Semester Registration</button> 
-        <br>
-        <button mat-stroked-button color ="accent" [routerLink]="['/downloadreport']">Download Registration Report</button> 
-        <br>
-        <button mat-stroked-button color ="accent" [routerLink]="['/studentaverage']">Check yearly average for scholarship</button> 
-        <br>
-        <a href="https://admission.dei.ac.in/epay80" target="_blank"><button mat-stroked-button color ="accent">Click here to Make Your Payment</button> </a> 
-
-     
+      <button
+        mat-stroked-button
+        color="accent"
+        class="mt-5"
+        (click)="onClickfirstSem()"
+      >
+        Click here for First Semester Registration
+      </button>
+      <br />
+      <button
+        mat-stroked-button
+        color="accent"
+        [routerLink]="['/downloadreport', 'REG']"
+      >
+        Download Registration Report
+      </button>
+      <br />
+      <!-- download report parameter N and Y, Admit Card link added by Jyoti on 7 Sep 2024-->
+      <button
+        mat-stroked-button
+        color="accent"
+        [routerLink]="['/downloadreport', 'ADM']"
+      >
+        Download Admit Card
+      </button>
+      <br />
+      <button
+        mat-stroked-button
+        color="accent"
+        [routerLink]="['/studentaverage']"
+      >
+        Check yearly average for scholarship
+      </button>
+      <br />
+      <a href="https://admission.dei.ac.in/epay80" target="_blank"
+        ><button mat-stroked-button color="accent">
+          Click here to Make Your Payment
+        </button>
+      </a>
     </nav>
 
-  
-    
-
- 
     <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12">
       <div class="container login-container">
         <div class="row login-form">
           <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
           <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 m-t-10 m-b-10">
-            
-            <form class="form-signin" #form="ngForm" (ngSubmit)="Login(form.value)" 
+            <form
+              class="form-signin"
+              #form="ngForm"
+              (ngSubmit)="Login(form.value)"
             >
-              <div *ngIf="sts!='ACT'" >
-                <div class="alert alert-danger h3 mb-3 font-weight-normal" role="alert">{{message}}</div>
-              </div>
-              <div class="form-group m-t-10 m-b-10">
-                  <label for="inputEmail" class="sr-only">User Name</label>
-                  <input type="email" ngModel id="inputUser" name ="inputUser" #user ="ngModel" 
-                        class="form-control form-control-sm" 
-                        placeholder="User Name" required autofocus>
-              </div>
-              <div class="form-group m-t-10 m-b-10">
-                  <label for="inputPassword" class="sr-only">Password</label> 
-                  <input #pwd ="ngModel"  ngModel name = "inputPassword"    type="password" id="inputPassword"  ng-change= "onChange($event)"
-                          class="form-control form-control-sm" ng-model="myValue"
-                          placeholder="Password" required>
-                
-              </div>
-
-              <div class="form-group m-t-10 m-b-10">
-                
-                <label for ="role" class="sr-only" >Select Role</label> 
-                <app-custom-combobox   
-                (OptSelected)="OnOptionselected($event)"
-                #combo 
-                name="role"
-                *ngIf="combodata.length>1" 
-                [Options] ='combodata' 
-                [labeltext]='combolabel' 
-                [combowidth] ="combowidth"
+              <div *ngIf="sts != 'ACT'">
+                <div
+                  class="alert alert-danger h3 mb-3 font-weight-normal"
+                  role="alert"
                 >
-                
-                </app-custom-combobox>
-                <button (click) ="Onconfirm()" *ngIf="combodata.length>1 && optionselected"  class="btn btn-lg btn-primary btn-block"  >
-                  Confirm 
-                </button>
- 
+                  {{ message }}
+                </div>
+              </div>
+              <div class="form-group m-t-10 m-b-10">
+                <label for="inputEmail" class="sr-only">User Name</label>
+                <input
+                  type="email"
+                  ngModel
+                  id="inputUser"
+                  name="inputUser"
+                  #user="ngModel"
+                  class="form-control form-control-sm"
+                  placeholder="User Name"
+                  required
+                  autofocus
+                />
+              </div>
+              <div class="form-group m-t-10 m-b-10">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input
+                  #pwd="ngModel"
+                  ngModel
+                  name="inputPassword"
+                  type="password"
+                  id="inputPassword"
+                  ng-change="onChange($event)"
+                  class="form-control form-control-sm"
+                  ng-model="myValue"
+                  placeholder="Password"
+                  required
+                />
+              </div>
 
+              <div class="form-group m-t-10 m-b-10">
+                <label for="role" class="sr-only">Select Role</label>
+                <app-custom-combobox
+                  (OptSelected)="OnOptionselected($event)"
+                  #combo
+                  name="role"
+                  *ngIf="combodata.length > 1"
+                  [Options]="combodata"
+                  [labeltext]="combolabel"
+                  [combowidth]="combowidth"
+                >
+                </app-custom-combobox>
+                <button
+                  (click)="Onconfirm()"
+                  *ngIf="combodata.length > 1 && optionselected"
+                  class="btn btn-lg btn-primary btn-block"
+                >
+                  Confirm
+                </button>
               </div>
               <div class="checkbox form-group m-t-10 m-b-10">
                 <label>
-                <input type="checkbox" value="remember-me"> Remember me
+                  <input type="checkbox" value="remember-me" /> Remember me
                 </label>
               </div>
-            
-              <div class="form-group m-t-10 m-b-10"  >
-                  <button type ="submit" class="btn btn-lg btn-primary btn-block"  
-                  *ngIf="combodata.length<2" 
-                   >
-                    Sign in 
-                  </button>
+
+              <div class="form-group m-t-10 m-b-10">
+                <button
+                  type="submit"
+                  class="btn btn-lg btn-primary btn-block"
+                  *ngIf="combodata.length < 2"
+                >
+                  Sign in
+                </button>
+              </div>
+              <div class="form-group m-t-10 m-b-10">
+                <button
+                  class="btn btn-lg btn-secondary btn-block"
+                  (click)="forgotpassword(); $event.preventDefault()"
+                >
+                  Forgot Password
+                </button>
               </div>
               <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
-              </form>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
 </div>
-<div>
- 
-  
-  
-</div>
+<div></div>
 
-    
 <div class="footer fixed-bottom bk-grey">
   <div class="container-fluid">
-  <div class="row text-center">
-      <div class="col-lg-12">© 2011 Dayalbagh Educational Institute, Dayalbagh, Agra UP 282005, INDIA Phone: +91-562-2801545, Fax: +91-562-2801226</div>
+    <div class="row text-center">
+      <div class="col-lg-12">
+        © 2011 Dayalbagh Educational Institute, Dayalbagh, Agra UP 282005, INDIA
+        Phone: +91-562-2801545, Fax: +91-562-2801226
+      </div>
+    </div>
   </div>
-  </div>   
 </div>

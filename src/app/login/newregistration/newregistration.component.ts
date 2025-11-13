@@ -122,7 +122,7 @@ this.agGrid.defaultColDef=this.defaultColDef;
    coursecode:string=""; 
    coursename:string=""; 
   spinnerstatus:boolean=false;
-
+  selecteddata:string=""; //added by Jyoti on 6 Aug 2025
   public myrowData=[];
 
    selectedNodes:any;
@@ -199,7 +199,7 @@ getcoursesservice(){
 
   console.log("courses",this.myrowData.length);
 	var start:number=0;
-	
+	this.pck = "";
 	
 
 
@@ -220,8 +220,7 @@ getcoursesservice(){
        console.log(this.mincreditrequired,this.maxcreditrequired);
 			 
 			 
-			 this.pck = obj.programcoursekey ;
-				 
+			 this.pck = obj.program_course_key ; 
    
     
        this.creditavailable = parseFloat(obj.credits);
@@ -251,7 +250,6 @@ goBack(): void {
  
   const selectedNodes = this.agGrid.api.getSelectedNodes();
   const subjectselected = selectedNodes.map(node => node.data );
-  
  
 
     if (subjectselected.length==0){
@@ -265,7 +263,7 @@ goBack(): void {
  
       this.courseobj={};
       this.courseary=[];
-
+     this.selecteddata ="";
     //for(var d:number=0;d<subjectselected.length;d++)
     for (var gridItem of subjectselected) 
     {
@@ -297,7 +295,7 @@ goBack(): void {
            
 
             this.courseary.push(this.courseobj);
-
+            this.selecteddata= this.selecteddata+this.coursecode+",";
             
              if(gridItem.course_classification[0]=="T"){
             		this.credittheory += parseFloat(gridItem.credits[0]);
@@ -309,7 +307,15 @@ goBack(): void {
      }
      
      }
-     
+     //added by Jyoti on 6 Aug 2025
+     console.log("selectedcourses", this.selecteddata, " pck", this.pck);
+     if (!this.validateCourseTypeCredits())
+     {
+        console.log("not validated in if");
+         return;	
+     } //added till here by Jyoti on 6 Aug 2025
+     console.log("after validation");
+
      this.crselected="Credits Selected:"+this.creditselected;
       
           if(
@@ -575,6 +581,42 @@ get f(){
      
 
    }
+      //validateCourseTypeCredits added by Jyoti on 6 Aug 2025
+   validateCourseTypeCredits()
+    {
+      console.log("selCourseData", this.selecteddata, "forpck", this.pck);
+      var proceed:boolean = true;
+      let myparam = {xmltojs:'Y', method:'None' };  
+      myparam.method='/registrationforstudent/checkCourseTypeCredits.htm';
+      this.params= this.params.set("selecteddata",this.selecteddata);
+      this.params=this.params.set('pck', this.pck);
+      //this.mask=true;
+      this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
+         let data = JSON.parse(res);
+         let alertmsg = "";
+         for (var obj of  data.registerDetails.Detail)
+         {
+              proceed = false;
+              if(obj.available=='N'){
+                  //console.log("after validation",obj.message);
+                  proceed = true;
+                  break;
+              }else{
+                alertmsg = alertmsg  + "You selected total:<b>" + obj.credits +"</b> credits for " + "<b>" + obj.coursetypedesc + "</b>" +
+                       " Please select at least :<b>" + obj.mincredit + "</b><br/>";
+              }
+          }
+          if (alertmsg.length > 0) {
+              const dialogRef=  this.dialog.open(alertComponent,
+                    {data:{title:"Warning",content: alertmsg ,ok:true,cancel:false,color:"warn"}
+                    });
+                dialogRef.disableClose = true;
+          }
+      });
+      //this.mask = false;
+      return proceed;
+    }
+
 
   }
   
