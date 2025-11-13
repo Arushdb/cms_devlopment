@@ -19,7 +19,7 @@ import { AssignCoursesComponent } from '../instructor/assigncourses/assigncourse
 import { RegisterStudentComponent } from '../student/register-student/register-student.component';
 import { ProvisionalCertificateComponent } from '../reports/provisional-certificate/provisional-certificate.component';
 import { UploadApplicationNumbersComponent } from '../student/upload-application-numbers/upload-application-numbers.component';
-
+import { CourseevaluationComponent} from '../courseevaluation/courseevaluation.component';
 
 
 
@@ -59,7 +59,7 @@ const routes:Routes=[
  {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
  {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
  {path:'course_assignment',component: AssignCoursesComponent,runGuardsAndResolvers: "always"},
-
+{path:"evaluation_component", component :CourseevaluationComponent,}, 
  
  {path:'login',component:SignonformComponent},
  
