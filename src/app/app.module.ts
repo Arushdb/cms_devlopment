@@ -21,6 +21,8 @@ import { CourseevaluationComponent } from './courseevaluation/courseevaluation.c
 import { TemplateComponent } from './courseevaluation/template/template.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 //import {StudentModule} from  './student/student.module' ;
+import {ReportsModule} from './reports/reports.module';
+import { InstructorModule } from './instructor/instructor.module';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ResultprocessingModule,
     RevertresultModule,
     MatTooltipModule,
+    ReportsModule,
+    InstructorModule
 
 
     //AgGridModule.withComponents([])
