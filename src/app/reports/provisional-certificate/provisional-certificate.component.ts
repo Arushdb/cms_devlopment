@@ -8,6 +8,8 @@ import { ProgramService } from '../../services/program.service';
 import { UserService } from '../../services/user.service';
 import { MyItem } from 'src/app/interfaces/my-item';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
+import { MatDialog } from '@angular/material/dialog';
+import {alertComponent} from  'src/app/shared/alert/alert.component';
 
 function customComboValidator(obj): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -37,11 +39,14 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
   pcfilepath:String="";
   showDropdown: boolean = false;
   selectedExitYear: string = '';
+  spstatus:string='';
+  showExitYear:boolean = false ;
 
   constructor(private fb: FormBuilder, private router: Router,
         private fileservice:FlleserviceService,
         private programService:ProgramService,
-        private userservice:UserService ) 
+        private userservice:UserService,
+        public dialog: MatDialog ) 
   {
     this.proviform = this.fb.group({
       rollno: ["", [Validators.required]],
@@ -73,6 +78,7 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
   //  console.log("inp roll no", this.inp_rollno); 
     this.programdata =[];
     this.showProgramList= false;
+    this.showExitYear = false;
     this.programService.getStudentExitProgram(this.inp_rollno).subscribe(res=>{  
       let  data = JSON.parse(res); console.log("data", data, data.programList.program);
           if(isUndefined(data.programList.program) || data === null){
@@ -99,7 +105,12 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
     this.nepId = obj.nepId[0];
     this.prgId=obj.id[0];
     this.pgmName=obj.label[0];
-//    console.log("obj", obj);
+    this.spstatus=obj.status[0];
+    if(this.spstatus === 'ACT' && this.nepId.length > 0 )
+    {
+      this.showExitYear = true;
+    }
+    else { this.showExitYear = false; }
   }
 
   onSubmit(){
@@ -107,6 +118,26 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
         this.userservice.log("Input not Valid");
       return;
     }
+    var alertmsg:string="Are you sure to generate Provisional";
+    if(this.spstatus === 'ACT' && this.nepId.length > 0 )
+    {
+      alertmsg = alertmsg + " with student exit year " + this.selectedExitYear + " ?";
+    }
+    const dialogRef=  this.dialog.open(alertComponent,
+              { data:{title:"Warning",content:alertmsg, ok:true,cancel:true,color:"warn"}});
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(result => {
+                  if(result){ 
+                      this.generateProviCertificate();
+                  }
+              }, err => {
+                    this.userservice.log("Problem in generating");
+              });
+  }
+
+
+  generateProviCertificate()
+  {
     this.pcfilepath = "";
     let params:HttpParams= new HttpParams();
     params=params.set("rollNumber", this.inp_rollno.trim())
