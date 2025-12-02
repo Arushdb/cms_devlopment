@@ -32,12 +32,11 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
   public programdata :MyItem []=[];
   prgId: any;
   pgmName: any;
+  nepId: any;
   combowidth:string; 
   pcfilepath:String="";
-  selectedOption: string = '';
   showDropdown: boolean = false;
   selectedExitYear: string = '';
-  exitYear: string[] = ['1', '2', '3', '4'];
 
   constructor(private fb: FormBuilder, private router: Router,
         private fileservice:FlleserviceService,
@@ -45,9 +44,7 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
         private userservice:UserService ) 
   {
     this.proviform = this.fb.group({
-      option: ['', [Validators.required]],
-      selNepExitYear: [''],
-      rollno: [null, [Validators.required]],
+      rollno: ["", [Validators.required]],
       programId: [" ", [Validators.required,customComboValidator(this.prgId)]]
     });
     this.programcombolabel = "Select Program" ;
@@ -69,42 +66,22 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
     this.router.navigate(['dashboard']);
   }
   
-  onOptionChange() {
-    this.proviform.get('rollno')?.setValue("");
-    this.proviform.get('selNepExitYear')?.setValue("");
-    this.programdata =[];
-    this.showProgramList= false;
-    this.pcfilepath = "";
-  }
-
-  onyrChange() {
-    this.programdata =[];
-    this.showProgramList= false;
-    this.pcfilepath = "";
-  }
-
   getProgram(){
+    this.userservice.clear();
     this.pcfilepath = "";
     this.inp_rollno = this.proviform.value.rollno;
-    this.selectedOption = this.proviform.value.option;
-    if ( this.selectedOption == "NEP"){
-          this.selectedExitYear = this.proviform.value.selNepExitYear;
-    }
-    else { 
-      this.selectedExitYear = "";
-    }
-    console.log("inp roll no", this.inp_rollno, " selectionOption", this.selectedOption,"exityr ", this.selectedExitYear);
+  //  console.log("inp roll no", this.inp_rollno); 
     this.programdata =[];
     this.showProgramList= false;
-    this.programService.getStudentExitProgram(this.inp_rollno, this.selectedOption, this.selectedExitYear).subscribe(res=>{
+    this.programService.getStudentExitProgram(this.inp_rollno).subscribe(res=>{  
       let  data = JSON.parse(res); console.log("data", data, data.programList.program);
           if(isUndefined(data.programList.program) || data === null){
-              this.programService.log("No Data found");
+              this.programService.log("No Data found with required PAS semesters");
               return;
             }
             
           data.programList.program.forEach(ob => {        
-            this.programdata.push({id:ob.programID,label:ob.programName,status:ob.statusInProgram});
+            this.programdata.push({id:ob.programID,label:ob.programName,status:ob.statusInProgram, exitYear:ob.exitYear, nepId:ob.nepId});
             });     
            if(this.programdata.length >0)
            {
@@ -118,9 +95,11 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
 
   Onpgmselected(obj){ 
     this.proviform.get('programId')?.setValue(obj.id[0]);
+    this.selectedExitYear = obj.exitYear[0];
+    this.nepId = obj.nepId[0];
     this.prgId=obj.id[0];
     this.pgmName=obj.label[0];
-    console.log("obj", obj);
+//    console.log("obj", obj);
   }
 
   onSubmit(){
@@ -132,21 +111,27 @@ export class ProvisionalCertificateComponent implements OnInit,OnDestroy {
     let params:HttpParams= new HttpParams();
     params=params.set("rollNumber", this.inp_rollno.trim())
                   .set("programID", this.prgId.trim())
-                  .set("prgOption", this.selectedOption)
                   .set("exitYear", this.selectedExitYear)
+                  .set("nepId", this.nepId)
                  ;
     let  myparam:any={};
     myparam.xmltojs="Y"  ;          
     this.fileservice.getProviCertiFileName(params,myparam).subscribe(res=>{
      let resobj = JSON.parse(res);
-     if(!(isUndefined(resobj.info.result)) && resobj.info.result[0].status == "success"){
-      let url1:String = resobj.info.result[0].pathWithFileName;
-		  let aa:any[] = url1.toString().split('\\');
-			url1 = aa.join('\/');
-      if (url1.length > 0) {
-        this.pcfilepath = url1;
-       }  
+     if(!(isUndefined(resobj.info.result))){
+      if (resobj.info.result[0].status == "success") {
+        let url1:String = resobj.info.result[0].pathWithFileName;
+		    let aa:any[] = url1.toString().split('\\');
+			  url1 = aa.join('\/');
+        if (url1.length > 0) {
+          this.pcfilepath = url1;
+        }  
+       }
+       else {
+          this.userservice.log(resobj.info.result[0].message);
+       }
      }
+     
     },error=>{
       this.userservice.log(error.originalError.statusText);
     });
