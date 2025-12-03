@@ -1,49 +1,39 @@
 <div class="container" > 
-    <div class="row">
-    <div class="col-md-4 col-lg-6 col-xl-6 " >
-        <button type="button" class="close" (click) = "onCancel()" aria-label="Close" >
+    <button type="button" class="close" (click) = "onCancel()" aria-label="Close" >
             <span aria-hidden="true">&times;</span>
-        </button>  
+        </button>
+    <div class="row" >
         <div class="card-body border border-primary" >
+        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
             <h3 class="card-header ">Provisional Certificate</h3>
             <form [formGroup]="proviform"  (ngSubmit)="onSubmit()">
-             <div class="p-2 bd-highlight" style="display: flex; align-items: center; gap: 16px;" >
-                <label>
-                    <input type="radio" value="NON-NEP" name="option" formControlName="option" (change)="onOptionChange()"/>NON-NEP
-                </label>
-                <label>
-                    <input type="radio" value="NEP" name="option" formControlName="option" (change)="onOptionChange()"/>NEP
-                </label>
-                <label *ngIf="proviform.get('option')?.value === 'NEP'" for="dropdown">Select Exit Year:
-                <select *ngIf="proviform.get('option')?.value === 'NEP'" id="dropdown" formControlName="selNepExitYear" (change)="onyrChange()" >
-                        <option *ngFor="let yr of exitYear" [value]="yr">{{ yr }}</option>
-                </select>
-                </label>
-            </div>
-        <div class="p-2 bd-highlight" style="display: flex; align-items: center; gap: 16px;" >
-            <label  [ngStyle]="{'color':mycolor}" >Enter Roll Number</label>
-            <input  type="text" id="rollno" formControlName="rollno" class="form-control"/>
-            <button  type="button" class="btn btn-success mr-2 btn-sm" (click)="getProgram()">ShowProgram</button>
-        </div>
-        <div class="p-2 bd-highlight" *ngIf="showProgramList">
-              <app-custom-combobox  
-                        (OptSelected)="Onpgmselected($event)"
-                        #programCombo 
-                        [Options] ='programdata' 
-                        [labeltext]='programcombolabel' 
-                        [combowidth] ="combowidth">
-              </app-custom-combobox>    
-        </div>
-       <a  *ngIf = "pcfilepath!==''" [href]="pcfilepath"  [download]="pcfilepath" target="_blank" rel="noopener noreferrer" class="btn btn-link">
-        Click here to Download Provisional Certificate
-        </a>
-        <div class="form-row" *ngIf="showProgramList">
-                <div class="text-center form-group col"  >
-                        <button  type="submit" class="btn btn-primary mr-1"  >Generate Certificate</button>
-                        <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+            <div class="p-2 bd-highlight" style="display: flex; align-items: center; gap: 10px;" >
+                <label  [ngStyle]="{'color':mycolor}" >Enter Roll Number</label>
+                <input  type="text" id="rollno" formControlName="rollno" class="form-control form-control-sm w-25"/>
+                <button  type="button" class="btn btn-success mr-2 btn-sm" (click)="getProgram()">ShowProgram</button>
+            </div> 
+            <div class="p-2 bd-highlight" *ngIf="showProgramList">
+                <app-custom-combobox  
+                            (OptSelected)="Onpgmselected($event)"
+                            #programCombo 
+                            [Options] ='programdata' 
+                            [labeltext]='programcombolabel' 
+                            [combowidth] ="combowidth">
+                </app-custom-combobox>   
+                <div *ngIf="showExitYear" style="background-color: 'yellow'">
+                <label style="display: block; text-align: center;"><b>Eligible for Exit Year {{selectedExitYear}}</b></label>
                 </div>
+            </div>
+            <a  *ngIf = "pcfilepath!==''" [href]="pcfilepath"  [download]="pcfilepath" target="_blank" rel="noopener noreferrer" class="btn btn-link">
+            Click here to Download Provisional Certificate
+            </a>
+            <div class="form-row" *ngIf="showProgramList">
+                    <div class="text-center form-group col"  >
+                            <button  type="submit" class="btn btn-primary mr-1"  >Generate Certificate</button>
+                            <button   class="btn btn-primary mr-1"  (click) ="onCancel()" >Cancel</button>
+                    </div>
+            </div>
+        </form>
         </div>
-    </form>
-    </div>
     </div>
 </div>
