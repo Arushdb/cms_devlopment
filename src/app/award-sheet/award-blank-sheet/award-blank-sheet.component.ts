@@ -947,8 +947,9 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       definition = {
         headerName: 'Roll Number',
         field: 'rollNumber',
-        width: 100,
+        width: 120,             // increased from 100 to 120, by Jyoti on 29Dec 2025
         editable: false,
+        suppressSizeToFit: true, //added by Jyoti on 29 Dec 2025
       };
       this.columnDefsmk.push(definition);
       definition = {
@@ -2000,6 +2001,7 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
       delete node.data.grade;
       delete node.data.totalInternal;
       delete node.data.totalMarks;
+      delete node.data.totalExternal; //added by Jyoti on 29 Dec 2025
       //node.data.E02 = node.data.E02[0];
       //node.data.E03 = node.data.E02[0];
       let displayType = this.awardsheet_params.get('displayType');
@@ -2010,6 +2012,11 @@ export class AwardBlankSheetComponent implements OnInit, OnDestroy {
           evidname = column.evaluationIdName[0];
           node.data[evidname] = node.data[evid][0];
           delete node.data[evid];
+        }
+        if (displayType == 'E') { //added by Jyoti on 29 Dec 2025
+          evid = column.evaluationId[0];
+          evidname = column.evaluationIdName[0];
+          node.data[evidname] = node.data[evid][0];
         }
       });
 

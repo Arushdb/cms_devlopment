@@ -997,6 +997,49 @@
 </component>
 </components>
 </t1>
+<t1 name="Internship" >
+<total>200</total>
+<components>
+<component componentType="RPT" group="RPT" compName="RPT" fullName="Report" numberOfComponents="1" maxMarks="100" weightage="100" rule="BT1">
+<group>RPT</group>
+<compName>RPT</compName>
+<fullName>Report</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>100</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>RPT</componentType>
+</component>
+<component componentType="PS1" group="PS1" compName="PS1" fullName="Presentation" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1">
+<group>PS1</group>
+<compName>PS1</compName>
+<fullName>Presentation</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>PS1</componentType>
+</component>
+<component componentType="VIV" group="VIV" compName="VIV" fullName="Viva" numberOfComponents="1" maxMarks="30" weightage="100" rule="BT1">
+<group>VIV</group>
+<compName>VIV</compName>
+<fullName>Viva</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>30</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+<componentType>VIV</componentType>
+</component>
+<component group="ATT" compName="ATT" fullName="Attendance" numberOfComponents="1" maxMarks="20" weightage="100" rule="BT1">
+<group>ATT</group>
+<compName>ATT</compName>
+<fullName>Attendance</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>20</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule></component>
+</components>
+</t1>
 
 
 </template>
