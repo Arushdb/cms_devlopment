@@ -215,7 +215,7 @@ private showAuthError(): void {
   validateFields(): void {
     if (this.courseCode) { this.courseCode = this.courseCode.toUpperCase(); }
 
-    const codeOK    = /^[A-Z]{3}\d{3}$/.test(this.courseCode.trim());
+    const codeOK    = /^[A-Z0-9]{6,}$/.test(this.courseCode.trim());
     const sessionOK = !!this.selectedSession;
 
     this.isOkButtonEnabled    = codeOK && sessionOK;
