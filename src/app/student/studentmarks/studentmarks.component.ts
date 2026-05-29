@@ -437,7 +437,8 @@ getEvaluationComponents(){
   console.log(this.myparam);
   let obj = {xmltojs:'Y',
   method:'None' };   
-obj.method='/awardsheet/getEvaluationComponents.htm';
+//obj.method='/awardsheet/getEvaluationComponents.htm'; commented by Jyoti on 29-05-2026
+obj.method='/marksInfo/getEvaluationComponentsAng.htm';
 
 this.subs.add=this.userservice.getdata(this.myparam,obj).subscribe(res=>{
   //this.userservice.log(" in switch detail selected");
