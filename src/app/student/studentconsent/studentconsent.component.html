@@ -1,0 +1,52 @@
+<div class="container">
+  <div *ngIf="!isNep"><b>{{message}}</b></div>
+  <div *ngIf="isNep">
+      <h3><b>Consent to Continue Registration / Exit </b></h3>
+      <label>Roll Number : <b>{{rollNumber}}</b> &nbsp;&nbsp;Program : <b>{{programName}}</b>&nbsp;&nbsp;
+      Branch : <b>{{branchName}}</b> &nbsp;&nbsp;
+      Specialization : <b>{{specializationName}}</b> &nbsp;&nbsp;
+      Semester : <b>{{currentSem}}</b> </label><br/><label>
+      Last Passed Year : <b>{{lastPassedYear}}</b> &nbsp;&nbsp;
+      Last Passed Session : <b>{{lastPassedSession}}</b> &nbsp;&nbsp;
+      CGPA : <b>{{cgpa}}</b> </label><br/>
+      <div *ngIf="consentExists"> <b>{{consentMessage}}</b></div>
+      <div *ngIf="!consentExists"><br>
+        <div>
+          <label><b>Please select whether you want to</b></label><br>
+          <label><b>
+            <input type="radio" name="studentChoice" value="CONTINUE" [(ngModel)]="studentChoice">
+            Continue Registration
+          </b></label> &nbsp;&nbsp;
+          <label><b>
+            <input type="radio" name="studentChoice" value="EXIT" [(ngModel)]="studentChoice">
+            Exit Program
+          </b></label><br><br>
+          <button type="button" (click)="proceed()">Proceed</button>
+        </div>
+        <div *ngIf="studentChoice=='CONTINUE' && proceedClicked">
+          <label>Next Semester : {{nextSemester}}</label>
+          <div>
+            <label>Branch</label>
+            <select [(ngModel)]="selectedBranch">
+              <option value="">Select Branch</option>
+              <option *ngFor="let branch of branches" [value]="branch.branchCode">{{branch.branchName}}</option>
+            </select>
+          </div>
+          &nbsp;&nbsp;
+          <div>
+            <label>Specialization</label>
+            <select [(ngModel)]="selectedSpecializationId" name="selectedSpecializationId"
+                (ngModelChange)="onSpecializationChange($event)">
+              <option value="">Select Specialization</option>
+              <option *ngFor="let spec of specializations" [value]="spec.specializationCode">
+                {{spec.specializationName}}
+              </option>
+            </select>
+          </div>
+          <br>
+          <button type="button" (click)="submitContinueConsent()"> Submit Consent</button>
+        </div>
+      </div>
+  </div>
+  <hr><button class="btn btn-primary  mr-2  btn-sm" (click)="onCancel()">Close</button>
+</div>

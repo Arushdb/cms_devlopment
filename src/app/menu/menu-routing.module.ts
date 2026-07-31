@@ -20,7 +20,7 @@ import { RegisterStudentComponent } from '../student/register-student/register-s
 import { ProvisionalCertificateComponent } from '../reports/provisional-certificate/provisional-certificate.component';
 import { UploadApplicationNumbersComponent } from '../student/upload-application-numbers/upload-application-numbers.component';
 import { CourseevaluationComponent} from '../courseevaluation/courseevaluation.component';
-
+import { StudentconsentComponent } from '../student/studentconsent/studentconsent.component';
 
 
 
@@ -57,9 +57,10 @@ const routes:Routes=[
  // {path:'Internal_award_sheet',loadChildren: () => import('../award-sheet/award-sheet.module').then(m => m.AwardSheetModule)} 
  
  {path:'student_marks',  component: StudentmarksComponent,runGuardsAndResolvers: "always"},
+ {path: 'student_consent', component: StudentconsentComponent, runGuardsAndResolvers: "always"}, //added by Jyoti on 23 May 2026
  {path:'revert_result',  component: RevertresultprocessComponent,runGuardsAndResolvers: "always"},
  {path:'course_assignment',component: AssignCoursesComponent,runGuardsAndResolvers: "always"},
-{path:"evaluation_component", component :CourseevaluationComponent,}, 
+ {path:"evaluation_component", component :CourseevaluationComponent,}, 
  
  {path:'login',component:SignonformComponent},
  
