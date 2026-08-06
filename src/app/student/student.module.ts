@@ -15,7 +15,6 @@ import { SchoolMainComponent } from './school-main/school-main.component';
 import { SchoolStudentDetailComponent } from './school-student-detail/school-student-detail.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { UploadApplicationNumbersComponent } from './upload-application-numbers/upload-application-numbers.component';
-import { StudentresearchComponent } from './studentresearch/studentresearch.component';
 import { StudentconsentComponent } from './studentconsent/studentconsent.component';
 
 
@@ -34,7 +33,6 @@ import { StudentconsentComponent } from './studentconsent/studentconsent.compone
     SchoolStudentDetailComponent,
     FileUploadComponent,
     UploadApplicationNumbersComponent,
-    StudentresearchComponent,
     StudentconsentComponent,
    
     
