@@ -307,13 +307,6 @@ goBack(): void {
      }
      
      }
-     //added by Jyoti on 6 Aug 2025
-     console.log("selectedcourses", this.selecteddata, " pck", this.pck);
-     if (!this.validateCourseTypeCredits())
-     {
-        console.log("not validated in if");
-         return;	
-     } //added till here by Jyoti on 6 Aug 2025
      console.log("after validation");
 
      this.crselected="Credits Selected:"+this.creditselected;
@@ -323,7 +316,9 @@ goBack(): void {
                      
            )
            {
-     
+            //console.log("pck credits are validated...now validate course type credits.");
+            this.validateCourseTypeCredits(); //added by Jyoti on 29 Aug 2026
+            /* //commented below code, as it shifted in proceedonSubmission() 
              const dialogconf =new MatDialogConfig();
              dialogconf.disableClose=true;
              dialogconf.autoFocus=true;
@@ -342,7 +337,7 @@ goBack(): void {
             }
 
             });      
-           
+           */
            	
 			
            }
@@ -371,6 +366,24 @@ goBack(): void {
            }
            
            
+  }
+
+  proceedforSubmission() //added by Jyoti on 29 Aug 2026
+  {           
+      const dialogconf =new MatDialogConfig();
+      dialogconf.disableClose=true;
+      dialogconf.autoFocus=true;
+      dialogconf.width='20%'
+      let data={title:"Please confirm",content:"" ,ok:true,cancel:true,color:"warn"};
+      dialogconf.data=data;
+      const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
+      dialogRef.disableClose = true;
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+            if(result){
+              this.onOK();
+            }
+      });      
   }
 
     onOK(){
@@ -584,8 +597,8 @@ get f(){
       //validateCourseTypeCredits added by Jyoti on 6 Aug 2025
    validateCourseTypeCredits()
     {
-      console.log("selCourseData", this.selecteddata, "forpck", this.pck);
-      var proceed:boolean = true;
+      //console.log("selCourseData", this.selecteddata, "forpck", this.pck);
+      var proceed:boolean = false;
       let myparam = {xmltojs:'Y', method:'None' };  
       myparam.method='/registrationforstudent/checkCourseTypeCredits.htm';
       this.params= this.params.set("selecteddata",this.selecteddata);
@@ -612,22 +625,17 @@ get f(){
                     });
                 dialogRef.disableClose = true;
           }
+                //this.mask = false;
+          if (!proceed && alertmsg.length > 0) {
+              const dialogRef=  this.dialog.open(alertComponent,
+                    {data:{title:"Warning",content: alertmsg ,ok:true,cancel:false,color:"warn"}
+                    });
+                dialogRef.disableClose = true;
+          }
+          else if (proceed) 
+          {this.proceedforSubmission();}
       });
-      //this.mask = false;
-      return proceed;
     }
 
 
   }
-  
-  
-
-
-
-
-
-   
-    
-
-
-
