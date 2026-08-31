@@ -214,7 +214,7 @@ columnDefs = [
       //public function
  gettencodeSuccess(res){
  //let data = null;
- 
+ console.log("registrationdetails...........................", res);
   let myparam = {};
     for (var  obj of  res.registerDetails.Detail ){
     
@@ -623,12 +623,6 @@ goBack(): void {
      }
      
      }
-     //added by Jyoti on 3 Jul 2025
-     if (!this.validateCourseTypeCredits())
-     {
-        console.log("not validated in if");
-         return;	
-     } //added till here by Jyoti on 3 Jul 2025
      console.log("after validation");
      //Alert.show("creditselected"+creditselected);
      this.crselected="Credits Selected:"+this.creditselected;
@@ -646,6 +640,9 @@ goBack(): void {
            
            )
            {
+            //console.log("pck credits are validated...now validate course type credits.");
+            this.validateCourseTypeCredits(); //added by Jyoti on 29 Aug 2026
+             /* //commented below code, as it shifted in proceedonSubmission()
              console.log("success");
              const dialogconf =new MatDialogConfig();
              dialogconf.disableClose=true;
@@ -660,10 +657,10 @@ goBack(): void {
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
             if(result){
-              this.onOK();
+              this.onOK(); 
             }
 
-            });      
+            }); */      
            
            	
 			  // Alert.show(commonFunction.getMessages('conformForContinue'),
@@ -692,26 +689,25 @@ goBack(): void {
             
            }
            
-           
   }
+
     //validateCourseTypeCredits added by Jyoti on 3 Jul 2025
    validateCourseTypeCredits()
     {
-      //console.log("selCourseData", this.selecteddata, "forpck", this.pck);
-      var proceed:boolean = true;
+      var proceed:boolean = false;
       let myparam = {xmltojs:'Y', method:'None' };  
       myparam.method='/registrationforstudent/checkCourseTypeCredits.htm';
       this.params= this.params.set("selecteddata",this.selecteddata);
       this.params=this.params.set('pck', this.pck);
       this.mask=true;
       this.subs.add= this.userservice.getdata(this.params,myparam).subscribe(res=>{
-         let data = JSON.parse(res);
-         let alertmsg = "";
-         for (var obj of  data.registerDetails.Detail)
-         {
+          let data = JSON.parse(res);
+          let alertmsg = "";
+          for (var obj of  data.registerDetails.Detail)
+          {
               proceed = false;
               if(obj.available=='N'){
-                  //console.log("after validation",obj.message);
+                  //console.log("o",obj.message);
                   proceed = true;
                   break;
               }else{
@@ -719,15 +715,34 @@ goBack(): void {
                        " Please select at least :<b>" + obj.mincredit + "</b><br/>";
               }
           }
-          if (alertmsg.length > 0) {
+          this.mask = false;
+          if (!proceed && alertmsg.length > 0) {
               const dialogRef=  this.dialog.open(alertComponent,
                     {data:{title:"Warning",content: alertmsg ,ok:true,cancel:false,color:"warn"}
                     });
                 dialogRef.disableClose = true;
           }
+          else if (proceed) 
+          {this.proceedforSubmission();}
       });
-      this.mask = false;
-      return proceed;
+      
+    }
+
+    proceedforSubmission() //added by Jyoti on 29 Aug 2026
+    {
+          const dialogconf =new MatDialogConfig();
+          dialogconf.disableClose=true;
+          dialogconf.autoFocus=true;
+          let data={title:"",content:"Please confirm" ,ok:true,cancel:true,color:"warn"};
+          dialogconf.data=data;
+          const  dialogRef=  this.dialog.open(alertComponent,dialogconf);    
+          dialogRef.disableClose = true;
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+            if(result){
+              this.onOK(); 
+            }
+            });                 
     }
 
     onOK(){
