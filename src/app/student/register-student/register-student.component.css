@@ -14,3 +14,11 @@ margin-bottom: 5px !important;
   .example-margin {
     margin: 0 10px;
   }
+
+  .selection-error {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 15px 20px;
+  margin: 15px 0;
+  border-width: 2px;
+}

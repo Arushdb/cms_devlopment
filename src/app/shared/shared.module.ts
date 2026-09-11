@@ -35,6 +35,7 @@ import { CustomButtonComponent } from './custom-button/custom-button.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TimerComponent } from './timer/timer.component';
+import { CourseGroupRowComponent } from './course-group-row/course-group-row.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { TimerComponent } from './timer/timer.component';
     CustomButtonComponent,
     DatePickerComponent,
     TimerComponent,
+    CourseGroupRowComponent,
   ],
   imports: [
     CommonModule,
@@ -91,6 +93,7 @@ import { TimerComponent } from './timer/timer.component';
     CustomButtonComponent,
     DatePickerComponent,
     TimerComponent,
+    CourseGroupRowComponent,
 
     //shared Module
     CommonModule,
