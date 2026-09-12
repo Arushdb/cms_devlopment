@@ -222,59 +222,32 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
           coursetypedesc: row.coursetypedesc + '(' + row.coursetype + ')',
         });
 
-        previousType = String(row.coursetypedesc).trim();
-      }
-
-      result.push({
-        ...row,
-        isGroup: false,
-      });
-    });
-    console.log('Grouped Data', result);
-    return result;
-  }
-
-  gettencode() {
-    //debugger;
-    let obj = {
-      xmltojs: 'Y',
-      method: '/registrationforstudent/gettencodes.htm',
-    };
-    this.mask = true;
-    this.subs.add = this.userservice
-      .getdata(this.params, obj)
-      .subscribe((res) => {
-        res = JSON.parse(res);
-        this.gettencodeSuccess(res);
-        this.mask = false;
-      });
-  }
-
-  //public function
-  gettencodeSuccess(res) {
-    //let data = null;
-
-    let myparam: any = {};
-    for (var obj of res.registerDetails.Detail) {
-      if (obj.switchType != '') {
-        //if there is a switch
-        //Alert.show("switch type"+obj.switchType);
-        myparam['module'] = '';
-        myparam['switchType'] = obj.switchType;
-        myparam['entitytype'] = obj.entitytype;
-        myparam['entityId'] = obj.entityId;
-        myparam['entityName'] = obj.entityName;
-
-        myparam['switchoption'] = obj.switchoption;
-
-        myparam['currentpck'] = obj.programcoursekey;
-        myparam['newpck'] = obj.newpck;
-        myparam['semesterStartDate'] = obj.semesterStartDate;
-        myparam['semesterEndDate'] = obj.semesterEndDate;
-      }
-
-      if (obj.available == 'Y') {
-        /*   
+      //public function
+ gettencodeSuccess(res){
+ //let data = null;
+ console.log("registrationdetails...........................", res);
+  let myparam = {};
+    for (var  obj of  res.registerDetails.Detail ){
+    
+    if(obj.switchType!=""){
+          //if there is a switch
+      //Alert.show("switch type"+obj.switchType);
+      myparam["module"] ="";
+      myparam["switchType"] = obj.switchType ;
+          myparam["entitytype"]=obj.entitytype;
+          myparam["entityId"]= obj.entityId;
+          myparam["entityName"]= obj.entityName;
+          
+          myparam["switchoption"] = obj.switchoption ;
+          
+          myparam["currentpck"] = obj.programcoursekey ;
+          myparam["newpck"] = obj.newpck ;
+          myparam["semesterStartDate"] = obj.semesterStartDate ;
+          myparam["semesterEndDate"] = obj.semesterEndDate ;
+    }
+    
+    if(obj.available=="Y"){
+       /*   
        vstack.selectedChild=sempanel;
        */
         for (var num: number = 1; num < 17; num++) {
@@ -969,7 +942,29 @@ onSelectionChanged(event: any) {
            {
             //console.log("pck credits are validated...now validate course type credits.");
             this.validateCourseTypeCredits(); //added by Jyoti on 29 Aug 2026
-     
+             /* //commented below code, as it shifted in proceedonSubmission()
+             console.log("success");
+             const dialogconf =new MatDialogConfig();
+             dialogconf.disableClose=true;
+             dialogconf.autoFocus=true;
+             let data={title:"",content:"Please confirm" ,ok:true,cancel:true,color:"warn"};
+             dialogconf.data=data;
+            // dialogconf.role=
+
+            const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
+              
+            dialogRef.disableClose = true;
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+            if(result){
+              this.onOK(); 
+            }
+
+            }); */      
+           
+           	
+			  // Alert.show(commonFunction.getMessages('conformForContinue'),
+			  // commonFunction.getMessages('confirm'),(Alert.YES|Alert.NO),null,onOK,questionIcon);
            }
            else
            {
@@ -995,7 +990,9 @@ onSelectionChanged(event: any) {
            }
            
   }
- validateCourseTypeCredits()
+
+    //validateCourseTypeCredits added by Jyoti on 3 Jul 2025
+   validateCourseTypeCredits()
     {
       var proceed:boolean = false;
       let myparam = {xmltojs:'Y', method:'None' };  
@@ -1030,7 +1027,8 @@ onSelectionChanged(event: any) {
       });
       
     }
- proceedforSubmission() //added by Jyoti on 29 Aug 2026
+
+    proceedforSubmission() //added by Jyoti on 29 Aug 2026
     {
           const dialogconf =new MatDialogConfig();
           dialogconf.disableClose=true;
