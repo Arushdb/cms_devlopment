@@ -221,6 +221,34 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
           isGroup: true,
           coursetypedesc: row.coursetypedesc + '(' + row.coursetype + ')',
         });
+          previousType = String(row.coursetypedesc).trim();
+      }
+
+      result.push({
+        ...row,
+        isGroup: false,
+      });
+    });
+    console.log('Grouped Data', result);
+    return result;
+  }
+
+  gettencode() {
+    //debugger;
+    let obj = {
+      xmltojs: 'Y',
+      method: '/registrationforstudent/gettencodes.htm',
+    };
+    this.mask = true;
+    this.subs.add = this.userservice
+      .getdata(this.params, obj)
+      .subscribe((res) => {
+        res = JSON.parse(res);
+        this.gettencodeSuccess(res);
+        this.mask = false;
+      });
+  }
+
 
       //public function
  gettencodeSuccess(res){
@@ -609,8 +637,12 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 onSelectionChanged(event: any) {
   console.log('Selected nodes:', event.api.getSelectedNodes());
   console.log('Selected data:', event.api.getSelectedRows());
+
+  this.isSubmitEnabled = this.checkTotalCreditRules();
+  if (this.isSubmitEnabled) {
+    this.selectionErrorMessage=""
+  }
 }
-  
 
 
   getCreditRule(groupCode: string): any {
