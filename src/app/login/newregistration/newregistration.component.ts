@@ -12,6 +12,10 @@ import { SubscriptionContainer } from 'src/app/shared/subscription-container';
 import {Location} from '@angular/common';
 import { FormControl, FormGroup } from '@angular/forms';
 import { isUndefined } from 'typescript-collections/dist/lib/util';
+import { CourseGroupRelationRule } from 'src/app/interfaces/course-group-relation-rule';
+import { GroupCreditRule } from 'src/app/interfaces/group-credit-rule';
+import { CourseRuleService } from 'src/app/services/course-rule.service';
+import { CourseGroupRowComponent } from 'src/app/shared/course-group-row/course-group-row.component';
 @Component({
   selector: 'app-newregistration',
   templateUrl: './newregistration.component.html',
@@ -21,22 +25,27 @@ export class NewregistrationComponent implements OnInit {
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('CustomComboboxComponent') custcombo: CustomComboboxComponent;
-  combowidth: string;
+  selectionErrorMessage: string = '';
+   isSubmitEnabled: boolean = false;
+    mask: boolean = false;
+    courseGroupRow = CourseGroupRowComponent;
+  
+  combowidth: string='';
   //public displaybutton: boolean =false;
   //suppressRowDeselection = false;
   check=false;
   subs = new SubscriptionContainer();
   reg_params =new HttpParams();
-  program_id: string;
-  branch_code: string;
-  new_specialization: string;
-  semester_code: string;
-  entity_id: string;
-  program_name: string;
-  branch_name: string;
-  new_specialization_description: string;
-  spc_name: string;
-  entity_name: string;
+  program_id: string='';
+  branch_code: string='';
+  new_specialization: string='';
+  semester_code: string='';
+  entity_id: string='';
+  program_name: string='';
+  branch_name: string='';
+  new_specialization_description: string='';
+  spc_name: string='';
+  entity_name: string='';
   _studentdata:any;
 
   displaystudent=true;
@@ -45,6 +54,9 @@ export class NewregistrationComponent implements OnInit {
  
   courseobj: {};
   courseary: any;
+
+  courseGroupRules: CourseGroupRelationRule[] = [];
+  groupCreditRules: GroupCreditRule[] = [];
   //enrollment_number: string;
 
   
@@ -62,6 +74,7 @@ export class NewregistrationComponent implements OnInit {
     private location:Location,
     public dialog: MatDialog,
     private renderer:Renderer2,
+     private courseRuleService: CourseRuleService,
     private dialogRef: MatDialogRef<NewregistrationComponent>
 
     ) { 
@@ -80,24 +93,28 @@ export class NewregistrationComponent implements OnInit {
   }
 
  
-  Onchange(){
-    console.log(this.check);
-    this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
-  }
+  // Onchange(){
+  //   console.log(this.check);
+  //   this.check?this.agGrid.api.selectAll():this.agGrid.api.deselectAll();
+  // }
 
   OngridReady(parameters:GridReadyEvent){
     //this.agGrid.api.forEachNode((node,index)=>{console.log(node,index)});
-this.agGrid.defaultColDef=this.defaultColDef;
+//this.agGrid.defaultColDef=this.defaultColDef;
 
-      if(this.mincreditrequired===this.creditavailable)
-      
-      {
-        parameters.api.selectAll();
-      
-        this.check=true;
-        //this.suppressRowDeselection=true;
+ parameters.api.deselectAll();
 
-  }
+    this.check = false;
+
+  //     if(this.mincreditrequired===this.creditavailable)
+      
+  //     {
+  //       parameters.api.selectAll();
+      
+  //       this.check=true;
+  //       //this.suppressRowDeselection=true;
+
+  // }
   }
 
   ngOnInit(): void {
@@ -110,20 +127,20 @@ this.agGrid.defaultColDef=this.defaultColDef;
    crselected: any;
  
   
-   semesterStartDate:string;
-   semesterEndDate:string
-   pck:string;
-   creditavailable:number;
-   creditselected:number;
-   credittheory:number;
-   creditpractical:number;
-   maxcreditrequired:number;
-   mincreditrequired:number;
+   semesterStartDate:string='';
+   semesterEndDate:string='';
+   pck:string='';
+   creditavailable:number=0;
+   creditselected:number=0;
+   credittheory:number=0;
+   creditpractical:number=0;
+   maxcreditrequired:number=0;
+   mincreditrequired:number=0;
    coursecode:string=""; 
    coursename:string=""; 
   spinnerstatus:boolean=false;
   selecteddata:string=""; //added by Jyoti on 6 Aug 2025
-  public myrowData=[];
+  public myrowData:any[]=[];
 
    selectedNodes:any;
  
@@ -133,23 +150,73 @@ this.agGrid.defaultColDef=this.defaultColDef;
     filter: true
        
 };
-hashValueGetter = function (params) {
-  return params.node.rowIndex;
+hashValueGetter = (params: any) => {
+  if (params.data?.isGroup === true) {
+    return '';
+  }
+
+  let seqNo = 0;
+  let found = false;
+
+  params.api.forEachNodeAfterFilterAndSort((node: any) => {
+
+    if (found) {
+      return;
+    }
+
+    // Start a new group
+    if (node.data?.isGroup === true) {
+      seqNo = 0;
+      return;
+    }
+
+    seqNo++;
+
+    if (node === params.node) {
+      found = true;
+    }
+  });
+
+  return seqNo;
 };
 
+
+
 columnDefs = [
- 
-  {
-    headerName: 'Seq No',
-    maxWidth: 100,
-    valueGetter: this.hashValueGetter,
-  },
-  { field: 'course_type' },
-  { field: 'course_code',checkboxSelection: true  },
-  { field: 'course_name' },
-  { field: 'credits' },
- 
-];
+   {
+     headerName: 'Seq No',
+     maxWidth: 100,
+     valueGetter: this.hashValueGetter,
+   },
+    {
+      field: 'coursetypedesc',
+      headerName: 'Course Type',
+      hide: true,
+    },
+
+    {
+      field: 'coursetype',
+      hide: true,
+    },
+
+    {
+      field: 'course_code',
+      headerName: 'Course Code',
+      checkboxSelection: (params) => {
+        return !params.data.isGroup;
+      },
+    },
+
+    {
+      field: 'course_name',
+      headerName: 'Course Name',
+    },
+
+    {
+      field: 'credits',
+      headerName: 'Credits',
+    },
+  ];
 
 
    params = new HttpParams()
@@ -193,9 +260,12 @@ getcoursesservice(){
 
  
   console.log("courses",res);
-  
+   let data: any  =res.ElectiveSubjects.elective;
+    this.myrowData = this.createGroupedData(data);
+    this.getCourseGroupRules(data);
 
-  this.myrowData=res.ElectiveSubjects.elective;
+ 
+
 
   console.log("courses",this.myrowData.length);
 	var start:number=0;
@@ -318,27 +388,7 @@ goBack(): void {
            {
             //console.log("pck credits are validated...now validate course type credits.");
             this.validateCourseTypeCredits(); //added by Jyoti on 29 Aug 2026
-             /* //commented below code, as it shifted in proceedonSubmission()
-             const dialogconf =new MatDialogConfig();
-             dialogconf.disableClose=true;
-             dialogconf.autoFocus=true;
-             dialogconf.width='20%'
-             let data={title:"Please confirm",content:"" ,ok:true,cancel:true,color:"warn"};
-             dialogconf.data=data;
-           
-
-            const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
-              
-            dialogRef.disableClose = true;
-          dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-            if(result){
-              this.onOK();
-            }
-
-            });      
-           */
-           	
+            	
 			
            }
            else
@@ -358,8 +408,6 @@ goBack(): void {
             });      
 
             
-            // Alert.show(("You selected :"+ creditselected +" credits ." +"Please select at least :"+semestermincredit),
-            // (commonFunction.getMessages('error')),0,null,null,errorIcon);
            
             return;	
             
@@ -459,10 +507,7 @@ goBack(): void {
        
         dialogConfig.panelClass='custom-modalbox'
 
-      //   const dialogRef=  this.dialog.open(alertComponent,
-      //     {data:{title:"Success",content:"You are successfully registered"
-      //     ,ok:true,cancel:false,color:"accent" },width:"30%",height:"20%"
-      // });
+     
          const dialogRef=  this.dialog.open(alertComponent,dialogConfig);
          
          dialogRef.disableClose = true;
@@ -630,5 +675,378 @@ get f(){
               }
           });      
     }
+
+     isFullWidthCell = (rowNode: any): boolean => {
+    // console.log('FULL WIDTH:', rowNode.data);
+
+    return rowNode.data && rowNode.data.isGroup === true;
+  };
+  
+   createGroupedData(data: any[]): any[] {
+    const result: any[] = [];
+    let previousType: string = '';
+
+    data.forEach((row) => {
+      if (String(row.coursetypedesc).trim() !== previousType) {
+        result.push({
+          isGroup: true,
+          coursetypedesc: row.coursetypedesc + '(' + row.course_type + ')',
+        });
+          previousType = String(row.coursetypedesc).trim();
+      }
+
+      result.push({
+        ...row,
+        isGroup: false,
+        coursetype: row.course_type
+      });
+    });
+    console.log('Grouped Data', result);
+    return result;
+  }
+  getCourseGroupRules(data: any) {
+    let myparam = { xmltojs: 'Y', method: 'None' };
+    let pck = data[0].program_course_key;
+    myparam.method = '/registrationforstudent/checkCourseGroupRules.htm';
+    this.params = this.params.set('programCourseKey', pck);
+   
+    this.mask = true;
+    this.subs.add = this.userservice.getdata(this.params, myparam).subscribe(
+      (res) => {
+        const data = JSON.parse(res);
+        console.log('Course Group Rules', data);
+        // Credit rules
+        this.groupCreditRules = data.groupCreditRules || [];
+
+        // Relationship rules
+        this.courseGroupRules = data.groupRelations || [];
+
+        console.log('GROUP CREDIT RULES:', this.groupCreditRules);
+    
+        this.mask = false;
+        //this.getcoursesSuccess(res );
+        console.log('Course Group Rules', this.courseGroupRules);
+        console.log('Group Credit Rules', this.groupCreditRules);
+      },
+      (error: any) => {
+        console.error('Error getting course group rules', error);
+      },
+    );
+  }
+  getRuleForGroup(groupCode: string): CourseGroupRelationRule | null {
+    const rule = this.courseGroupRules.find(
+      (r) => r.dependent_group_code === groupCode && r.active === 1,
+    );
+
+    return rule || null;
+  }
+  getSelectedCredits(groupCode: string): number {
+    let totalCredits = 0;
+
+    this.agGrid.api.forEachNode((node) => {
+      if (!node.data || node.data.isGroup) {
+        return;
+      }
+
+      const group = this.getValue(node.data.coursetype);
+
+      if (node.isSelected() && group === groupCode) {
+        totalCredits += this.getCredits(node.data);
+      }
+    });
+
+    return totalCredits;
+  }
+
+  checkDependency(
+  node: any,
+  rule: CourseGroupRelationRule
+): boolean {
+   debugger;
+  
+  const result =
+    this.courseRuleService.checkDependency(
+      node,
+      rule,
+      (value: any) => this.getValue(value),
+      (groupCode: string) =>
+        this.getSelectedCredits(groupCode),
+      (groupCode: string, node: any) =>
+        this.getSelectedDisciplines(groupCode, node)
+    );
+
+  this.selectionErrorMessage =
+    result.message;
+
+  return result.valid;
+}
+ 
+
+  getSelectedDisciplines(groupCode: string, excludeNode?: any): string[] {
+    const disciplines: string[] = [];
+
+
+    this.agGrid.api.forEachNode((node: any) => {
+      if (!node.data || node.data.isGroup) {
+        return;
+      }
+      console.log(
+    'Course:',
+    node.data?.coursecode,
+    'Selected:',
+    node.isSelected(),
+    'Data:',
+    node.data
+  );
+
+      // IMPORTANT:
+      // Don't include the course currently being checked
+      if (excludeNode && node === excludeNode) {
+        return;
+      }
+
+      const group = this.getValue(node.data.coursetype);
+      console.log(node.isSelected(), group, groupCode, node.data.discipline);
+      if (node.isSelected() && group === groupCode) {
+        const discipline = this.getValue(node.data.discipline);
+
+        if (discipline && disciplines.indexOf(discipline) === -1) {
+          disciplines.push(discipline);
+        }
+      }
+    });
+
+    return disciplines;
+  }
+onSelectionChanged(event: any) {
+  console.log('Selected nodes:', event.api.getSelectedNodes());
+  console.log('Selected data:', event.api.getSelectedRows());
+
+  this.isSubmitEnabled = this.checkTotalCreditRules();
+  if (this.isSubmitEnabled) {
+    this.selectionErrorMessage=""
+  }
+}
+
+
+  getCreditRule(groupCode: string): any {
+    return this.groupCreditRules.find((r) => r.courseGroupCode === groupCode);
+  }
+
+  checkCreditLimit(node: any): boolean {
+    console.log('Checking credit limit for node:', node.data);
+
+    const group = this.getValue(node.data.coursetype);
+
+    const rule = this.getCreditRule(group);
+
+    if (!rule) {
+      return true;
+    }
+
+    let selectedCredits = 0;
+
+    this.agGrid.api.forEachNode((rowNode: any) => {
+      if (!rowNode.data || rowNode.data.isGroup) {
+        return;
+      }
+
+      // Don't count the course we are currently checking
+      if (rowNode === node) {
+        return;
+      }
+
+      if (rowNode.isSelected()) {
+        const rowGroup = this.getValue(rowNode.data.coursetype);
+
+        if (rowGroup === group) {
+          selectedCredits += this.getCredits(rowNode.data);
+        }
+      }
+    });
+
+    const courseCredits = this.getCredits(node.data);
+    
+    if (selectedCredits + courseCredits > Number(rule.maximumCredit)) {
+      this.selectionErrorMessage =
+        'You cannot select more than ' +
+        rule.maximumCredit +
+        ' credits in the ' +
+        group +
+        ' group.';
+
+      return false;
+    }
+
+    return true;
+  }
+ 
+  onRowSelected(event: any): void {
+ 
+    
+    console.log('Row selected:', event.node.data);
+
+    // Ignore group rows
+    if (!event.node.data || event.node.data.isGroup) {
+      return;
+    }
+
+    console.log('Selected:', event.node.isSelected());
+    
+    
+
+    // -----------------------------------------
+    // DESELECTION
+    // -----------------------------------------
+    if (!event.node.isSelected()) {
+      // Refresh the grid because the selected
+      // discipline/credit situation has changed
+      this.agGrid.api.refreshCells({
+        force: true,
+      });
+      
+     if(this.isSubmitEnabled){
+
+       this.isSubmitEnabled = this.checkTotalCreditRules();
+     }
+      return;
+    }
+
+    // -----------------------------------------
+    // NEW SELECTION
+    // -----------------------------------------
+    if (!this.canSelectCourse(event.node)) {
+      // Undo the selection
+      event.node.setSelected(false);
+
+      //alert('Course selection is not allowed by the current rules.');
+
+      return;
+    }
+    this.isSubmitEnabled = this.checkTotalCreditRules();
+
+    // -----------------------------------------
+    // VALID SELECTION
+    // -----------------------------------------
+    this.agGrid.api.refreshCells({
+      force: true,
+    });
+  }
+  canSelectCourse(node: any): boolean {
+    debugger;
+    if (!node.data || node.data.isGroup) {
+      return false;
+    }
+
+    const group = this.getValue(node.data.coursetype);
+
+    const rule = this.getRuleForGroup(group);
+
+    // No relationship rule
+    if (!rule) {
+      return this.checkCreditLimit(node);
+    }
+
+    // Dependency
+    if (!this.checkDependency(node, rule)) {
+      return false;
+    }
+
+    // Credit limit
+    if (!this.checkCreditLimit(node)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getValue(value: any): string {
+    if (Array.isArray(value)) {
+      return value.length > 0 ? value[0] : '';
+    }
+
+    return value || '';
+  }
+  getCredits(row: any): number {
+    return parseFloat(this.getValue(row.credits)) || 0;
+  }
+  checkDisciplineSelection(node: any, rule: CourseGroupRelationRule): boolean {
+    // No discipline selection restriction
+    if (
+      !rule ||
+      !rule.discipline_selection ||
+      rule.discipline_selection !== 'SINGLE'
+    ) {
+      return true;
+    }
+
+    const currentDiscipline = this.getValue(node.data.discipline);
+
+    const selectedDisciplines = this.getSelectedDisciplines(
+      rule.dependent_group_code,
+    );
+
+    // No discipline has been selected yet
+    if (selectedDisciplines.length === 0) {
+      return true;
+    }
+
+    // SINGLE means only the already-selected
+    // discipline can be selected
+    return selectedDisciplines.indexOf(currentDiscipline) !== -1;
+  }
+
+  checkTotalCreditRules(): boolean {
+    if (!this.groupCreditRules || this.groupCreditRules.length === 0) {
+      return false;
+    }
+
+    // Check every group rule returned by backend
+    for (const rule of this.groupCreditRules) {
+      const groupCode = rule.courseGroupCode;
+
+      const selectedCredits = this.getSelectedCredits(groupCode);
+
+      const minimumCredit = Number(rule.minimumCredit);
+
+      const maximumCredit = Number(rule.maximumCredit);
+
+      console.log(
+        'Credit Rule:',
+        groupCode,
+        'Selected:',
+        selectedCredits,
+        'Min:',
+        minimumCredit,
+        'Max:',
+        maximumCredit,
+      );
+
+      // Minimum credit not satisfied
+      if (selectedCredits < minimumCredit) {
+        this.selectionErrorMessage =
+          'You must select at least ' +
+          minimumCredit +
+          ' credits in the ' +
+          groupCode +
+          ' group.';
+        return false;
+      }
+
+      // Maximum credit exceeded
+      if (selectedCredits > maximumCredit) {
+        this.selectionErrorMessage =
+          'You cannot select more than ' +
+          maximumCredit +
+          ' credits in the ' +
+          groupCode +
+          ' group.';
+        return false;
+      }
+    }
+
+    return true;
+  }
+
 
   }
