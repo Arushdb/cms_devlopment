@@ -165,12 +165,46 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 
     return rowNode.data && rowNode.data.isGroup === true;
   };
-  hashValueGetter = function (params) {
-    return params.node.rowIndex;
-  };
+ 
+
+hashValueGetter = (params: any) => {
+  if (params.data?.isGroup === true) {
+    return '';
+  }
+
+  let seqNo = 0;
+  let found = false;
+
+  params.api.forEachNodeAfterFilterAndSort((node: any) => {
+
+    if (found) {
+      return;
+    }
+
+    // Start a new group
+    if (node.data?.isGroup === true) {
+      seqNo = 0;
+      return;
+    }
+
+    seqNo++;
+
+    if (node === params.node) {
+      found = true;
+    }
+  });
+
+  return seqNo;
+};
+
 
   
   columnDefs = [
+      {
+     headerName: 'Seq No',
+     maxWidth: 100,
+     valueGetter: this.hashValueGetter,
+   },
     {
       field: 'coursetypedesc',
       headerName: 'Course Type',
@@ -453,16 +487,14 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 
     var start: number = 0;
 
-    //Alert.show("arush"+semDetail);
+   
 
     for (var obj of res.registerDetails.Detail) {
       if (obj.available == 'N') {
         this.myrowData.splice(0, this.myrowData.length); // clear the myrowdata array
         this.userservice.log(obj.message);
         this.ngOnDestroy();
-        //errorlabel.text=obj.message;
-        //vstack.selectedChild=errorpanel;
-        //		Alert.show("Error :"+obj.message);
+       
 
         return;
       } else {
@@ -505,18 +537,7 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 
           start++;
         }
-        // regdataAC.addItem({
-        // sst:obj.semesterStartDate,sed:obj.semesterEndDate,coursetype:obj.coursetype,
-        // courseCode:obj.courseCode,coursename:obj.coursename,courseclassification:obj.courseclassification,
-        // credits:obj.credits,maxcredit:obj.maxcredit,mincredit:obj.mincredit
-        //this.agGrid.api.refreshCells();
-
-        //});
-
-        // this.agGrid.api.forEachNode((node,index)=>{
-        //   console.log(node,index);
-
-        // });
+    
       }
     }
   }
@@ -593,6 +614,7 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 
   this.selectionErrorMessage =
     result.message;
+    console.log('Dependency Check Result:', result);
 
   return result.valid;
 }
@@ -634,15 +656,7 @@ export class RegisterStudentComponent implements AfterViewInit, OnDestroy {
 
     return disciplines;
   }
-onSelectionChanged(event: any) {
-  console.log('Selected nodes:', event.api.getSelectedNodes());
-  console.log('Selected data:', event.api.getSelectedRows());
 
-  this.isSubmitEnabled = this.checkTotalCreditRules();
-  if (this.isSubmitEnabled) {
-    this.selectionErrorMessage=""
-  }
-}
 
 
   getCreditRule(groupCode: string): any {
@@ -682,14 +696,7 @@ onSelectionChanged(event: any) {
     });
 
     const courseCredits = this.getCredits(node.data);
-    console.log(
-      'Selected credits:',
-      selectedCredits,
-      'Course credits:',
-      courseCredits,
-      'Rule max credit:',
-      rule.maximumCredit,
-    );
+    
     if (selectedCredits + courseCredits > Number(rule.maximumCredit)) {
       this.selectionErrorMessage =
         'You cannot select more than ' +
@@ -704,6 +711,8 @@ onSelectionChanged(event: any) {
     return true;
   }
   onRowSelected(event: any): void {
+ 
+    
     console.log('Row selected:', event.node.data);
 
     // Ignore group rows
@@ -724,7 +733,11 @@ onSelectionChanged(event: any) {
       this.agGrid.api.refreshCells({
         force: true,
       });
+      
+     if(this.isSubmitEnabled){
 
+       this.isSubmitEnabled = this.checkTotalCreditRules();
+     }
       return;
     }
 
@@ -735,7 +748,7 @@ onSelectionChanged(event: any) {
       // Undo the selection
       event.node.setSelected(false);
 
-      alert('Course selection is not allowed by the current rules.');
+      //alert('Course selection is not allowed by the current rules.');
 
       return;
     }
@@ -749,7 +762,7 @@ onSelectionChanged(event: any) {
     });
   }
   canSelectCourse(node: any): boolean {
-    debugger;
+    
     if (!node.data || node.data.isGroup) {
       return false;
     }
@@ -827,18 +840,7 @@ onSelectionChanged(event: any) {
 
       const maximumCredit = Number(rule.maximumCredit);
 
-      console.log(
-        'Credit Rule:',
-        groupCode,
-        'Selected:',
-        selectedCredits,
-        'Min:',
-        minimumCredit,
-        'Max:',
-        maximumCredit,
-      );
-
-      // Minimum credit not satisfied
+     
       if (selectedCredits < minimumCredit) {
         this.selectionErrorMessage =
           'You must select at least ' +
@@ -883,28 +885,14 @@ onSelectionChanged(event: any) {
   
 
    
-  // const dialogRef =this.dialog.open(DialogComponent,
-  //                 {data:{title:"Hello",content:"Press Ok to continue Cancel to Discard"}
-  //             });
-
-  // dialogRef.afterClosed().subscribe(result => {
-  //   console.log(`Dialog result: ${result}`);
-  // });
   
-  //const subjectselected = this.agGrid.api.getSelectedNodes();
-  //console.log(selectedNodes);
-  //const subjectselected1 = subjectselected.map(node => node.data );
- // const subjectselected1 = selectedNodes.map(node => node.data );
-
     var instructorAssigned:number=0;
     this.credittheory = 0;
     this.creditpractical=0;
     this.creditselected = 0;
     semestermincredit =0;
     semestermaxcredit =0;
-    //selecteddata.removeAll();
-    
-   //submitButton.enabled=false;
+   
    
     
     var semestermaxcredit:number=0;
@@ -960,43 +948,20 @@ onSelectionChanged(event: any) {
      
      }
      console.log("after validation");
-     //Alert.show("creditselected"+creditselected);
+     
      this.crselected="Credits Selected:"+this.creditselected;
       
          console.log("credit selected",this.creditselected);
       
           if(
           (this.creditselected>=semestermincredit)&&(this.creditselected<=semestermaxcredit)
-          // ||
-          //(creditavailable<=mincreditrequired)
+         
            
            )
            {
             //console.log("pck credits are validated...now validate course type credits.");
             this.validateCourseTypeCredits(); //added by Jyoti on 29 Aug 2026
-             /* //commented below code, as it shifted in proceedonSubmission()
-             console.log("success");
-             const dialogconf =new MatDialogConfig();
-             dialogconf.disableClose=true;
-             dialogconf.autoFocus=true;
-             let data={title:"",content:"Please confirm" ,ok:true,cancel:true,color:"warn"};
-             dialogconf.data=data;
-            // dialogconf.role=
-
-            const  dialogRef=  this.dialog.open(alertComponent,dialogconf);
-              
-            dialogRef.disableClose = true;
-          dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-            if(result){
-              this.onOK(); 
-            }
-
-            }); */      
-           
-           	
-			  // Alert.show(commonFunction.getMessages('conformForContinue'),
-			  // commonFunction.getMessages('confirm'),(Alert.YES|Alert.NO),null,onOK,questionIcon);
+          
            }
            else
            {
@@ -1014,9 +979,7 @@ onSelectionChanged(event: any) {
             });      
 
             
-            // Alert.show(("You selected :"+ creditselected +" credits ." +"Please select at least :"+semestermincredit),
-            // (commonFunction.getMessages('error')),0,null,null,errorIcon);
-           
+            
             return;	
             
            }
@@ -1078,9 +1041,7 @@ onSelectionChanged(event: any) {
     }
 
   onOK() {
-    //if(event.detail==Alert.YES){
-
-    //	Alert.show("On OK called ");
+   
 
     let myparam1 = new HttpParams();
     //.set('application','CMS');
@@ -1147,42 +1108,35 @@ onSelectionChanged(event: any) {
   //}
 
   registerstudentSuccess(res) {
-    //Mask.close();
-    //semDetail = event.result as XML;
-
-    //Alert.show("regstatus:"+semDetail);
-    //vstack.selectedChild=errorpanel;
+   
     for (var obj of res.registerDetails.Detail) {
       if (obj.available == 'err') {
-        //errorlabel.text=obj.message;
+       
         this.userservice.log(obj.message);
-        //this.router.navigate(['../dashboard']);
+       
         this.ngOnDestroy();
         return;
 
-        //		Alert.show("Error :"+obj.message);
+      
       }
       if (obj.available == 'reg') {
         // errorlabel.text ="You are successfully registered";
         this.userservice.log('You are successfully registered');
 
-        //vstack.selectedChild=errorpanel;
-        //this.router.navigate(['../dashboard']);
+      
         this.ngOnDestroy();
         return;
-        //		Alert.show("Error :"+obj.message);
+      
       } else {
         this.userservice.log('Error in registration');
-        //errorlabel.text ="Error in registration";
+       
         this.ngOnDestroy();
-        //this.router.navigate(['../dashboard']);
+       
         return;
       }
     }
 
-    //vstack.selectedChild=errorpanel;
-
-    //Alert.show("registerstudentsuccess"+semDetail);
+  
   }
 
   getbrnSuccess(res) {

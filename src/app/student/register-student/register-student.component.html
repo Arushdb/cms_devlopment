@@ -52,39 +52,11 @@
                     
                     <button type="button" class="btn btn-primary btn-sm" (click)="ngOnDestroy()">Cancel</button>
                   </div>
-                  <!--
-                <button class="btn btn-primary btn-primary-spacing  btn-sm " (click)="submit()">Submit</button>
-                <button class="btn btn-primary btn-primary-spacing  btn-sm " (click)="OnSelectAll()">Select All</button>
-                <button class="btn btn-primary btn-primary-spacing  btn-sm " >Cancel</button>
-                --> 
-               <!--
-               
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="Check1"  [(ngModel)]="check"  
-                    (change)="Onchange()" >
-                    <label class="form-check-label" for="Check1">Select All</label>
-                  </div>
-                 -->
+              
                  
                 <div class="d-flex p-2 bd-highlight border" >
                    
-    <!--
-                        <ag-grid-angular
-                            suppressHorizontalScroll = "true"
-                            style="width: 100%; height: 500px;"
-                            [rowData]="myrowData"
-                            [columnDefs]="columnDefs"
-                              [isRowSelectable]="isRowSelectable"
-                            #agGrid
-                            (gridReady) ="OngridReady($event)"
-                            rowSelection="multiple"
-                            class="ag-theme-alpine"
-                           
-                            [defaultColDef]="defaultColDef"
-                        [scr]
-                        >
-                        </ag-grid-angular> -->
-
+   
 
                         <ag-grid-angular
     style="width: 100%; height: 500px;"
@@ -101,7 +73,7 @@
     #agGrid
     (gridReady)="OngridReady($event)"
     (rowSelected)="onRowSelected($event)"
-    (selectionChanged)="onSelectionChanged($event)"
+    
     rowSelection="multiple"
     class="ag-theme-alpine">
 </ag-grid-angular>
