@@ -398,7 +398,7 @@
 
 
 
-<t1 name="GKC/Pre-Dissertation" >
+<t1 name="GKC" >
 <total>200</total>
 <components>
 <component componentType="DHAS" group="DHA" compName="DHA" fullName="DHA and CAs" numberOfComponents="1" maxMarks="180" weightage="100" rule="BT1">
@@ -1038,6 +1038,48 @@
 <maxMarks>20</maxMarks>
 <weightage>100</weightage>
 <rule>BT1</rule></component>
+</components>
+</t1>
+
+<t1 name="Pre-Dissertation">
+<total>200</total>
+<components>
+<component group="G1" compName="E13" fullName="Research Problem and Objectives " numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1" >
+<group>G1</group>
+<compName>E13</compName>
+<fullName>Research Problem and Objectives </fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G2" compName="E14" fullName="Research Gap and Novelty" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1">
+<group>G2</group>
+<compName>E14</compName>
+<fullName>Research Gap and Novelty</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G3" compName="E15" fullName="Presentation" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1">
+<group>G3</group>
+<compName>E15</compName>
+<fullName>Presentation</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
+<component group="G4" compName="E16" fullName="Defense of Proposal" numberOfComponents="1" maxMarks="50" weightage="100" rule="BT1">
+<group>G4</group>
+<compName>E16</compName>
+<fullName>Defense of Proposal</fullName>
+<numberOfComponents>1</numberOfComponents>
+<maxMarks>50</maxMarks>
+<weightage>100</weightage>
+<rule>BT1</rule>
+</component>
 </components>
 </t1>
 
